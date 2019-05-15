@@ -1,0 +1,60 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- Unicode character encoding - multi-language compatibility -->
+    <meta charset="utf-8">
+
+    <!-- Set the initial view zooming scale for mobile device -->
+    <meta name="viewport" content="width = device-width,
+ initial-scale = 1" />
+
+    <title>NP ICT Portfolio</title>
+
+    <!-- Reference to customized styling for this website -->
+    <link rel="stylesheet" type="text/css" href="~/css/Site.css">
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <!-- 1st row -->
+        <div class="flex-container">
+            <!-- Flexbox for logo, auto-expand in the container -->
+            <div style="flex:auto;">
+                <img id="imgNPLogo" src="~/images/nplogo.gif" />
+            </div>
+            <div></div>
+            <!-- Flexbox for staff login -->
+            <div>
+                <form method="post" action="~/Home/StaffLogin">
+                    <fieldset class="loginFieldset">
+                        <legend>Lecturer Login</legend>
+                        <label for="txtLoginID">Login ID:</label>
+                        <input type="email" name="txtLoginID"
+                               id="txtLoginID" required /><br />
+                        <label for="txtPassword">Password:</label>
+                        <input type="password" name="txtPassword"
+                               id="txtPassword" style="width:100px"
+                               required />
+                        <input type="submit" id="btnStaffLogin"
+                               class="myButton" value="Login" />
+                    </fieldset>
+                </form>
+            </div>
+            <!-- Flexbox for student login -->
+            <div>
+                <fieldset class="loginFieldset">
+                    <legend>Student Login</legend>
+                    <p>
+                        <a href="#" class="myButton">Microsoft Login</a>
+                    </p>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

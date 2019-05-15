@@ -1,0 +1,45 @@
+﻿<!-- A grey navbar that expands horizontally at medium device -->
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <!-- The brand(or icon) of the navbar -->
+    <a class="navbar-brand" href="~/Home/LecturerMain"
+       style="font-size:32px; font-weight:bold; color:#3399FF;">
+        NP ICT Portfolio
+    </a>
+    <!-- Toggle/collapsible Button, also known as hamburger button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#staffNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- Links in the navbar, displayed as drop-down list when collapsed -->
+    <div class="collapse navbar-collapse" id="staffNavbar">
+        <!-- Links that are aligned to the left,
+        mr-auto: right margin auto-adjusted -->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="~/LecturerProfile/Index">
+                    Create Lecturer Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="~/Suggestions/Create">Post Suggestions for Improvement</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="~/Suggestions/Index">View Suggestions Posted</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="~/Students/Index">View List of Students</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="~/Password/Index">Change Password</a>
+            </li>
+        </ul>
+        <!-- Links that are aligned to the right,
+        ml-auto: left margin auto-adjusted -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <!-- A link for logging out user -->
+                <a class="nav-link" href="~/Home/LogOut">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
