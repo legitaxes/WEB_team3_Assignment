@@ -13,6 +13,7 @@ namespace web_team3_assignment.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult StaffLogin(IFormCollection formData)
         {
@@ -25,13 +26,26 @@ namespace web_team3_assignment.Controllers
                 // Redirect user to the "StaffMain" view through an action
                 return RedirectToAction("LecturerMain");
             }
+
+            if (loginID == "abc2@npbook.com" && password == "pass1234")
+            {
+                // Redirect user to the "StudentMain" view through an action
+                return RedirectToAction("StudentMain");
+            }
+
             else
             {
                 // Redirect user back to the index view through an action
                 return RedirectToAction("Index");
             }
         }
+
         public ActionResult LecturerMain()
+        {
+            return View();
+        }
+
+        public ActionResult StudentMain()
         {
             return View();
         }
