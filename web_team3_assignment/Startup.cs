@@ -17,6 +17,12 @@ namespace web_team3_assignment
         {
             //enable MVC services
             services.AddMvc();
+
+            // Add a default in-memory implementation of distributed cache
+            services.AddDistributedMemoryCache();
+
+            // Add the session service
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +40,10 @@ namespace web_team3_assignment
 
             //enable the use of static files in wwwroot
             app.UseStaticFiles();
+
+            // Enable session state
+            // IMPORTANT: This session call MUST go before UseMvc()
+            app.UseSession();
 
             // Define the default route of MVC
             app.UseMvc(routes =>

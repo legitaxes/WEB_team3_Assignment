@@ -19,14 +19,39 @@
         <!-- 1st row -->
         <div class="row">
             <div class="col-sm-12">
-                @await Html.PartialAsync("_LecturerMenu.cshtml")
+                @if (Context.Session.GetString("Role") != null)
+                {
+                    if (Context.Session.GetString("Role") == "Lecturer")
+                    {
+                        @await Html.PartialAsync("_LecturerMenu.cshtml")
+                    }
+
+                    if (Context.Session.GetString("Role") == "Student")
+                    {
+                        @await Html.PartialAsync("_StudentMenu.cshtml")
+                    }
+                }
             </div>
         </div>
         <!-- 2nd row -->
         <div class="row">
             <div class="col-sm-12">
                 <p style="padding:2px 15px;">
+                    @{
+                        string userId = "Anonymous";
+                        string userRole = "Unknown";
+                        if (Context.Session.GetString("Role") != null)
+                        {
+                            userRole = Context.Session.GetString("Role");
+                        }
+                        if (Context.Session.GetString("LoginID") != null)
+                        {
+                            userId = Context.Session.GetString("LoginID");
+                        }
+                    }
                     Welcome,&nbsp;
+                    <span style="font-weight:bold">@userId</span>&nbsp;
+                    (Role: @userRole).&nbsp;
                 </p>
             </div>
         </div>
