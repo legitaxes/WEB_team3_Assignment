@@ -26,7 +26,7 @@
                         @await Html.PartialAsync("_LecturerMenu.cshtml")
                     }
 
-                    if (Context.Session.GetString("Role") == "Student")
+                    else if (Context.Session.GetString("Role") == "Student")
                     {
                         @await Html.PartialAsync("_StudentMenu.cshtml")
                     }
