@@ -18,6 +18,7 @@ namespace web_team3_assignment.Models
 
         [Required]
         [Display(Name = "Role")]
-        public int Role { get; set; }
+        [StringLength(50, ErrorMessage = "Cannot Exceed 50 Characters")]
+        public string Role { get; set; }
     }
 }
