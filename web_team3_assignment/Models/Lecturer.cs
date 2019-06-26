@@ -13,7 +13,7 @@ namespace web_team3_assignment.Models
         public int LecturerId { get; set; }
 
         [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
-        [StringLength(50, ErrorMessage = "Cannot Exceed 50 Characters!")]
+        [StringLength(50, ErrorMessage = "Name Cannot Exceed 50 Characters!")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
