@@ -60,7 +60,7 @@ namespace web_team3_assignment.DAL
                 {
                     LecturerId = Convert.ToInt32(row["LecturerID"]),
                     Name = row["Name"].ToString(),
-                    Email = row["EmailAddr"].ToString(),
+                    EmailAddr = row["EmailAddr"].ToString(),
                     Password = row["Password"].ToString(),
                     Description = row["Description"].ToString()
                 }

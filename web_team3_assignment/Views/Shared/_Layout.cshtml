@@ -40,18 +40,21 @@
                     @{
                         string userId = "Anonymous";
                         string userRole = "Unknown";
+                        string today = "";
                         if (Context.Session.GetString("Role") != null)
                         {
                             userRole = Context.Session.GetString("Role");
+                            today = Context.Session.GetString("currentTime");
                         }
                         if (Context.Session.GetString("LoginID") != null)
                         {
                             userId = Context.Session.GetString("LoginID");
+                            today = Context.Session.GetString("currentTime");
                         }
                     }
                     Welcome,&nbsp;
                     <span style="font-weight:bold">@userId</span>&nbsp;
-                    (Role: @userRole).&nbsp;
+                    (Role: @userRole).&nbsp; You have logged in since @today
                 </p>
             </div>
         </div>

@@ -25,6 +25,7 @@ namespace web_team3_assignment.Controllers
             {
                 HttpContext.Session.SetString("LoginID", loginID);
                 HttpContext.Session.SetString("Role", "Lecturer");
+                HttpContext.Session.SetString("currentTime", DateTime.Now.ToString());
                 // Redirect user to the "StaffMain" view through an action
                 return RedirectToAction("LecturerMain");
             }
@@ -33,6 +34,7 @@ namespace web_team3_assignment.Controllers
             {
                 HttpContext.Session.SetString("LoginID", loginID);
                 HttpContext.Session.SetString("Role", "Student");
+                HttpContext.Session.SetString("currentTime", DateTime.Now.ToString());
                 // Redirect user to the "StudentMain" view through an action
                 return RedirectToAction("StudentMain");
             }
