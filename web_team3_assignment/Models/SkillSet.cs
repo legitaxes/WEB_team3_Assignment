@@ -9,6 +9,7 @@ namespace web_team3_assignment.Models
     public class SkillSet
     {
         [Key]
+        [Required(ErrorMessage = "Please Do Not Leave This Field Blank!")]
         [Display(Name = "SkillSet ID")]
         public int SkillSetId { get; set; }
 
