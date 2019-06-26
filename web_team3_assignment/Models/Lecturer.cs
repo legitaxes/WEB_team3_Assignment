@@ -22,7 +22,7 @@ namespace web_team3_assignment.Models
         [StringLength(50, ErrorMessage = "Email Cannot Exceed 50 Characters!")]
         // Custom Validation Attribute for checking email address exists
         //[ValidateEmailExists(ErrorMessage = "Email address already exists!")]
-        public string EmailAddr { get; set; }
+        public string Email { get; set; }
 
         [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [DataType(DataType.Password)]

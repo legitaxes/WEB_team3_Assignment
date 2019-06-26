@@ -16,9 +16,9 @@ namespace web_team3_assignment.Controllers
         public ActionResult Index()
         {
             // Stop accessing the action if not logged in 
-            // or account not in the "Staff" role
+            // or account not in the "Lecturer" role
             if ((HttpContext.Session.GetString("Role") == null) || 
-                (HttpContext.Session.GetString("Role") != "Staff"))
+                (HttpContext.Session.GetString("Role") != "Lecturer"))
             {
                 return RedirectToAction("Index", "Home");
             }
