@@ -28,17 +28,17 @@
 }
 
 fieldset {
-    border: 2px solid darkblue;
+    border: 2px solid #EE4266;
     border-radius: 10px;
     padding: 5px;
-    background-color: antiquewhite;
+    background-color: #E1EFE6;
 }
 
-fieldset legend{
+fieldset legend {
     padding: 4px;
     font-size: 16px;
     font-weight: bold;
-    color: brown;
+    color: #4F1749;
     width: auto;
 }
 

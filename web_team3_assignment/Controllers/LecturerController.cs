@@ -48,19 +48,29 @@ namespace web_team3_assignment.Controllers
         // POST: Lecturer/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Lecturer lecturer)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
+                lecturer.LecturerId = lecturerContext.Add(lecturer);
+                return RedirectToAction("Index");
+            }
+            else
+            { 
+                
+                return View(lecturer);
+            }
+              //try
+              //{
+              //    // TODO: Add insert logic here
 
-                return RedirectToAction(nameof(Index));
+                //    return RedirectToAction(nameof(Index));
+                //}
+                //catch
+                //{
+                //    return View();
+                //}
             }
-            catch
-            {
-                return View();
-            }
-        }
 
         // GET: Lecturer/Edit/5
         public ActionResult Edit(int id)

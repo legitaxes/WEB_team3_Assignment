@@ -8,7 +8,6 @@ namespace web_team3_assignment.Models
 {
     public class Lecturer
     {
-        [Key]
         [Display(Name = "Lecturer ID")]
         public int LecturerId { get; set; }
 

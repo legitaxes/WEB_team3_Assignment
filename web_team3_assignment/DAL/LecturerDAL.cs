@@ -29,7 +29,24 @@ namespace web_team3_assignment.DAL
             //Connection String read.
             conn = new SqlConnection(strConn);
         }
-
+        public int Add(Lecturer lecturer)
+        {
+            //sql command to add (i hope it works :pray:)
+            SqlCommand cmd = new SqlCommand
+                ("INSERT INTO Lecturer (Name, EmailAddr, Password, Description)" +
+                "OUTPUT INSERTED.LecturerID " +
+                "VALUES(@name, @email, @password, @description", conn);
+            cmd.Parameters.AddWithValue("@name", lecturer.Name);
+            cmd.Parameters.AddWithValue("@email", lecturer.Email);
+            cmd.Parameters.AddWithValue("@password", lecturer.Password);
+            cmd.Parameters.AddWithValue("@description", lecturer.Description);
+            //open connection to run command
+            conn.Open();
+            lecturer.LecturerId = (int)cmd.ExecuteScalar();
+            //close connection
+            conn.Close();
+            return lecturer.LecturerId;
+        }
         public List<Lecturer> GetAllLecturer()
         {
             //Instantiate a SqlCommand object, supply it with a
