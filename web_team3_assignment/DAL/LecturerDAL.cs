@@ -34,8 +34,8 @@ namespace web_team3_assignment.DAL
             //sql command to add (i hope it works :pray:)
             SqlCommand cmd = new SqlCommand
                 ("INSERT INTO Lecturer (Name, EmailAddr, Password, Description)" +
-                "OUTPUT INSERTED.LecturerID " +
-                "VALUES(@name, @email, @password, @description", conn);
+                " OUTPUT INSERTED.LecturerID" +
+                " VALUES(@name, @email, @password, @description)", conn);
             cmd.Parameters.AddWithValue("@name", lecturer.Name);
             cmd.Parameters.AddWithValue("@email", lecturer.Email);
             cmd.Parameters.AddWithValue("@password", lecturer.Password);

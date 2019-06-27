@@ -50,14 +50,14 @@ namespace web_team3_assignment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Lecturer lecturer)
         {
+            lecturer.Password = "p@55Mentor";
             if (ModelState.IsValid)
             {
                 lecturer.LecturerId = lecturerContext.Add(lecturer);
                 return RedirectToAction("Index");
             }
             else
-            { 
-                
+            {
                 return View(lecturer);
             }
               //try
