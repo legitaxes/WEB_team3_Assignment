@@ -101,6 +101,11 @@ namespace web_team3_assignment.Controllers
             return View();
         }
 
+        public ActionResult SkillSetMain()
+        {
+            return View();
+        }
+
         public ActionResult LogOut()
         {
             // Clear all key-values pairs stored in session state

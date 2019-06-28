@@ -1,0 +1,11 @@
+﻿@model IEnumerable<web_team3_assignment.Models.SkillSet>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<a asp-action="SkillSetCreate"></a>
+<!-- Add a partial view to display a list of staff records in a tabular format. -->
+<partial name="~/Views/SkillSet/_ViewSkillSet.cshtml" model="@Model" />

@@ -1,0 +1,31 @@
+﻿@model web_team3_assignment.Models.SkillSet
+
+@{
+    ViewData["Title"] = "SkillSetCreate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="SkillSetCreate">
+    <fieldset class="FormContent">
+        <legend>Input SkillSet Details Below</legend>
+        <div class="form-group row">
+            <label asp-for="SkillSetName"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="SkillSetName" class="form-control" />
+                <span asp-validation-for="SkillSetName"
+                      class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <input type="submit" value="Create"
+                       class="btn btn-primary mb1 black bg-aqua" />
+            </div>
+        </div>
+        <div>
+            <a class="btn btn-secondary" role="button" asp-action="Index">Back to List</a>
+        </div>
+    </fieldset>
+</form>

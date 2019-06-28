@@ -1,7 +1,12 @@
-﻿<!-- A grey navbar that expands horizontally at medium device -->
+﻿
+@{
+    Layout = null;
+}
+
+<!-- A grey navbar that expands horizontally at medium device -->
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <!-- The brand(or icon) of the navbar -->
-    <a class="navbar-brand" href="~/Home/LecturerMain"
+    <a class="navbar-brand" href="~/Home/StudentMain"
        style="font-size:32px; font-weight:bold; color:#3399FF;">
         NP ICT Portfolio
     </a>
@@ -16,24 +21,18 @@
         mr-auto: right margin auto-adjusted -->
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="~/Home/SkillSetMain">
-                    Skillset Administration
+                <a class="nav-link" href="~/LecturerProfile/Index">
+                    Student Profile
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="~/Lecturer/Create">Create Lecturer Profile</a>
+                <a class="nav-link" href="~/SkillSet/Create">Create New SkillSet</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="~/Lecturer/PostSuggestion">Post Suggestions</a>
+                <a class="nav-link" href="~/SkillSet/Index">View SkillSets</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="~/Lecturer/ViewSuggestion">View Suggestions Posted</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="~/Lecturer/ViewAllStudents">View Students</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="~/Lecturer/Change">Change Password</a>
+                <a class="nav-link" href="~/SkillSet/Search">Search For Students With a SkillSet</a>
             </li>
         </ul>
         <!-- Links that are aligned to the right,
@@ -46,3 +45,6 @@
         </ul>
     </div>
 </nav>
+
+
+

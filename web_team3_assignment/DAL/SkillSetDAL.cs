@@ -29,6 +29,22 @@ namespace web_team3_assignment.DAL
             conn = new SqlConnection(strConn);
         }
 
+        public int Add(SkillSet skillSet)
+        {
+            //sql command to add 
+            SqlCommand cmd = new SqlCommand
+                ("INSERT INTO SkillSet (SkillSetName)" +
+                "OUTPUT INSERTED.SkillSetID " +
+                "VALUES(@skillsetname", conn);
+            cmd.Parameters.AddWithValue("@skillsetname", skillSet.SkillSetName);        
+            //open connection to run command
+            conn.Open();
+            skillSet.SkillSetId = (int)cmd.ExecuteScalar();
+            //close connection
+            conn.Close();
+            return skillSet.SkillSetId;
+        }
+
         public List<SkillSet> GetAllSkillSet()
         {
             //Instantiate a SqlCommand object, supply it with a
@@ -52,13 +68,13 @@ namespace web_team3_assignment.DAL
 
             //Transferring rows of data in DataSet’s table to “Staff” objects
             List<SkillSet> SkillSetList = new List<SkillSet>();
-            foreach (DataRow row in result.Tables["LecturerDetails"].Rows)
+            foreach (DataRow row in result.Tables["SkillsetDetails"].Rows)
             {
                 SkillSetList.Add(
                 new SkillSet
                 {
                     SkillSetId = Convert.ToInt32(row["SkillsetID"]),
-                    SkillSetName = row["SkillSet Name"].ToString()
+                    SkillSetName = row["SkillSetName"].ToString()
                 }
                 );
             }
