@@ -1,0 +1,52 @@
+﻿@model web_team3_assignment.Models.Project
+
+@{
+    ViewData["Title"] = "CreateProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="PageTitle">Add Project Record</h4>
+<hr />
+<form asp-action="CreateProject">
+    <fieldset class="FormContent">
+        <legend>Input Profile Details Below</legend>
+        <div class="form-group row">
+            <label asp-for="ProjectId"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="ProjectId" class="form-control" />
+                <span asp-validation-for="ProjectId"
+                      class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Title"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title"
+                      class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Description"
+                   class="col-sm-3 col-form-label">
+            </label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="Description" class="form-control" title="Professional Area Description" />
+                <span asp-validation-for="Description"
+                      class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <input type="submit" value="Create"
+                       class="btn btn-primary mb1 black bg-aqua" />
+            </div>
+        </div>
+        <div>
+            <a class="btn btn-secondary" role="button" asp-action="Index">Back to List</a>
+        </div>
+    </fieldset>
+</form>

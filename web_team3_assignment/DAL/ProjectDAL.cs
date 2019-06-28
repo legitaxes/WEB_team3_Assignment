@@ -33,13 +33,28 @@ namespace web_team3_assignment.DAL
             conn = new SqlConnection(strConn);
         }
 
-        public List<ProjectMember> GetAllProjectMember()
+        public int Add(Project project)
+        {
+            SqlCommand cmd = new SqlCommand
+            ("INSERT INTO Project (ProjectId, title, description)" + "OUTPUT INSERTED.ProjectID" + "VALUES(@projectId, @title, @description)", conn);
+            cmd.Parameters.AddWithValue("@projectId", project.ProjectId);
+            cmd.Parameters.AddWithValue("@title", project.Title);
+            cmd.Parameters.AddWithValue("@description", project.Description);
+            //open connection to run command
+            conn.Open();
+            project.ProjectId = (int)cmd.ExecuteScalar();
+            //close connection
+            conn.Close();
+            return project.ProjectId;        
+        }
+
+        public List<Project> GetAllProject()
         {
             //Instantiate a SqlCommand object, supply it with a
             //SELECT SQL statement that operates against the database,
             //and the connection object for connecting to the database.
             SqlCommand cmd = new SqlCommand(
-            "SELECT * FROM ProjectMember ORDER BY ProjectID", conn);
+            "SELECT * FROM Project ORDER BY ProjectID", conn);
 
             //Instantiate a DataAdapter object and pass the
             //SqlCommand object created as parameter.
@@ -60,19 +75,19 @@ namespace web_team3_assignment.DAL
             conn.Close();
 
             //Transferring rows of data in DataSet’s table to “Staff” objects
-            List<ProjectMember> ProjectMemberList = new List<ProjectMember>();
+            List<Project> projectList = new List<Project>();
             foreach (DataRow row in result.Tables["ProjectDetails"].Rows)
             {
-                ProjectMemberList.Add(
-                new ProjectMember
+                projectList.Add(
+                new Project
                 {
                     ProjectId = Convert.ToInt32(row["ProjectId"]),
-                    StudentId = Convert.ToInt32(row["StudentId"]),
-                    Role = row["Role"].ToString()
+                    Title = row["Title"].ToString(),
+                    Description = row["Description"].ToString()
                 }
                 );
             }
-            return ProjectMemberList;
+            return projectList;
         }
 
     }

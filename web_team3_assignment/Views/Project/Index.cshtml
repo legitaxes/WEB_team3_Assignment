@@ -1,0 +1,11 @@
+﻿@model IEnumerable<web_team3_assignment.Models.Project>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="PageTitle">View Project</h4>
+<p><a asp-action="CreateProject">Create New Project</a></p>
+<!-- Add a partial view to display a list of staff records in a tabular format. -->
+<partial name="~/Views/Project/_ViewProject.cshtml" model="@Model" />
