@@ -40,7 +40,7 @@ namespace web_team3_assignment.DAL
             conn.Close();
             foreach (DataRow row in result.Tables["loginDetails"].Rows)
             {
-                string emailaddress = row["EmailAddr"].ToString();
+                string emailaddress = row["EmailAddr"].ToString().ToLower();
                 string pass = row["Password"].ToString();
                 
                 if (emailaddress == email && pass == password)
@@ -60,7 +60,7 @@ namespace web_team3_assignment.DAL
             conn.Close();
             foreach (DataRow row in result.Tables["studentLoginDetails"].Rows)
             {
-                string emailaddress = row["EmailAddr"].ToString();
+                string emailaddress = row["EmailAddr"].ToString().ToLower();
                 string pass = row["Password"].ToString();
 
                 if (emailaddress == email && pass == password)

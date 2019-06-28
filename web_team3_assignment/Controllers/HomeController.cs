@@ -26,7 +26,7 @@ namespace web_team3_assignment.Controllers
         {
             // Read inputs from textboxes
             // Email address converted to lowercase
-            string loginID = formData["txtLecturerID"].ToString();
+            string loginID = formData["txtLecturerID"].ToString().ToLower();
             string password = formData["txtLecturerPassword"].ToString();
 
             if (homeContext.lecturerLogin(loginID, password))
@@ -49,7 +49,7 @@ namespace web_team3_assignment.Controllers
         {
             // Read inputs from textboxes
             // Email address converted to lowercase
-            string studentLoginID = formData["txtLoginID"].ToString();
+            string studentLoginID = formData["txtLoginID"].ToString().ToLower();
             string studentPassword = formData["txtPassword"].ToString();
 
             if (homeContext.studentLogin(studentLoginID, studentPassword))
