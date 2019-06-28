@@ -122,5 +122,22 @@ namespace web_team3_assignment.Controllers
                 return View();
             }
         }
+        // GET: Lecturer/PostSuggestion
+        public ActionResult PostSuggestion()
+        {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+                (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //// POST: Lecturer/PostSuggestion
+        //public ActionResult PostSuggestion()
+        //{
+
+        //}
     }
 }
