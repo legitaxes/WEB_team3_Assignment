@@ -4,11 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using web_team3_assignment.DAL;
+using web_team3_assignment.Models;
+using System.IO;
+
 
 namespace web_team3_assignment.Controllers
 {
     public class HomeController : Controller
     {
+        private HomeDAL homeContext = new HomeDAL();
+
         public IActionResult Index()
         {
             return View();
@@ -19,9 +26,10 @@ namespace web_team3_assignment.Controllers
         {
             // Read inputs from textboxes
             // Email address converted to lowercase
-            string loginID = formData["txtLoginID"].ToString().ToLower();
-            string password = formData["txtPassword"].ToString();
-            if (loginID == "abc@npbook.com" && password == "pass1234")
+            string loginID = formData["txtLecturerID"].ToString();
+            string password = formData["txtLecturerPassword"].ToString();
+
+            if (homeContext.lecturerLogin(loginID, password))
             {
                 HttpContext.Session.SetString("LoginID", loginID);
                 HttpContext.Session.SetString("Role", "Lecturer");
@@ -29,24 +37,52 @@ namespace web_team3_assignment.Controllers
                 // Redirect user to the "StaffMain" view through an action
                 return RedirectToAction("LecturerMain");
             }
-
-            if (loginID == "abc2@npbook.com" && password == "pass1234")
+            else
             {
-                HttpContext.Session.SetString("LoginID", loginID);
+                TempData["Message"] = "Invalid Login Credentials!";
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult StudentLogin(IFormCollection formData)
+        {
+            // Read inputs from textboxes
+            // Email address converted to lowercase
+            string studentLoginID = formData["txtLoginID"].ToString();
+            string studentPassword = formData["txtPassword"].ToString();
+
+            if (homeContext.studentLogin(studentLoginID, studentPassword))
+            {
+                HttpContext.Session.SetString("LoginID", studentLoginID);
                 HttpContext.Session.SetString("Role", "Student");
                 HttpContext.Session.SetString("currentTime", DateTime.Now.ToString());
                 // Redirect user to the "StudentMain" view through an action
                 return RedirectToAction("StudentMain");
             }
-
             else
             {
-                // Store an error message in TempData for display at the index view
                 TempData["Message"] = "Invalid Login Credentials!";
-
-                // Redirect user back to the index view through an action
                 return RedirectToAction("Index");
             }
+
+            //if (loginID == "abc2@npbook.com" && password == "pass1234")
+            //{
+            //    HttpContext.Session.SetString("LoginID", loginID);
+            //    HttpContext.Session.SetString("Role", "Student");
+            //    HttpContext.Session.SetString("currentTime", DateTime.Now.ToString());
+            //    // Redirect user to the "StudentMain" view through an action
+            //    return RedirectToAction("StudentMain");
+            //}
+
+            //else
+            //{
+            //    // Store an error message in TempData for display at the index view
+            //    TempData["Message"] = "Invalid Login Credentials!";
+
+            //    // Redirect user back to the index view through an action
+            //    return RedirectToAction("Index");
+            //}
         }
 
         public ActionResult LecturerMain()

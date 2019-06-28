@@ -34,11 +34,11 @@
                     <fieldset class="loginFieldset">
                         <legend>Lecturer Login</legend>
                         <label for="txtLoginID">Login ID:</label>
-                        <input type="email" name="txtLoginID"
-                               id="txtLoginID" required /><br />
+                        <input type="email" name="txtLecturerID"
+                               id="txtLecturerID" required /><br />
                         <label for="txtPassword">Password:</label>
-                        <input type="password" name="txtPassword"
-                               id="txtPassword" style="width:100px"
+                        <input type="password" name="txtLecturerPassword"
+                               id="txtLecturerPassword" style="width:100px"
                                required />
                         <input type="submit" id="btnStaffLogin"
                                class="myButton" value="Login" />
@@ -47,12 +47,20 @@
             </div>
             <!-- Flexbox for student login -->
             <div>
-                <fieldset class="loginFieldset">
-                    <legend>Student Login</legend>
-                    <p>
-                        <a href="#" class="myButton">Microsoft Login</a>
-                    </p>
-                </fieldset>
+                <form method="post" action="~/Home/StudentLogin">
+                    <fieldset class="loginFieldset">
+                        <legend>Student Login</legend> 
+                        <label for="txtLoginID">Login ID:</label>
+                        <input type="email" name="txtLoginID"
+                               id="txtLoginID" required /><br />
+                        <label for="txtPassword">Password:</label>
+                        <input type="password" name="txtPassword"
+                               id="txtPassword" style="width:100px"
+                               required />
+                        <input type="submit" id="btnStduentLogin"
+                               class="myButton" value="Login" />
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>
