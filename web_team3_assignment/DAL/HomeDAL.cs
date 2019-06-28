@@ -32,7 +32,7 @@ namespace web_team3_assignment.DAL
 
         public bool lecturerLogin(string email, string password)
         {
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer ORDER BY LecturerID", conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer", conn);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet result = new DataSet();
             conn.Open();
@@ -50,9 +50,10 @@ namespace web_team3_assignment.DAL
             }
             return false;
         }
+
         public bool studentLogin(string email, string password)
         {
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Student ORDER BY StudentID", conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Student", conn);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet result = new DataSet();
             conn.Open();
