@@ -48,10 +48,10 @@ namespace web_team3_assignment.DAL
                     lecturer.LecturerId = Convert.ToInt32(row["LecturerID"]);
                     if (!DBNull.Value.Equals(row["Name"]))
                         lecturer.Name = row["Name"].ToString();
-                    return lecturer;
+                    break;
                 }
             }
-            return null;
+            return lecturer;
         }
 
         public bool studentLogin(string email, string password)
