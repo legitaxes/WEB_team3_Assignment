@@ -57,6 +57,10 @@
         </div>
         <div>
             <a class="btn btn-secondary" role="button" asp-action="Index">Back to List</a>
+            @if (ViewData["Message"] != null)
+            {
+                <span class="text-danger">@ViewData["Message"]</span>
+            }
         </div>
     </fieldset>
 </form>

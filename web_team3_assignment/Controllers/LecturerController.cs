@@ -27,12 +27,14 @@ namespace web_team3_assignment.Controllers
             return View(lecturerList);
         }
 
+        //Done
         // GET: Lecturer/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
+        //Done
         // GET: Lecturer/Create
         public ActionResult Create()
         {
@@ -45,6 +47,8 @@ namespace web_team3_assignment.Controllers
             return View();
         }
 
+        //Done
+
         // POST: Lecturer/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -53,8 +57,9 @@ namespace web_team3_assignment.Controllers
             lecturer.Password = "p@55Mentor";
             if (ModelState.IsValid)
             {
+                ViewData["Message"] = "Employee Created Successfully";
                 lecturer.LecturerId = lecturerContext.Add(lecturer);
-                return RedirectToAction("Index");
+                return View();
             }
             else
             {

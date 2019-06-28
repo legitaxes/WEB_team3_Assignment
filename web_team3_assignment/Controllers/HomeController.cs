@@ -28,10 +28,10 @@ namespace web_team3_assignment.Controllers
             // Email address converted to lowercase
             string loginID = formData["txtLecturerID"].ToString().ToLower();
             string password = formData["txtLecturerPassword"].ToString();
-
-            if (homeContext.lecturerLogin(loginID, password))
+            Lecturer lecturer = homeContext.lecturerLogin(loginID, password);
+            if (lecturer.Email == loginID && lecturer.Password == password)
             {
-                HttpContext.Session.SetString("LoginID", loginID);
+                HttpContext.Session.SetString("LoginID", lecturer.Name.ToString());
                 HttpContext.Session.SetString("Role", "Lecturer");
                 HttpContext.Session.SetString("currentTime", DateTime.Now.ToString());
                 // Redirect user to the "StaffMain" view through an action
@@ -39,7 +39,7 @@ namespace web_team3_assignment.Controllers
             }
             else
             {
-                TempData["Message"] = "Invalid Login Credentials!";
+                TempData["LecturerMessage"] = "Invalid Login Credentials!";
                 return RedirectToAction("Index");
             }
         }
