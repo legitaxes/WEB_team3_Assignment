@@ -7,6 +7,7 @@ using System.IO;
 using System.Data;
 using System.Data.SqlClient;
 using web_team3_assignment.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace web_team3_assignment.DAL
 {
@@ -29,6 +30,7 @@ namespace web_team3_assignment.DAL
             //Connection String read.
             conn = new SqlConnection(strConn);
         }
+
         public int Add(Lecturer lecturer)
         {
             //sql command to add (i hope it works :pray:)
@@ -47,6 +49,24 @@ namespace web_team3_assignment.DAL
             conn.Close();
             return lecturer.LecturerId;
         }
+
+        public bool IsEmailExist(string email)
+        {
+            SqlCommand cmd = new SqlCommand
+            ("SELECT LecturerID FROM Lecturer WHERE EmailAddr=@selectedEmail", conn);
+            cmd.Parameters.AddWithValue("@selectedEmail", email);
+            SqlDataAdapter daEmail = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            //Use DataAdapter to fetch data to a table "EmailDetails" in DataSet.
+            daEmail.Fill(result, "EmailDetails");
+            conn.Close();
+            if (result.Tables["EmailDetails"].Rows.Count > 0)
+                return true; //The email exists for another staff
+            else
+                return false; // The email address given does not exist
+        }
+
         public List<Lecturer> GetAllLecturer()
         {
             //Instantiate a SqlCommand object, supply it with a
@@ -119,6 +139,45 @@ namespace web_team3_assignment.DAL
             {
                 return null; 
             }
+        }
+
+        public int PostSuggestion(Suggestion suggestion)
+        {
+            SqlCommand cmd = new SqlCommand("INSERT INTO Suggestion (LecturerID, StudentID, Description, Status) " +
+            "OUTPUT INSERTED.SuggestionID " +
+            "VALUES(@lecturerid, @student, @desc, @status)", conn);
+            cmd.Parameters.AddWithValue("@lecturerid", suggestion.LecturerId);
+            cmd.Parameters.AddWithValue("@student", suggestion.StudentId);
+            cmd.Parameters.AddWithValue("@desc", suggestion.Description);
+            cmd.Parameters.AddWithValue("@status", suggestion.Status);
+            conn.Open();
+            suggestion.SuggestionId = (int)cmd.ExecuteScalar();
+            conn.Close();
+            return suggestion.SuggestionId;
+        }
+
+        public List<SelectListItem> GetMentees(int lecturerId)
+        {
+
+            SqlCommand cmd = new SqlCommand("SELECT StudentID, Name FROM Student WHERE MentorID = @selectedMentorID", conn);
+            cmd.Parameters.AddWithValue("@selectedMentorID", lecturerId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "MenteeDetails");
+            conn.Close();
+            List<SelectListItem> menteesList = new List<SelectListItem>();
+            System.Diagnostics.Debug.WriteLine(menteesList.Count);
+            foreach (DataRow row in result.Tables["MenteeDetails"].Rows)
+            {
+                menteesList.Add(
+                    new SelectListItem
+                    {
+                        Value = row["StudentID"].ToString(),
+                        Text = row["Name"].ToString()
+                    });
+            }
+            return menteesList;
         }
     }
 

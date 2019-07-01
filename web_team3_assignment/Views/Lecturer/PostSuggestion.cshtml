@@ -1,4 +1,4 @@
-﻿@model web_team3_assignment.Models.Lecturer
+﻿@model web_team3_assignment.Models.Suggestion
 
 @{
     ViewData["Title"] = "PostSuggestion";
@@ -6,8 +6,41 @@
 }
 
 <img src="~/images/postsuggestion.png" style="display:block; margin:auto;" class="img-fluid" />
-@*<form asp-action="PostSuggestion">
+<form asp-action="PostSuggestion">
     <fieldset class="FormContent">
         <legend>Key in a Suggestion to a Mentee Below</legend>
-        <div class="form-group row">*@
+        <div class="form-group row">
+            <label asp-for="StudentId"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-4">
+                <select asp-for="StudentId"
+                        asp-items="@ViewData["MenteeList"] as List<SelectListItem>"
+                        class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Description"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-4">
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description"
+                      class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <input type="submit" value="Post Suggestion"
+                       class="btn btn-primary" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
 
+                @if (ViewData["Message"] != null)
+                {
+                    <span class="text-danger">@ViewData["Message"]</span>
+                }
+            </div>
+        </div>
+</fieldset>
+    </form>

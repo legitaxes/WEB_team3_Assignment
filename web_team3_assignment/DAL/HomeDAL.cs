@@ -32,7 +32,7 @@ namespace web_team3_assignment.DAL
 
         public Lecturer lecturerLogin(string email, string password)
         {
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer", conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer" , conn);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet result = new DataSet();
             conn.Open();

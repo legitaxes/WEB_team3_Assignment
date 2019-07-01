@@ -14,19 +14,18 @@ namespace web_team3_assignment.Models
         [Display(Name = "Lecturer ID")]
         public int LecturerId { get; set; }
 
-        [Display(Name = "Student ID")]
+        [Display(Name = "Student Name")]
         public int StudentId { get; set; }
 
+        [Required(ErrorMessage = "Fill in the Description!")]
         [StringLength(3000, ErrorMessage = "Description Cannot Exceed 3000 Characters!")]
         public string Description { get; set; }
 
-        [Required]
-        [StringLength(1, ErrorMessage ="Status Cannot Exceed More Than 1 Character!")]
         public char Status { get; set; }
 
-        [Required]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
         public DateTime DateCreated { get; set; }
+
     }
 }

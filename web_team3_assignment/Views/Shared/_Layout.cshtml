@@ -26,8 +26,7 @@
                     {
                         @await Html.PartialAsync("_LecturerMenu.cshtml")
                     }
-
-                    else if (Context.Session.GetString("Role") == "Student")
+                    if (Context.Session.GetString("Role") == "Student")
                     {
                         @await Html.PartialAsync("_StudentMenu.cshtml")
                     }
@@ -45,11 +44,10 @@
                         if (Context.Session.GetString("Role") != null)
                         {
                             userRole = Context.Session.GetString("Role");
-                            today = Context.Session.GetString("currentTime");
                         }
-                        if (Context.Session.GetString("LoginID") != null)
+                        if (Context.Session.GetString("LoginName") != null)
                         {
-                            userId = Context.Session.GetString("LoginID");
+                            userId = Context.Session.GetString("LoginName");
                             today = Context.Session.GetString("currentTime");
                         }
                     }

@@ -31,7 +31,8 @@ namespace web_team3_assignment.Controllers
             Lecturer lecturer = homeContext.lecturerLogin(loginID, password);
             if (lecturer.Email == loginID && lecturer.Password == password)
             {
-                HttpContext.Session.SetString("LoginID", lecturer.Name.ToString());
+                HttpContext.Session.SetString("LoginName", lecturer.Name.ToString());
+                HttpContext.Session.SetString("ID", lecturer.LecturerId.ToString());
                 HttpContext.Session.SetString("Role", "Lecturer");
                 HttpContext.Session.SetString("currentTime", DateTime.Now.ToString());
                 // Redirect user to the "StaffMain" view through an action
@@ -54,7 +55,7 @@ namespace web_team3_assignment.Controllers
 
             if (homeContext.studentLogin(studentLoginID, studentPassword))
             {
-                HttpContext.Session.SetString("LoginID", studentLoginID);
+                HttpContext.Session.SetString("LoginName", studentLoginID);
                 HttpContext.Session.SetString("Role", "Student");
                 HttpContext.Session.SetString("currentTime", DateTime.Now.ToString());
                 // Redirect user to the "StudentMain" view through an action
@@ -65,44 +66,46 @@ namespace web_team3_assignment.Controllers
                 TempData["Message"] = "Invalid Login Credentials!";
                 return RedirectToAction("Index");
             }
-
-            //if (loginID == "abc2@npbook.com" && password == "pass1234")
-            //{
-            //    HttpContext.Session.SetString("LoginID", loginID);
-            //    HttpContext.Session.SetString("Role", "Student");
-            //    HttpContext.Session.SetString("currentTime", DateTime.Now.ToString());
-            //    // Redirect user to the "StudentMain" view through an action
-            //    return RedirectToAction("StudentMain");
-            //}
-
-            //else
-            //{
-            //    // Store an error message in TempData for display at the index view
-            //    TempData["Message"] = "Invalid Login Credentials!";
-
-            //    // Redirect user back to the index view through an action
-            //    return RedirectToAction("Index");
-            //}
         }
 
         public ActionResult LecturerMain()
         {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
         public ActionResult StudentMain()
         {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
 
         public ActionResult ProjectMain()
         {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
         public ActionResult SkillSetMain()
         {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 

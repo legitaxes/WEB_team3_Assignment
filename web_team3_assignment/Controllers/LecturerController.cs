@@ -13,6 +13,7 @@ namespace web_team3_assignment.Controllers
     public class LecturerController : Controller
     {
         private LecturerDAL lecturerContext = new LecturerDAL();
+
         // GET: Lecturer
         public ActionResult Index()
         {
@@ -55,6 +56,7 @@ namespace web_team3_assignment.Controllers
         public ActionResult Create(Lecturer lecturer)
         {
             lecturer.Password = "p@55Mentor";
+            System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {
                 ViewData["Message"] = "Employee Created Successfully";
@@ -65,17 +67,17 @@ namespace web_team3_assignment.Controllers
             {
                 return View(lecturer);
             }
-              //try
-              //{
-              //    // TODO: Add insert logic here
+            //try
+            //{
+            //    // TODO: Add insert logic here
 
-                //    return RedirectToAction(nameof(Index));
-                //}
-                //catch
-                //{
-                //    return View();
-                //}
-            }
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //catch
+            //{
+            //    return View();
+            //}
+        }
 
         // GET: Lecturer/Edit/5
         public ActionResult Edit(int id)
@@ -122,6 +124,7 @@ namespace web_team3_assignment.Controllers
                 return View();
             }
         }
+
         // GET: Lecturer/PostSuggestion
         public ActionResult PostSuggestion()
         {
@@ -130,14 +133,32 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            ViewData["MenteeList"] = lecturerContext.GetMentees(Convert.ToInt32(HttpContext.Session.GetString("ID")));
             return View();
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //// POST: Lecturer/PostSuggestion
-        //public ActionResult PostSuggestion()
-        //{
 
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        // POST: Lecturer/PostSuggestion
+        public ActionResult PostSuggestion(Suggestion suggest)
+        {
+            //ViewData["MenteeList"] = lecturerContext.GetMentees(Convert.ToInt32(HttpContext.Session.GetString("ID")));
+            suggest.LecturerId = Convert.ToInt32(HttpContext.Session.GetString("ID"));
+            suggest.Status = 'N';
+            System.Diagnostics.Debug.WriteLine(suggest.StudentId);
+            System.Diagnostics.Debug.WriteLine(suggest.Description);
+            System.Diagnostics.Debug.WriteLine(suggest.LecturerId);
+            System.Diagnostics.Debug.WriteLine(suggest.Status);
+            if (ModelState.IsValid)
+            {
+                suggest.SuggestionId = lecturerContext.PostSuggestion(suggest);
+                ViewData["Message"] = "Suggestion Posted Successfully";
+                return View();
+            }
+            else
+            {
+                return View(suggest);
+            }
+        }
     }
 }

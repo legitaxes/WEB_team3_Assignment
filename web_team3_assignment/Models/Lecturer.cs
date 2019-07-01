@@ -18,12 +18,10 @@ namespace web_team3_assignment.Models
         [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [Display(Name = "Email Address")]
         [EmailAddress]
+        [ValidateEmailExists(ErrorMessage = "Email Address already exists!")]
         [StringLength(50, ErrorMessage = "Email Cannot Exceed 50 Characters!")]
-        // Custom Validation Attribute for checking email address exists
-        //[ValidateEmailExists(ErrorMessage = "Email address already exists!")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [DataType(DataType.Password)]
         [StringLength(255, ErrorMessage = "Password Length Cannot Exceed 255 Characters!")]
         public string Password { get; set; }
