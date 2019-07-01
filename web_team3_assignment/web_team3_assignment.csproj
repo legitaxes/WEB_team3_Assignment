@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Suggestion\" />
     <Folder Include="Views\ProjectMembers\" />
-    <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\css\" />
   </ItemGroup>
 

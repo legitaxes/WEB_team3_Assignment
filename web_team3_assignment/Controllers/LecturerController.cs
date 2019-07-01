@@ -13,6 +13,7 @@ namespace web_team3_assignment.Controllers
     public class LecturerController : Controller
     {
         private LecturerDAL lecturerContext = new LecturerDAL();
+        private SuggestionDAL suggestionContext = new SuggestionDAL();
 
         // GET: Lecturer
         public ActionResult Index()
@@ -151,7 +152,7 @@ namespace web_team3_assignment.Controllers
             System.Diagnostics.Debug.WriteLine(suggest.Status);
             if (ModelState.IsValid)
             {
-                suggest.SuggestionId = lecturerContext.PostSuggestion(suggest);
+                suggest.SuggestionId = suggestionContext.PostSuggestion(suggest);
                 ViewData["Message"] = "Suggestion Posted Successfully";
                 return View();
             }

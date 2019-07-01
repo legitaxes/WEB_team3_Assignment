@@ -141,21 +141,6 @@ namespace web_team3_assignment.DAL
             }
         }
 
-        public int PostSuggestion(Suggestion suggestion)
-        {
-            SqlCommand cmd = new SqlCommand("INSERT INTO Suggestion (LecturerID, StudentID, Description, Status) " +
-            "OUTPUT INSERTED.SuggestionID " +
-            "VALUES(@lecturerid, @student, @desc, @status)", conn);
-            cmd.Parameters.AddWithValue("@lecturerid", suggestion.LecturerId);
-            cmd.Parameters.AddWithValue("@student", suggestion.StudentId);
-            cmd.Parameters.AddWithValue("@desc", suggestion.Description);
-            cmd.Parameters.AddWithValue("@status", suggestion.Status);
-            conn.Open();
-            suggestion.SuggestionId = (int)cmd.ExecuteScalar();
-            conn.Close();
-            return suggestion.SuggestionId;
-        }
-
         public List<SelectListItem> GetMentees(int lecturerId)
         {
 

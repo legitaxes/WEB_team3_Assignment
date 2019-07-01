@@ -17,6 +17,12 @@
     <title>NP ICT Portfolio</title>
 
     <!-- Reference to customized styling for this website -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/basscss@7.1.1/css/basscss.min.css" rel="stylesheet">
+    <script src="~/js/jquery-3.3.1.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/script.js"></script>
     <link rel="stylesheet" type="text/css" href="~/css/Site.css">
 </head>
 <body>
@@ -25,48 +31,87 @@
         <div class="flex-container">
             <!-- Flexbox for logo, auto-expand in the container -->
             <div style="flex:auto;">
-                <img id="imgNPLogo" src="~/images/nplogo.gif" />
+                <img id="imgNPLogo" src="~/images/nplogo.gif" style="display:block; margin:auto;"/>
             </div>
             <div></div>
-            <!-- Flexbox for staff login -->
-            <div>
-                <form method="post" action="~/Home/StaffLogin" id="lecturerform">
-                    <fieldset class="loginFieldset">
-                        <legend>Lecturer Login</legend>
-                        <label for="txtLoginID">Login ID:</label>
-                        <input type="email" name="txtLecturerID"
-                               id="txtLecturerID" required /><br />
-                        <label for="txtPassword">Password:</label>
-                        <input type="password" name="txtLecturerPassword"
-                               id="txtLecturerPassword" style="width:100px"
-                               required />
-                        <input type="submit" id="btnStaffLogin"
-                               class="myButton" value="Login" />
-                        <br />
-                        <span style="color: red;">@TempData["LecturerMessage"]</span>
-                    </fieldset>
-                </form>
-            </div>
-            <!-- Flexbox for student login -->
-            <div>
-                <form method="post" action="~/Home/StudentLogin" id="studentform">
-                    <fieldset class="loginFieldset">
-                        <legend>Student Login</legend>
-                        <label for="txtLoginID">Login ID:</label>
-                        <input type="email" name="txtLoginID"
-                               id="txtLoginID" required /><br />
-                        <label for="txtPassword">Password:</label>
-                        <input type="password" name="txtPassword"
-                               id="txtPassword" style="width:100px"
-                               required />
-                        <input type="submit" id="btnStduentLogin"
-                               class="myButton" value="Login" />
-                        <br />
-                        <span style="color: red;">@TempData["Message"]</span>
-                    </fieldset>
-                </form>
-            </div>
         </div>
+        <div>
+            <img src="~/images/welcome.gif" style="display:block; margin:auto;" class="img-fluid" />
+            <div style="text-align:center" id="buttonmenu">
+                <br />
+                <h5>Choose Login Method</h5>
+                <br />
+                <button class="btn btn-outline mb1 red" id="lecturerbtn">Lecturer Login</button>
+                <button class="btn btn-outline mb1 fuchsia" id="studentbtn">Student Login</button>
+            </div>
+            <form method="post" action="~/Home/StaffLogin" id="lecturerform">
+                <fieldset class="loginFieldset">
+                    <legend>Lecturer Login</legend>
+                    <div class="form-group row">
+                        <label for="txtLoginID" class="col-sm-3 col-form-label">Login ID:</label>
+                        <div class="col-sm-9 col-md-5">
+                            <input type="email" name="txtLecturerID"
+                                   id="txtLecturerID" required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtPassword" class="col-sm-3 col-form-label">Password:</label>
+                        <div class="col-sm-9 col-md-5">
+                            <input type="password" name="txtLecturerPassword"
+                                   id="txtLecturerPassword" style="width:100px"
+                                   required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-9 offset-sm-3">
+                            <input type="submit" id="btnStaffLogin"
+                                   class="myButton" value="Login" />
+                        </div>
+                        <div class="col-sm-9 offset-sm-3">
+                            <span style="color: red;">@TempData["LecturerMessage"]</span>
+                        </div>
+                    </div>
+                    <div>
+                        <a class="btn btn-primary mb1 bg-teal" role="button" id="choose">Back to Menu</a>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div>
+            <form method="post" action="~/Home/StudentLogin" id="studentform">
+                <fieldset class="loginFieldset">
+                    <legend>Student Login</legend>
+                    <div class="form-group row">
+                        <label for="txtLoginID" class="col-sm-3 col-form-label">Login ID:</label>
+                        <div class="col-sm-9 col-md-5">
+                            <input type="email" name="txtLoginID"
+                                   id="txtLoginID" required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtPassword" class="col-sm-3 col-form-label">Password:</label>
+                        <div class="col-sm-9 col-md-5">
+                            <input type="password" name="txtPassword"
+                                   id="txtPassword" style="width:100px"
+                                   required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-9 offset-sm-3">
+                            <input type="submit" id="btnStduentLogin"
+                                   class="myButton" value="Login" />
+                        </div>
+                        <div class="col-sm-9 offset-sm-3">
+                            <span style="color: red;">@TempData["Message"]</span>
+                        </div>
+                    </div>
+                    <div>
+                        <a class="btn btn-primary mb1 bg-teal" role="button" id="choosemenu">Back To Menu</a>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
     </div>
 </body>
 </html>
