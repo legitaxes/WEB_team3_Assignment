@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Student\" />
     <Folder Include="Views\Suggestion\" />
     <Folder Include="Views\ProjectMembers\" />
     <Folder Include="wwwroot\css\" />
@@ -17,9 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Views\Home\StudentMain.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="Views\Shared\_StudentMenu.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
