@@ -126,40 +126,39 @@ namespace web_team3_assignment.Controllers
             }
         }
 
-        // GET: Lecturer/PostSuggestion
-        public ActionResult PostSuggestion()
-        {
-            if ((HttpContext.Session.GetString("Role") == null) ||
-                (HttpContext.Session.GetString("Role") != "Lecturer"))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            ViewData["MenteeList"] = lecturerContext.GetMentees(Convert.ToInt32(HttpContext.Session.GetString("ID")));
-            return View();
-        }
+        //// GET: Lecturer/PostSuggestion
+        //public ActionResult PostSuggestion()
+        //{
+        //    if ((HttpContext.Session.GetString("Role") == null) ||
+        //        (HttpContext.Session.GetString("Role") != "Lecturer"))
+        //    {
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    ViewData["MenteeList"] = lecturerContext.GetMentees(Convert.ToInt32(HttpContext.Session.GetString("ID")));
+        //    return View();
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        // POST: Lecturer/PostSuggestion
-        public ActionResult PostSuggestion(Suggestion suggest)
-        {
-            //ViewData["MenteeList"] = lecturerContext.GetMentees(Convert.ToInt32(HttpContext.Session.GetString("ID")));
-            suggest.LecturerId = Convert.ToInt32(HttpContext.Session.GetString("ID"));
-            suggest.Status = 'N';
-            System.Diagnostics.Debug.WriteLine(suggest.StudentId);
-            System.Diagnostics.Debug.WriteLine(suggest.Description);
-            System.Diagnostics.Debug.WriteLine(suggest.LecturerId);
-            System.Diagnostics.Debug.WriteLine(suggest.Status);
-            if (ModelState.IsValid)
-            {
-                suggest.SuggestionId = suggestionContext.PostSuggestion(suggest);
-                ViewData["Message"] = "Suggestion Posted Successfully";
-                return View();
-            }
-            else
-            {
-                return View(suggest);
-            }
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //// POST: Lecturer/PostSuggestion
+        //public ActionResult PostSuggestion(Suggestion suggest)
+        //{
+        //    suggest.LecturerId = Convert.ToInt32(HttpContext.Session.GetString("ID"));
+        //    suggest.Status = 'N';
+        //    System.Diagnostics.Debug.WriteLine(suggest.StudentId);
+        //    System.Diagnostics.Debug.WriteLine(suggest.Description);
+        //    System.Diagnostics.Debug.WriteLine(suggest.LecturerId);
+        //    System.Diagnostics.Debug.WriteLine(suggest.Status);
+        //    if (ModelState.IsValid)
+        //    {
+        //        suggest.SuggestionId = suggestionContext.PostSuggestion(suggest);
+        //        ViewData["Message"] = "Suggestion Posted Successfully";
+        //        return View();
+        //    }
+        //    else
+        //    {
+        //        return View(suggest);
+        //    }
+        //}
     }
 }

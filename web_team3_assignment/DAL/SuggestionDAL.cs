@@ -46,5 +46,68 @@ namespace web_team3_assignment.DAL
             return suggestion.SuggestionId;
         }
 
+        //public List<Suggestion> GetSuggestionDetails(int lecturerid)
+        //{
+        //    SqlCommand cmd = new SqlCommand
+        //    ("SELECT * FROM Suggestion WHERE LecturerID = @selectedLecturerID", conn);
+        //    cmd.Parameters.AddWithValue("@selectedLecturerID", lecturerid);
+        //    SqlDataAdapter da = new SqlDataAdapter(cmd);
+        //    DataSet result = new DataSet();
+        //    conn.Open();
+        //    da.Fill(result, "SuggestionDetails");
+        //    conn.Close();
+        //    Suggestion suggestion = new Suggestion();
+        //    if (result.Tables["SuggestionDetails"].Rows.Count > 0)
+        //    {
+        //        suggestion.LecturerId = lecturerid;
+        //        DataTable table = result.Tables["SuggestionDetails"];
+
+        //        if (!DBNull.Value.Equals(table.Rows[0]["SuggestionID"]))
+        //            suggestion.SuggestionId = Convert.ToInt32(table.Rows[0]["SuggestionID"]);
+
+        //        if (!DBNull.Value.Equals(table.Rows[0]["StudentID"]))
+        //            suggestion.StudentId = Convert.ToInt32(table.Rows[0]["StudentID"]);
+
+        //        if (!DBNull.Value.Equals(table.Rows[0]["Description"]))
+        //            suggestion.Description = table.Rows[0]["Description"].ToString();
+
+        //        if (!DBNull.Value.Equals(table.Rows[0]["Status"]))
+        //            suggestion.Status = Convert.ToChar(table.Rows[0]["Status"]);
+
+        //        return suggestion;
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
+
+        public List<Suggestion> GetAllSuggestionDetails(int lecturerId)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Suggestion" +
+                " WHERE LecturerID = @selectedLecturerID", conn);
+            cmd.Parameters.AddWithValue("@selectedLecturerID", lecturerId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "SuggestDetails");
+            conn.Close();
+            List<Suggestion> suggestList = new List<Suggestion>();
+            foreach (DataRow row in result.Tables["SuggestDetails"].Rows)
+            {
+                suggestList.Add(
+                    new Suggestion
+                    {
+                        SuggestionId = Convert.ToInt32(row["SuggestionID"]),
+                        LecturerId = Convert.ToInt32(row["LecturerID"]),
+                        StudentId = Convert.ToInt32(row["StudentID"]),
+                        Description = row["Description"].ToString(),
+                        Status = Convert.ToChar(row["Status"]),
+                        DateCreated = Convert.ToDateTime(row["DateCreated"])
+                    }
+                    );
+            }
+            return suggestList; 
+        }
     }
 }

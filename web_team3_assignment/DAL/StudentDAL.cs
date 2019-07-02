@@ -59,11 +59,15 @@ namespace web_team3_assignment.DAL
                 studentList.Add(
                 new Student
                 {
-                    StudentID = Convert.ToInt32(row["LecturerID"]),
+                    StudentID = Convert.ToInt32(row["StudentID"]),
                     Name = row["Name"].ToString(),
+                    Course = row["Course"].ToString(),
+                    Description = row["Description"].ToString(),
+                    Achievement = row["Achievement"].ToString(),
+                    ExternalLink = row["ExternalLink"].ToString(),
                     Email = row["EmailAddr"].ToString(),
                     Password = row["Password"].ToString(),
-                    Description = row["Description"].ToString()
+                    MentorID = Convert.ToInt32(row["MentorID"])
                 }
                 );
             }

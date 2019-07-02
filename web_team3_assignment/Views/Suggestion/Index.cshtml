@@ -1,0 +1,45 @@
+﻿@model IEnumerable<web_team3_assignment.Models.SuggestionViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<img class="img-fluid" src="~/images/viewsuggestion.png" style="display:block; margin:auto;" />
+<a asp-action="PostSuggestion"><img class="img-fluid" src="~/images/postsuggestion.gif" style="display:block; margin:auto;" /></a>
+
+@if (Model.ToList().Count > 0)
+{
+    <div class="table-responsive">
+        <table id="viewStaff" class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Student Name</th>
+                    <th>Description</th>
+                    <th>Date Created</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                 {
+                    <tr>
+                        <td>@item.SuggestionId.ToString()</td>
+                        <td>@item.StudentName</td>
+                        <td>@item.Description</td>
+                        <td>@item.DateCreated.ToString()</td>
+                        <td>@item.Status</td>
+                        <td>
+                            <a asp-action="Edit" asp-controller="Suggestion"
+                              asp-route-id="@item.SuggestionId">Edit</a>
+                            <a asp-action="Delete" asp-controller="Suggestion"
+                              asp-route-id="@item.SuggestionId">Delete</a>
+                        </td>
+                    </tr>
+                 }
+            </tbody>
+        </table>
+    </div>
+}
