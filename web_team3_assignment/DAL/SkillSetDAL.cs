@@ -35,7 +35,7 @@ namespace web_team3_assignment.DAL
             SqlCommand cmd = new SqlCommand
                 ("INSERT INTO SkillSet (SkillSetName)" +
                 "OUTPUT INSERTED.SkillSetID " +
-                "VALUES(@skillsetname", conn);
+                "VALUES(@skillsetname)", conn);
             cmd.Parameters.AddWithValue("@skillsetname", skillSet.SkillSetName);        
             //open connection to run command
             conn.Open();
@@ -79,6 +79,62 @@ namespace web_team3_assignment.DAL
                 );
             }
             return SkillSetList;
+        }
+
+        // Return number of row updated
+        public int Update(SkillSet skillSet)
+        {
+            //Instantiate a SqlCommand object, supply it with SQL statement UPDATE
+            //and the connection object for connecting to the database.
+            SqlCommand cmd = new SqlCommand
+            ("UPDATE SkillSet SET SkillsetName=@skillsetName WHERE SkillsetID = @selectedSkillsetID", conn);
+
+            cmd.Parameters.AddWithValue("@skillsetName", skillSet.SkillSetName);
+            cmd.Parameters.AddWithValue("@selectedSkillsetID", skillSet.SkillSetId);
+
+            conn.Open();
+
+            int count = cmd.ExecuteNonQuery();
+
+            conn.Close();
+            return count;
+        }
+
+        public SkillSet GetDetails(int SkillSetId)
+        {
+            //Instantiate a SqlCommand object, supply it with a SELECT SQL
+            //statement which retrieves all attributes of a staff record.
+            SqlCommand cmd = new SqlCommand
+            ("SELECT * FROM SKillset WHERE SKillsetID = @selectedSkillsetID", conn);
+            //Define the parameter used in SQL statement, value for the
+            //parameter is retrieved from the method parameter “staffId”.
+            cmd.Parameters.AddWithValue("@selectedSkillsetID", SkillSetId);
+            //Instantiate a DataAdapter object, pass the SqlCommand
+            //object “cmd” as parameter.
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            //Create a DataSet object “result"
+            DataSet result = new DataSet();
+            //Open a database connection.
+            conn.Open();
+            //Use DataAdapter to fetch data to a table "StaffDetails" in DataSet.
+            da.Fill(result, "SkillsetDetails");
+            //Close the database connection
+            conn.Close();
+            SkillSet skillset = new SkillSet();
+            if (result.Tables["SkillsetDetails"].Rows.Count > 0)
+            {
+                skillset.SkillSetId = SkillSetId;
+                // Fill staff object with values from the DataSet
+                DataTable table = result.Tables["SkillsetDetails"];
+                if (!DBNull.Value.Equals(table.Rows[0]["SkillSetName"]))
+                    skillset.SkillSetName = table.Rows[0]["SkillSetName"].ToString();
+               
+                return skillset; // No error occurs
+            }
+            else
+            {
+                return null; // Record not found
+            }
         }
     }
 }

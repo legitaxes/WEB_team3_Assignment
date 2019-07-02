@@ -39,7 +39,7 @@ namespace web_team3_assignment.Controllers
         }
 
         // GET: SkillSet/Create
-        public ActionResult Create()
+        public ActionResult Create(SkillSet skillset)
         {
             // Stop accessing the action if not logged in // or account not in the "Lecturer" role
             if ((HttpContext.Session.GetString("Role") == null) ||
@@ -47,13 +47,15 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            SkillSetContext.Add(skillset);
+            return RedirectToAction("Index", "SkillSet");
             return View();
         }
 
         // POST: SkillSet/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SkillSet skillSet)
+        public ActionResult SkillSetCreate(SkillSet skillSet)
         {
             if (ModelState.IsValid)
             {
@@ -69,26 +71,45 @@ namespace web_team3_assignment.Controllers
         }
 
         // GET: SkillSet/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult SkillSetEdit(int? id)
         {
-            return View();
+            // Stop accessing the action if not logged in
+            // or account not in the "Staff" role
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            if (id == null) //Query string parameter not provided
+            {
+                //Return to listing page, not allowed to edit
+                return RedirectToAction("Index");
+            }
+            SkillSet skillset = SkillSetContext.GetDetails(id.Value);
+            if (skillset == null)
+            {
+                //Return to listing page, not allowed to edit
+                return RedirectToAction("Index");
+            }
+            return View(skillset);
         }
 
         // POST: SkillSet/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(SkillSet skillset)
         {
-            try
+            //Get branch list for drop-down list
+            //in case of the need to return to Edit.cshtml view
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
+                //Update skillset record to database
+                SkillSetContext.Update(skillset);
+                return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            //Input validation fails, return to the view
+            //to display error message
+            return View(skillset);
         }
 
         // GET: SkillSet/Delete/5

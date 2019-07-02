@@ -18,16 +18,16 @@
                     <tr>
                         <td>@item.SkillSetId.ToString()</td>
                         <td>@item.SkillSetName</td>
-                        <td>
+                        @*<td>
                             @{ string imageFileName = item.SkillSetName; }
                             <img src="~/images/@imageFileName"
                                  style="width:50px" />
-                        </td>
+                        </td>*@
                         
                         <td>
                             <a asp-action="Delete" asp-controller="SkillSet"
                                asp-route-id="@item.SkillSetId">Delete</a>|
-                            <a asp-action="Edit" asp-controller="SkillSet"
+                            <a asp-action="SkillSetEdit" asp-controller="SkillSet"
                                asp-route-id="@item.SkillSetId">Edit</a>
                         </td>
 
