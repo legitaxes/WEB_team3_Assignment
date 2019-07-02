@@ -1,0 +1,51 @@
+﻿@model web_team3_assignment.Models.Project
+
+@{
+    ViewData["Title"] = "Delete Project";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="PageTitle">Delete Project Record</h4>
+<hr />
+<form asp-action="DeleteProject">
+    <fieldset class="FormContent">
+        <legend>Are you sure to delete this record?</legend>
+        <div class="form-group row">
+            <label asp-for="ProjectId"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="ProjectId" readonly
+                       class="form-control-plaintext" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Title"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="Title"
+                       class="form-control-plaintext" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Description"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="Description"
+                       class="form-control-plaintext" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <input type="submit" value="Delete" asp-action="Index"
+                       class="btn btn-primary" />
+            </div>
+        </div>
+
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </fieldset>
+</form>

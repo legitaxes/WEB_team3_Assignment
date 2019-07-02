@@ -14,7 +14,7 @@
             <label asp-for="ProjectId"
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="ProjectId" class="form-control" @*disabled*@ />
+                <input asp-for="ProjectId" class="form-control" placeholder="New ID will be given automatically" disabled />
                 <span asp-validation-for="ProjectId"
                       class="text-danger"></span>
             </div>
@@ -63,7 +63,7 @@
 
         <div class="form-group row">
             <div class="col-sm-9 offset-sm-3">
-                <input type="submit" value="Create"
+                <input type="submit" value="Create" asp-action="Create"
                        class="btn btn-primary mb1 black bg-aqua" />
             </div>
         </div>

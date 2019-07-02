@@ -79,17 +79,13 @@ namespace web_team3_assignment.DAL
             return projectList;
         }
 
-
-
         public int Add(Project project)
         {
             SqlCommand cmd = new SqlCommand
-            ("INSERT INTO Project (ProjectID, Title, Description, ProjectPoster, ProjectURL)" + 
-            "OUTPUT INSERTED.ProjectID" +
-            "VALUES(@projectID, @title, @description, @projectPoster, @projectURL)", conn);
-
-
-            cmd.Parameters.AddWithValue("@projectID", project.ProjectId);
+            ("INSERT INTO Project (Title, Description, ProjectPoster, ProjectURL) " + 
+            "OUTPUT INSERTED.ProjectID " +
+            "VALUES(@title, @description, @projectPoster, @projectURL)", conn);
+        
             cmd.Parameters.AddWithValue("@title", project.Title);
             cmd.Parameters.AddWithValue("@description", project.Description);
             cmd.Parameters.AddWithValue("@projectPoster", project.ProjectPoster);
@@ -113,29 +109,29 @@ namespace web_team3_assignment.DAL
 
      
 
-        public bool IsProjectExists(string ProjectId)
-        {
-            SqlCommand cmd = new SqlCommand
-                ("SELECT ProjectID FROM Project WHERE ProjectID=@selectedProjectID", conn);
+        //public bool IsProjectExists(string ProjectId)
+        //{
+        //    SqlCommand cmd = new SqlCommand
+        //        ("SELECT ProjectID FROM Project WHERE ProjectID=@selectedProjectID", conn);
 
-            cmd.Parameters.AddWithValue("@selectedProjectID", ProjectId);
+        //    cmd.Parameters.AddWithValue("@selectedProjectID", ProjectId);
 
-            SqlDataAdapter daProjectId = new SqlDataAdapter(cmd);
-            DataSet result = new DataSet();
+        //    SqlDataAdapter daProjectId = new SqlDataAdapter(cmd);
+        //    DataSet result = new DataSet();
 
-            conn.Open();
+        //    conn.Open();
 
-            //Use DataAdapter to fetch data to a table "EmailDetails" in DataSet. 
-            daProjectId.Fill(result, "ProjectIdDetails");
-            conn.Close();
+        //    //Use DataAdapter to fetch data to a table "EmailDetails" in DataSet. 
+        //    daProjectId.Fill(result, "ProjectIdDetails");
+        //    conn.Close();
 
-            if (result.Tables["ProjectIdDetails"].Rows.Count > 0)
-                return true; //The email exists for another staff
+        //    if (result.Tables["ProjectIdDetails"].Rows.Count > 0)
+        //        return true; //The email exists for another staff
 
-            else
-                return false; // The email address given does not exist 
+        //    else
+        //        return false; // The email address given does not exist 
 
-        }
+        //}
 
 
         //Get project details
@@ -185,9 +181,6 @@ namespace web_team3_assignment.DAL
                 if (!DBNull.Value.Equals(table.Rows[0]["Description"]))
                     project.Description = table.Rows[0]["Description"].ToString();
 
-                if (!DBNull.Value.Equals(table.Rows[0]["ProjectPoster"]))
-                    project.Description = table.Rows[0]["ProjectPoster"].ToString();
-
                 return project; // No error occurs
             }
 
@@ -197,66 +190,56 @@ namespace web_team3_assignment.DAL
             }
         }
 
-      
 
-        //// Return number of row updated
-        //public int Update(Project project)
-        //{
-        //    //Instantiate a SqlCommand object, supply it with SQL statement UPDATE
-        //    //and the connection object for connecting to the database.
-        //    SqlCommand cmd = new SqlCommand
-        //    ("UPDATE Project SET ProjectID=@projectId, Title=@title, Description=@description" +
-        //    " WHERE ProjectID = @selectedProjectID", conn);
 
-        //    //Define the parameters used in SQL statement, value for each parameter
-        //    //is retrieved from the respective property of “staff” object.
-        //    cmd.Parameters.AddWithValue("@projectId", project.ProjectId);
-        //    cmd.Parameters.AddWithValue("@title", project.Title);
-        //    cmd.Parameters.AddWithValue("@description", project.Description);
+        // Return number of row updated
+        public int Update(Project project)
+        {
+            //Instantiate a SqlCommand object, supply it with SQL statement UPDATE
+            //and the connection object for connecting to the database.
+            SqlCommand cmd = new SqlCommand
+            ("UPDATE Project SET Title=@title, Description=@description WHERE ProjectID = @selectedProjectID ", conn);
 
-        //    if (project.ProjectId != null) // A title is assigned
-        //        cmd.Parameters.AddWithValue("@ProjectID", project.ProjectId);
+            //Assign values to parameters
+            cmd.Parameters.AddWithValue("@title", project.Title);
+            cmd.Parameters.AddWithValue("@description", project.Description);
+            cmd.Parameters.AddWithValue("@selectedProjectID", project.ProjectId);
 
-        //    else // No branch is assigned
-        //        cmd.Parameters.AddWithValue("@ProjectID", DBNull.Value);
+            //Open a database connection.
+            conn.Open();
 
-        //    cmd.Parameters.AddWithValue("@selectedProjectID", project.ProjectId);
+            //ExecuteNonQuery is used for UPDATE and DELETE
+            int count = cmd.ExecuteNonQuery();
 
-        //    //Open a database connection.
-        //    conn.Open();
+            //Close the database connection.
+            conn.Close();
 
-        //    //ExecuteNonQuery is used for UPDATE and DELETE
-        //    int count = cmd.ExecuteNonQuery();
-
-        //    //Close the database connection.
-        //    conn.Close();
-
-        //    return count;
-        //}
+            return count;
+        }
 
 
         //DELETE Project
-        //public int Delete(int projectId)
-        //{
-        //    //Instantiate a SqlCommand object, supply it with a DELETE SQL statement
-        //    //to delete a staff record specified by a Staff ID.
-        //    SqlCommand cmd = new SqlCommand("DELETE FROM Project " +
-        //    "WHERE ProjectId = @selectProjectId", conn);
-        //    cmd.Parameters.AddWithValue("@selectProjectId", projectId);
+        public int Delete(int projectId)
+        {
+            //Instantiate a SqlCommand object, supply it with a DELETE SQL statement
+            //to delete a staff record specified by a Staff ID.
+            SqlCommand cmd = new SqlCommand("DELETE FROM Project " +
+            "WHERE ProjectId = @selectProjectId", conn);
+            cmd.Parameters.AddWithValue("@selectProjectId", projectId);
 
-        //    //Open a database connection.
-        //    conn.Open();
-        //    int rowCount;
+            //Open a database connection.
+            conn.Open();
+            int rowCount;
 
-        //    //Execute the DELETE SQL to remove the staff record.
-        //    rowCount = cmd.ExecuteNonQuery();
+            //Execute the DELETE SQL to remove the staff record.
+            rowCount = cmd.ExecuteNonQuery();
 
-        //    //Close database connection.
-        //    conn.Close();
+            //Close database connection.
+            conn.Close();
 
-        //    //Return number of row of staff record deleted.
-        //    return rowCount;
-        //}
+            //Return number of row of staff record deleted.
+            return rowCount;
+        }
 
     }
 }

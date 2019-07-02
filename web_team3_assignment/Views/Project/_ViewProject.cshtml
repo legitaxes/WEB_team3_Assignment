@@ -28,7 +28,7 @@
                     <td><a href="@item.ProjectURL">Click Here to View</a></td>
 
                     <td style="width:100px">
-                        <a asp-action="UpdateProject" asp-controller="Project"
+                        <a asp-action="EditProject" asp-controller="Project"
                            asp-route-id="@item.ProjectId">Edit</a>
 
                         <a asp-action="UploadProject" asp-controller="Project"
@@ -37,8 +37,8 @@
                         <a asp-action="ProjectDetails" asp-controller="Project"
                            asp-route-id="@item.ProjectId">Details</a>
 
-                        @*<a asp-action="DeleteProject" asp-controller="Project"
-                           asp-route-id="@item.ProjectId">Delete</a>*@
+                        <a asp-action="DeleteProject" asp-controller="Project"
+                           asp-route-id="@item.ProjectId">Delete</a>
                     </td>
 
                 </tr>

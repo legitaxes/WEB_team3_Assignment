@@ -13,6 +13,7 @@ namespace web_team3_assignment.Controllers
     public class ProjectController : Controller
     {
         private ProjectDAL projectContext = new ProjectDAL();
+        private ProjectMemberDAL projectMemberContext = new ProjectMemberDAL();
 
         // GET: Project
         public ActionResult Index()
@@ -31,6 +32,29 @@ namespace web_team3_assignment.Controllers
         // GET: ProjectMembers/Details/5
         public ActionResult Details(int id)
         {
+            // Stop accessing the action if not logged in
+            // or account not in the "Staff" role
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+
+            //Project project = projectContext.GetProjectDetails(id);
+            //ProjectViewModel projectVM = MapToProjectVM(project);
+            //return View(projectVM);
+        }
+
+        public ActionResult CreateProject()
+        {
+            // Stop accessing the action if not logged in // or account not in the "Lecturer" role
+            if ((HttpContext.Session.GetString("Role") == null) ||
+                (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -41,6 +65,7 @@ namespace web_team3_assignment.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 //Add staff record to database
                 project.ProjectId = projectContext.Add(project);
 
@@ -49,72 +74,118 @@ namespace web_team3_assignment.Controllers
             }
             else
             {
-                //Input validation fails, return to the Create view 
-                //to display error message
+
+                //Add staff record to database
+                project.ProjectId = projectContext.Add(project);
+
+                //Redirect user to Project/Index view
+                return RedirectToAction("Index");
             }
-                return View(project);
-
-            //try
-            //{
-            //    // TODO: Add insert logic here
-
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
         }
-
-        public ActionResult CreateProject()
-        {
-            return View();
-        }
+        
+        //public ActionResult EditProject(int? id)
+        //{
+        //    // Stop accessing the action if not logged in // or account not in the "Lecturer" role
+        //    if ((HttpContext.Session.GetString("Role") == null) ||
+        //        (HttpContext.Session.GetString("Role") != "Student"))
+        //    {
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    Project project = projectContext.GetProjectDetails(id.Value);
+        //    return View(project);
+        //}
 
         // GET: Lecturer/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditProject(int? id)
         {
-            return View();
+            // Stop accessing the action if not logged in
+            // or account not in the "Staff" role
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (id == null) //Query string parameter not provided
+            {
+                //Return to listing page, not allowed to edit
+                return RedirectToAction("Index");
+            }
+
+
+            Project project = projectContext.GetProjectDetails(id.Value);
+            if (project == null)
+            {
+                //Return to listing page, not allowed to edit
+                return RedirectToAction("Index");
+            }
+            return View(project);
         }
+
+  
 
         // POST: Lecturer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Project project)
         {
-            try
+            //Get branch list for drop-down list
+            //in case of the need to return to Edit.cshtml view
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
+                //Update staff record to database
+                projectContext.Update(project);
+                return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            //Input validation fails, return to the view
+            //to display error message
+            return View(project);
         }
+
+
+        //public ActionResult DeleteProject()
+        //{
+        //    // Stop accessing the action if not logged in // or account not in the "Lecturer" role
+        //    if ((HttpContext.Session.GetString("Role") == null) ||
+        //        (HttpContext.Session.GetString("Role") != "Student"))
+        //    {
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    return View();
+        //}
 
         // GET: Lecturer/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult DeleteProject(int? id)
         {
-            return View();
+            // Stop accessing the action if not logged in
+            // or account not in the "Staff" role
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            if (id == null)
+            {
+                //Return to listing page, not allowed to edit
+                return RedirectToAction("Index");
+            }
+            Project project = projectContext.GetProjectDetails(id.Value);
+            if (project == null)
+            {
+                //Return to listing page, not allowed to edit
+                return RedirectToAction("Index");
+            }
+            return View(project);
         }
 
-        // POST: Lecturer/Delete/5
+        //POST: Lecturer/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(Project project)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            // Delete the staff record from database
+            projectContext.Delete(project.ProjectId);
+            return RedirectToAction("Index");
         }
     }
 }
