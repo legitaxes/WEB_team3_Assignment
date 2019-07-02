@@ -11,6 +11,7 @@ namespace web_team3_assignment.Models
         [Key]
         [Required]
         [Display(Name = "Project ID")]
+        //[ValidateProjectExists(ErrorMessage = "ProjectId already exists!")]
         public int ProjectId { get; set; }
 
         [Required]

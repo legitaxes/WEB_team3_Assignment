@@ -33,20 +33,7 @@ namespace web_team3_assignment.DAL
             conn = new SqlConnection(strConn);
         }
 
-        public int Add(Project project)
-        {
-            SqlCommand cmd = new SqlCommand
-            ("INSERT INTO Project (ProjectId, title, description)" + "OUTPUT INSERTED.ProjectID" + "VALUES(@projectId, @title, @description)", conn);
-            cmd.Parameters.AddWithValue("@projectId", project.ProjectId);
-            cmd.Parameters.AddWithValue("@title", project.Title);
-            cmd.Parameters.AddWithValue("@description", project.Description);
-            //open connection to run command
-            conn.Open();
-            project.ProjectId = (int)cmd.ExecuteScalar();
-            //close connection
-            conn.Close();
-            return project.ProjectId;        
-        }
+
 
         public List<Project> GetAllProject()
         {
@@ -81,14 +68,195 @@ namespace web_team3_assignment.DAL
                 projectList.Add(
                 new Project
                 {
-                    ProjectId = Convert.ToInt32(row["ProjectId"]),
+                    ProjectId = Convert.ToInt32(row["ProjectID"]),
                     Title = row["Title"].ToString(),
-                    Description = row["Description"].ToString()
+                    Description = row["Description"].ToString(),
+                    ProjectPoster = row["ProjectPoster"].ToString(),
+                    ProjectURL = row["ProjectURL"].ToString()
                 }
                 );
             }
             return projectList;
         }
+
+
+
+        public int Add(Project project)
+        {
+            SqlCommand cmd = new SqlCommand
+            ("INSERT INTO Project (ProjectID, Title, Description, ProjectPoster, ProjectURL)" + 
+            "OUTPUT INSERTED.ProjectID" +
+            "VALUES(@projectID, @title, @description, @projectPoster, @projectURL)", conn);
+
+
+            cmd.Parameters.AddWithValue("@projectID", project.ProjectId);
+            cmd.Parameters.AddWithValue("@title", project.Title);
+            cmd.Parameters.AddWithValue("@description", project.Description);
+            cmd.Parameters.AddWithValue("@projectPoster", project.ProjectPoster);
+            cmd.Parameters.AddWithValue("@projectURL", project.ProjectURL);
+
+            //open connection to run command
+            conn.Open();
+
+            //ExecuteScalar is used to retrieve the auto-generated
+            //ExecuteScalar RETURNs a single value
+            //StaffID after executing the INSERT SQL statement
+            project.ProjectId = (int)cmd.ExecuteScalar();
+
+            //close connection
+            conn.Close();
+
+
+            //Return id when no error occurs.
+            return project.ProjectId;        
+        }
+
+     
+
+        public bool IsProjectExists(string ProjectId)
+        {
+            SqlCommand cmd = new SqlCommand
+                ("SELECT ProjectID FROM Project WHERE ProjectID=@selectedProjectID", conn);
+
+            cmd.Parameters.AddWithValue("@selectedProjectID", ProjectId);
+
+            SqlDataAdapter daProjectId = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+
+            conn.Open();
+
+            //Use DataAdapter to fetch data to a table "EmailDetails" in DataSet. 
+            daProjectId.Fill(result, "ProjectIdDetails");
+            conn.Close();
+
+            if (result.Tables["ProjectIdDetails"].Rows.Count > 0)
+                return true; //The email exists for another staff
+
+            else
+                return false; // The email address given does not exist 
+
+        }
+
+
+        //Get project details
+        public Project GetProjectDetails(int projectId)
+        {
+
+            //Instantiate a SqlCommand object, supply it with a SELECT SQL
+            //statement which retrieves all attributes of a staff record.
+            SqlCommand cmd = new SqlCommand
+            ("SELECT * FROM Project WHERE ProjectID = @selectedProjectID", conn);
+
+
+            //Define the parameter used in SQL statement, value for the
+            //parameter is retrieved from the method parameter “staffId”.
+            cmd.Parameters.AddWithValue("@selectedProjectID", projectId);
+
+
+            //Instantiate a DataAdapter object, pass the SqlCommand
+            //object “cmd” as parameter.
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+
+            //Create a DataSet object “result"
+            DataSet projectresult = new DataSet();
+
+            //Open a database connection.
+            conn.Open();
+
+            //Use DataAdapter to fetch data to a table "StaffDetails" in DataSet. 
+            da.Fill(projectresult, "ProjectDetails");
+
+            //Close the database connection 
+            conn.Close();
+
+            Project project = new Project();
+
+            if (projectresult.Tables["ProjectDetails"].Rows.Count > 0)
+            {
+                project.ProjectId = projectId;
+
+                // Fill staff object with values from the DataSet
+                DataTable table = projectresult.Tables["ProjectDetails"];
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Title"]))
+                    project.Title = table.Rows[0]["Title"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Description"]))
+                    project.Description = table.Rows[0]["Description"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["ProjectPoster"]))
+                    project.Description = table.Rows[0]["ProjectPoster"].ToString();
+
+                return project; // No error occurs
+            }
+
+            else
+            {
+                return null; // Record not found
+            }
+        }
+
+      
+
+        //// Return number of row updated
+        //public int Update(Project project)
+        //{
+        //    //Instantiate a SqlCommand object, supply it with SQL statement UPDATE
+        //    //and the connection object for connecting to the database.
+        //    SqlCommand cmd = new SqlCommand
+        //    ("UPDATE Project SET ProjectID=@projectId, Title=@title, Description=@description" +
+        //    " WHERE ProjectID = @selectedProjectID", conn);
+
+        //    //Define the parameters used in SQL statement, value for each parameter
+        //    //is retrieved from the respective property of “staff” object.
+        //    cmd.Parameters.AddWithValue("@projectId", project.ProjectId);
+        //    cmd.Parameters.AddWithValue("@title", project.Title);
+        //    cmd.Parameters.AddWithValue("@description", project.Description);
+
+        //    if (project.ProjectId != null) // A title is assigned
+        //        cmd.Parameters.AddWithValue("@ProjectID", project.ProjectId);
+
+        //    else // No branch is assigned
+        //        cmd.Parameters.AddWithValue("@ProjectID", DBNull.Value);
+
+        //    cmd.Parameters.AddWithValue("@selectedProjectID", project.ProjectId);
+
+        //    //Open a database connection.
+        //    conn.Open();
+
+        //    //ExecuteNonQuery is used for UPDATE and DELETE
+        //    int count = cmd.ExecuteNonQuery();
+
+        //    //Close the database connection.
+        //    conn.Close();
+
+        //    return count;
+        //}
+
+
+        //DELETE Project
+        //public int Delete(int projectId)
+        //{
+        //    //Instantiate a SqlCommand object, supply it with a DELETE SQL statement
+        //    //to delete a staff record specified by a Staff ID.
+        //    SqlCommand cmd = new SqlCommand("DELETE FROM Project " +
+        //    "WHERE ProjectId = @selectProjectId", conn);
+        //    cmd.Parameters.AddWithValue("@selectProjectId", projectId);
+
+        //    //Open a database connection.
+        //    conn.Open();
+        //    int rowCount;
+
+        //    //Execute the DELETE SQL to remove the staff record.
+        //    rowCount = cmd.ExecuteNonQuery();
+
+        //    //Close database connection.
+        //    conn.Close();
+
+        //    //Return number of row of staff record deleted.
+        //    return rowCount;
+        //}
 
     }
 }

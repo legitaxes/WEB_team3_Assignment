@@ -9,12 +9,12 @@
 <hr />
 <form asp-action="CreateProject">
     <fieldset class="FormContent">
-        <legend>Input Profile Details Below</legend>
+        <legend>Input Project Details Below</legend>
         <div class="form-group row">
             <label asp-for="ProjectId"
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="ProjectId" class="form-control" />
+                <input asp-for="ProjectId" class="form-control" @*disabled*@ />
                 <span asp-validation-for="ProjectId"
                       class="text-danger"></span>
             </div>
@@ -35,6 +35,28 @@
             <div class="col-sm-9 col-md-5">
                 <input asp-for="Description" class="form-control" title="Professional Area Description" />
                 <span asp-validation-for="Description"
+                      class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="ProjectPoster"
+                   class="col-sm-3 col-form-label">
+            </label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="ProjectPoster" class="form-control" />
+                <span asp-validation-for="ProjectPoster"
+                      class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="ProjectURL"
+                   class="col-sm-3 col-form-label">
+            </label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="ProjectURL" class="form-control" />
+                <span asp-validation-for="ProjectURL"
                       class="text-danger"></span>
             </div>
         </div>

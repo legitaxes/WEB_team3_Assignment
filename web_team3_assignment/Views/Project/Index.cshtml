@@ -5,7 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4 class="PageTitle">View Project</h4>
+<h4 class="PageTitle" style="font-size:large">View Project</h4><br />
+<img id="imgMainPic" src="~/images/nplogo.gif" class="img-fluid" style="display:block; margin:auto;" />
+<br />
 <p><a asp-action="CreateProject">Create New Project</a></p>
 <!-- Add a partial view to display a list of staff records in a tabular format. -->
 <partial name="~/Views/Project/_ViewProject.cshtml" model="@Model" />
