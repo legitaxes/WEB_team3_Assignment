@@ -141,6 +141,20 @@ namespace web_team3_assignment.DAL
             }
         }
 
+        //deletes record from database
+        public int Delete(int lecturerId)
+        {
+            SqlCommand cmd = new SqlCommand("DELETE FROM Lecturer " +
+                "WHERE LecturerID = @selectLecturerID", conn);
+            cmd.Parameters.AddWithValue("@selectLecturerID", lecturerId);
+            conn.Open();
+            int rowCount;
+            rowCount = cmd.ExecuteNonQuery();
+            conn.Close();
+            return rowCount;
+        }
+
+        //get a list of mentees under the lecturer in a selectListItem List
         public List<SelectListItem> GetMentees(int lecturerId)
         {
 

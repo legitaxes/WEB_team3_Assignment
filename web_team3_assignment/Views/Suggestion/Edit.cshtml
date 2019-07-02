@@ -1,0 +1,57 @@
+﻿@model web_team3_assignment.Models.SuggestionViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<img class="img-fluid" src="~/images/editsuggestion.png" style="display:block; margin:auto;" />
+<form asp-action="Edit">
+    <fieldset class="FormContent">
+        <div class="form-group row">
+            <label asp-for="SuggestionId" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 form-control-plaintext">
+                <input asp-for="SuggestionId" readonly class="form-control-plaintext" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="StudentName" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 form-control-plaintext">
+                <input asp-for="StudentName" readonly class="form-control-plaintext" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Description" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 form-control-plaintext">
+                <input asp-for="Description" class="form-control"/>
+                <span asp-validation-for="Description"
+                      class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Status" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 form-control-plaintext">
+                <select asp-for="Status"
+                        asp-items="@ViewData["Status"] as List<SelectListItem>"
+                        class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="DateCreated" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 form-control-plaintext">
+                <input asp-for="DateCreated" readonly class="form-control-plaintext" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <input type="submit" value="Save" class="btn btn-primary mb1 bg-teal"/>
+            </div>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-primary mb1 black bg-gray">Back to List</a>
+        </div>
+    </fieldset>
+</form>

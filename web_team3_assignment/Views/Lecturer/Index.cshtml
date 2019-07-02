@@ -8,5 +8,10 @@
 <img class="img-fluid" src="~/images/viewstaffstatic.png" style="display:block; margin:auto;" />
 
 <a asp-action="Create"><img src="~/images/createnewlecturerprofile.gif" class="img-fluid" style="display:block; margin:auto;" /></a>
+@if (ViewData["ErrorMessage"] != null)
+{
+    <span class="text-danger">@ViewData["ErrorMessage"]</span>
+}
+
 <!-- Add a partial view to display a list of staff records in a tabular format. -->
 <partial name="~/Views/Lecturer/_ViewLecturer.cshtml" model="@Model" />

@@ -26,6 +26,10 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index", "Home");
             }
             List<Lecturer> lecturerList = lecturerContext.GetAllLecturer();
+            if (ViewData["ErrorMessage"] != null)
+            {
+                ViewData["ErrorMessage"] = "You are not allowed to delete other lecturer's profile!";
+            }
             return View(lecturerList);
         }
 
@@ -60,7 +64,7 @@ namespace web_team3_assignment.Controllers
             System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {
-                ViewData["Message"] = "Employee Created Successfully";
+                ViewData["Message"] = "Employee Created Successfully!";
                 lecturer.LecturerId = lecturerContext.Add(lecturer);
                 return View();
             }
@@ -81,49 +85,76 @@ namespace web_team3_assignment.Controllers
         }
 
         // GET: Lecturer/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        //public ActionResult Edit(int? id)
+        //{
+        //    if ((HttpContext.Session.GetString("Role") == null) ||
+        //        (HttpContext.Session.GetString("Role") != "Lecturer"))
+        //    {
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    if (id == null)
+        //    {
+        //        return RedirectToAction("Index");   
+        //    }
+        //    Lecturer lecturer = lecturerContext.getLecturerDetails(id.Value);
+        //    if (lecturer == null)
+        //    {
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(lecturer);
+        //}
 
-        // POST: Lecturer/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
+        //// POST: Lecturer/Edit/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add update logic here
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
         // GET: Lecturer/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if ((HttpContext.Session.GetString("Role") == null) ||
+                (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+            Lecturer lecturer = lecturerContext.getLecturerDetails(id.Value);
+            //check if lectuer object is empty or the lecturerID matches the currently logged in user
+            if (lecturer == null || Convert.ToInt32(HttpContext.Session.GetString("ID")) != id.Value)
+            {
+                ViewData["ErrorMessage"] = "You are not allowed to delete other lecturer's profile!";
+                return RedirectToAction("Index");
+            }
+            return View(lecturer);
         }
 
         // POST: Lecturer/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(Lecturer lecturer)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            // Delete the staff record from database
+            lecturerContext.Delete(lecturer.LecturerId);
+            //Clear session state and log user out
+            HttpContext.Session.Clear();
+            // Call the Index action of Home controller
+            return RedirectToAction("Index", "Home");
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
 
         //// GET: Lecturer/PostSuggestion

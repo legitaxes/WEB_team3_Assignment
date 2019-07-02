@@ -46,43 +46,49 @@ namespace web_team3_assignment.DAL
             return suggestion.SuggestionId;
         }
 
-        //public List<Suggestion> GetSuggestionDetails(int lecturerid)
-        //{
-        //    SqlCommand cmd = new SqlCommand
-        //    ("SELECT * FROM Suggestion WHERE LecturerID = @selectedLecturerID", conn);
-        //    cmd.Parameters.AddWithValue("@selectedLecturerID", lecturerid);
-        //    SqlDataAdapter da = new SqlDataAdapter(cmd);
-        //    DataSet result = new DataSet();
-        //    conn.Open();
-        //    da.Fill(result, "SuggestionDetails");
-        //    conn.Close();
-        //    Suggestion suggestion = new Suggestion();
-        //    if (result.Tables["SuggestionDetails"].Rows.Count > 0)
-        //    {
-        //        suggestion.LecturerId = lecturerid;
-        //        DataTable table = result.Tables["SuggestionDetails"];
+        public Suggestion GetSuggestionDetails(int suggestionId)
+        {
+            SqlCommand cmd = new SqlCommand
+            ("SELECT * FROM Suggestion WHERE SuggestionID = @selectedSuggestionID", conn);
+            cmd.Parameters.AddWithValue("@selectedSuggestionID", suggestionId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "CurrentSuggestionDetails");
+            conn.Close();
+            Suggestion suggestion = new Suggestion();
+            if (result.Tables["CurrentSuggestionDetails"].Rows.Count > 0)
+            {
+                suggestion.SuggestionId = suggestionId;
+                DataTable table = result.Tables["CurrentSuggestionDetails"];
 
-        //        if (!DBNull.Value.Equals(table.Rows[0]["SuggestionID"]))
-        //            suggestion.SuggestionId = Convert.ToInt32(table.Rows[0]["SuggestionID"]);
+                //if (!DBNull.Value.Equals(table.Rows[0]["SuggestionID"]))
+                //    suggestion.SuggestionId = Convert.ToInt32(table.Rows[0]["SuggestionID"]);
 
-        //        if (!DBNull.Value.Equals(table.Rows[0]["StudentID"]))
-        //            suggestion.StudentId = Convert.ToInt32(table.Rows[0]["StudentID"]);
+                if (!DBNull.Value.Equals(table.Rows[0]["LecturerID"]))
+                    suggestion.LecturerId = Convert.ToInt32(table.Rows[0]["LecturerID"]);
 
-        //        if (!DBNull.Value.Equals(table.Rows[0]["Description"]))
-        //            suggestion.Description = table.Rows[0]["Description"].ToString();
+                if (!DBNull.Value.Equals(table.Rows[0]["StudentID"]))
+                    suggestion.StudentId = Convert.ToInt32(table.Rows[0]["StudentID"]);
 
-        //        if (!DBNull.Value.Equals(table.Rows[0]["Status"]))
-        //            suggestion.Status = Convert.ToChar(table.Rows[0]["Status"]);
+                if (!DBNull.Value.Equals(table.Rows[0]["Description"]))
+                    suggestion.Description = table.Rows[0]["Description"].ToString();
 
-        //        return suggestion;
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
+                if (!DBNull.Value.Equals(table.Rows[0]["Status"]))
+                    suggestion.Status = Convert.ToChar(table.Rows[0]["Status"]);
 
-        public List<Suggestion> GetAllSuggestionDetails(int lecturerId)
+                if (!DBNull.Value.Equals(table.Rows[0]["DateCreated"]))
+                    suggestion.DateCreated = Convert.ToDateTime(table.Rows[0]["DateCreated"]);
+
+                return suggestion;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public List<Suggestion> GetSuggestionPostedByMentor(int lecturerId)
         {
             SqlCommand cmd = new SqlCommand("SELECT * FROM Suggestion" +
                 " WHERE LecturerID = @selectedLecturerID", conn);
@@ -108,6 +114,36 @@ namespace web_team3_assignment.DAL
                     );
             }
             return suggestList; 
+        }
+
+        public int Update(Suggestion suggestion)
+        {
+            SqlCommand cmd = new SqlCommand("UPDATE Suggestion SET Description=@description, Status=@status" +
+                " WHERE SuggestionID = @selectedSuggestionID", conn);
+            cmd.Parameters.AddWithValue("@description", suggestion.Description);
+            cmd.Parameters.AddWithValue("@status", Convert.ToChar(suggestion.Status));
+            cmd.Parameters.AddWithValue("@selectedSuggestionID", suggestion.SuggestionId);
+
+            conn.Open();
+
+            int count = cmd.ExecuteNonQuery();
+
+            conn.Close();
+
+            return count;
+        }
+
+        public int Delete(int suggestionId)
+        {
+            SqlCommand cmd = new SqlCommand("DELETE FROM Suggestion " +
+            "WHERE SuggestionID = @selectSuggestionID", conn);
+
+            cmd.Parameters.AddWithValue("@selectSuggestionID", suggestionId);
+            conn.Open();
+            int rowCount;
+            rowCount = cmd.ExecuteNonQuery();
+            conn.Close();
+            return rowCount;
         }
     }
 }

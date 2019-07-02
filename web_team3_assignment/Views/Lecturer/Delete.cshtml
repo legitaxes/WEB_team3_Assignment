@@ -1,0 +1,45 @@
+﻿@model web_team3_assignment.Models.Lecturer
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<img class="img-fluid" src="~/images/deleteprofilestatic.png" style="display:block; margin:auto;" />
+<form asp-action="Delete"> 
+    <fieldset class="FormContent">
+        <div class="form-group row">
+            <label asp-for="LecturerId"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="LecturerId" readonly
+                       class="form-control-plaintext" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Name"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="Name" readonly
+                       class="form-control-plaintext" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <p style="color: red">Once you click the button below, you will be automatically logged out from your current account</p>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <input type="submit" value="Delete Profile"
+                       class="btn btn-primary mb1 black bg-aqua" />
+            </div>
+        </div>
+
+        <div>
+            <a asp-action="Index" class="btn btn-primary mb1 black bg-gray">Back to List</a>
+        </div>
+    </fieldset>
+</form>

@@ -10,14 +10,21 @@
                     <th>Name</th>
                     <th>Photo</th>
                     <th>Email Address</th>
+                    <th>Description</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-
-                    <tr>
+                    string selectedRow = "";
+                    string delete = "color: red; ";
+                    if (Context.Session.GetString("LoginName") == item.Name.ToString())
+                    {
+                        selectedRow = "class='table-primary'";
+                        delete = "color: green;";
+                    }
+                    <tr @Html.Raw(selectedRow)>
                         <td>@item.LecturerId.ToString()</td>
                         <td>@item.Name</td>
                         <td>
@@ -26,9 +33,10 @@
                                  style="width:50px" />
                         </td>
                         <td>@item.Email</td>
+                        <td>@item.Description</td>
                         <td>
-                            <a asp-action="Delete" asp-controller="Staff"
-                               asp-route-id="@item.LecturerId">Delete</a>
+                            <a asp-action="Delete" asp-controller="Lecturer"
+                               asp-route-id="@item.LecturerId" style="@Html.Raw(delete)"><b>Delete</b></a>
                         </td>
                     </tr>
                 }

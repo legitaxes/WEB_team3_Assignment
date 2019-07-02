@@ -8,13 +8,13 @@ namespace web_team3_assignment.Models
 {
     public class Suggestion
     {
-        [Display(Name = "Suggestion ID")]
+        [Display(Name = "Suggestion ID:")]
         public int SuggestionId { get; set; }
 
-        [Display(Name = "Lecturer ID")]
+        [Display(Name = "Lecturer ID:")]
         public int LecturerId { get; set; }
 
-        [Display(Name = "Student Name")]
+        [Display(Name = "Choose Your Mentee:")]
         public int StudentId { get; set; }
 
         [Required(ErrorMessage = "Fill in the Description!")]

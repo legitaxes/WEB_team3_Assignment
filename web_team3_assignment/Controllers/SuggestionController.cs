@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using web_team3_assignment.DAL;
 using web_team3_assignment.Models;
 
@@ -24,7 +25,7 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index", "Home");
             }
             List<SuggestionViewModel> suggestionVMList = new List<SuggestionViewModel>();
-            List<Suggestion> suggestionList = suggestionContext.GetAllSuggestionDetails(Convert.ToInt32(HttpContext.Session.GetString("ID")));
+            List<Suggestion> suggestionList = suggestionContext.GetSuggestionPostedByMentor(Convert.ToInt32(HttpContext.Session.GetString("ID")));
             foreach(Suggestion suggestion in suggestionList)
             {
                 SuggestionViewModel suggestionVM = MapToStudentVM(suggestion);
@@ -41,35 +42,42 @@ namespace web_team3_assignment.Controllers
 
         public SuggestionViewModel MapToStudentVM(Suggestion suggestion)
         {
-            string studentName = "";
-            List<Student> studentList = studentContext.GetAllStudent();
-            foreach (Student student in studentList)
+            if (suggestion != null)
             {
-                if (student.StudentID == suggestion.StudentId)
+
+
+                string studentName = "";
+                List<Student> studentList = studentContext.GetAllStudent();
+                foreach (Student student in studentList)
                 {
-                    studentName = student.Name;
-                    break;
+                    if (student.StudentID == suggestion.StudentId)
+                    {
+                        studentName = student.Name;
+                        break;
+                    }
                 }
-            }
-            string suggestionStatus;
-            if (suggestion.Status == 'N')
-            {
-                suggestionStatus = "Not Acknowledged";
+                string suggestionStatus;
+                if (suggestion.Status == 'N')
+                {
+                    suggestionStatus = "Not Acknowledged";
+                }
+                else
+                {
+                    suggestionStatus = "Acknowledged";
+                }
+                SuggestionViewModel suggestionVM = new SuggestionViewModel
+                {
+                    SuggestionId = suggestion.SuggestionId,
+                    LecturerId = suggestion.LecturerId,
+                    Description = suggestion.Description,
+                    Status = suggestionStatus,
+                    DateCreated = suggestion.DateCreated,
+                    StudentName = studentName
+                };
+                return suggestionVM;
             }
             else
-            {
-                suggestionStatus = "Acknowledged";
-            }
-            SuggestionViewModel suggestionVM = new SuggestionViewModel
-            {
-                SuggestionId = suggestion.SuggestionId,
-                LecturerId = suggestion.LecturerId,
-                Description = suggestion.Description,
-                Status = suggestionStatus,
-                DateCreated = suggestion.DateCreated,
-                StudentName = studentName
-            };
-            return suggestionVM;
+                return null;
         }
 
         // GET: Suggestion/PostSuggestion
@@ -120,49 +128,95 @@ namespace web_team3_assignment.Controllers
         }
 
         // GET: Suggestion/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewData["Status"] = GetSuggestionStatus();
+            Suggestion suggestion = suggestionContext.GetSuggestionDetails(id.Value);
+            SuggestionViewModel suggestionVM = MapToStudentVM(suggestion);
+            return View(suggestionVM);
         }
 
         // POST: Suggestion/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Suggestion suggestion)
         {
-            try
+            ViewData["Status"] = GetSuggestionStatus();
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
+                suggestionContext.Update(suggestion);
+                return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            ViewData["Message"] = "Something Went Wrong With The Update!";
+            return View(suggestion);
         }
 
         // GET: Suggestion/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+            Suggestion suggestion = suggestionContext.GetSuggestionDetails(id.Value);
+            SuggestionViewModel suggestionVM = MapToStudentVM(suggestion);
+            if (suggestion == null)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(suggestionVM);
         }
 
         // POST: Suggestion/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(Suggestion suggestion)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            // Delete the staff record from database
+            suggestionContext.Delete(suggestion.SuggestionId);
+            return RedirectToAction("Index");
+        }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+        //get a selectlistitem for status 
+        private List<SelectListItem> GetSuggestionStatus()
+        {
+            List<SelectListItem> status = new List<SelectListItem>();
+            status.Add(
+                new SelectListItem
+                {
+                    Value = "",
+                    Text = "--Select--"
+                });
+            status.Add(
+                new SelectListItem
+                {
+                    Value = "Y",
+                    Text = "Acknowledged"
+                });
+            status.Add(
+                new SelectListItem
+                {
+                    Value = "N",
+                    Text = "Not Acknowledged"
+                });
+            return status;
         }
     }
 }
