@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using web_team3_assignment.DAL;
 using web_team3_assignment.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace web_team3_assignment.Controllers
 {
@@ -29,23 +29,6 @@ namespace web_team3_assignment.Controllers
             return View(ProjectList);     
         }
 
-        // GET: ProjectMembers/Details/5
-        public ActionResult Details(int id)
-        {
-            // Stop accessing the action if not logged in
-            // or account not in the "Staff" role
-            if ((HttpContext.Session.GetString("Role") == null) ||
-            (HttpContext.Session.GetString("Role") != "Student"))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View();
-
-            //Project project = projectContext.GetProjectDetails(id);
-            //ProjectViewModel projectVM = MapToProjectVM(project);
-            //return View(projectVM);
-        }
 
         public ActionResult CreateProject()
         {
@@ -65,8 +48,7 @@ namespace web_team3_assignment.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                //Add staff record to database
+                //Add project record to database
                 project.ProjectId = projectContext.Add(project);
 
                 //Redirect user to Project/Index view
@@ -74,12 +56,7 @@ namespace web_team3_assignment.Controllers
             }
             else
             {
-
-                //Add staff record to database
-                project.ProjectId = projectContext.Add(project);
-
-                //Redirect user to Project/Index view
-                return RedirectToAction("Index");
+                return View(project);
             }
         }
         
@@ -143,16 +120,77 @@ namespace web_team3_assignment.Controllers
         }
 
 
-        //public ActionResult DeleteProject()
+        // GET: Suggestion/Details/5
+        public ActionResult DetailsProject(int id)
+        {
+
+            // Stop accessing the action if not logged in 
+            // or account not in the "Staff" role
+            if ((HttpContext.Session.GetString("Role") == null) ||
+                (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            //Project project = projectContext.GetProjectDetails(id);
+            //ProjectViewModel projectVM = MapToProjectVM(project);
+
+            //return View(projectVM);
+
+
+            return View();
+
+        }
+
+        //public ProjectViewModel MapToProjectVM(Project project)
         //{
-        //    // Stop accessing the action if not logged in // or account not in the "Lecturer" role
+        //    string Role = "";
+        //    if (project.Title != null)
+        //    {
+        //        List<ProjectMember> pmList = pmContext.GetAllpm();
+        //        foreach (ProjectMember projectMember in pmList)
+        //        {
+        //            if (projectMember.ProjectId == project.ProjectId)
+        //            {
+        //                Role = projectMember.Role;
+        //                //Exit the foreach loop once the name is found
+        //                break;
+        //            }
+        //        }
+        //    }
+           
+
+        //    ProjectViewModel projectVM = new ProjectViewModel
+        //    {
+        //        ProjectId = project.ProjectId,
+        //        Title = project.Title,
+        //        ProjectURL = project.ProjectURL,
+        //        Description = project.Description,
+        //        ProjectPoster = project.ProjectPoster + ".jpg"
+        //    };
+        //    return projectVM;
+        //}
+
+
+
+        //// GET: ProjectMembers/Details/5
+        //public ActionResult Details(int id)
+        //{
+        //    // Stop accessing the action if not logged in
+        //    // or account not in the "Staff" role
         //    if ((HttpContext.Session.GetString("Role") == null) ||
-        //        (HttpContext.Session.GetString("Role") != "Student"))
+        //    (HttpContext.Session.GetString("Role") != "Student"))
         //    {
         //        return RedirectToAction("Index", "Home");
         //    }
+
         //    return View();
+
+        //    //Project project = projectContext.GetProjectDetails(id);
+        //    //ProjectViewModel projectVM = MapToProjectVM(project);
+        //    //return View(projectVM);
         //}
+
 
         // GET: Lecturer/Delete/5
         public ActionResult DeleteProject(int? id)
@@ -170,21 +208,23 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
             Project project = projectContext.GetProjectDetails(id.Value);
-            if (project == null)
-            {
-                //Return to listing page, not allowed to edit
-                return RedirectToAction("Index");
-            }
+            //if (project == null)
+            //{
+            //    //Return to listing page, not allowed to edit
+            //    return RedirectToAction("Index");
+            //}
             return View(project);
         }
 
         //POST: Lecturer/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(Project project)
+        public ActionResult DeleteProject(Project project)
         {
             // Delete the staff record from database
             projectContext.Delete(project.ProjectId);
+
+            // Call the Index action of Home controller
             return RedirectToAction("Index");
         }
     }

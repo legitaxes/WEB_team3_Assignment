@@ -100,6 +100,19 @@ namespace web_team3_assignment.DAL
             return count;
         }
 
+        //deletes record from database
+        public int Delete(int SkillSetId)
+        {
+            SqlCommand cmd = new SqlCommand("DELETE FROM SkillSet " +
+                "WHERE SkillSetID = @selectedSkillSetID", conn);
+            cmd.Parameters.AddWithValue("@selectedSkillSetID", SkillSetId);
+            conn.Open();
+            int rowCount;
+            rowCount = cmd.ExecuteNonQuery();
+            conn.Close();
+            return rowCount;
+        }
+
         public SkillSet GetDetails(int SkillSetId)
         {
             //Instantiate a SqlCommand object, supply it with a SELECT SQL
