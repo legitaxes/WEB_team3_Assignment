@@ -170,21 +170,23 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
             Project project = projectContext.GetProjectDetails(id.Value);
-            if (project == null)
-            {
-                //Return to listing page, not allowed to edit
-                return RedirectToAction("Index");
-            }
+            //if (project == null)
+            //{
+            //    //Return to listing page, not allowed to edit
+            //    return RedirectToAction("Index");
+            //}
             return View(project);
         }
 
         //POST: Lecturer/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(Project project)
+        public ActionResult DeleteProject(Project project)
         {
             // Delete the staff record from database
             projectContext.Delete(project.ProjectId);
+
+            // Call the Index action of Home controller
             return RedirectToAction("Index");
         }
     }

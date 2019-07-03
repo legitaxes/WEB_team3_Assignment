@@ -74,6 +74,35 @@ namespace web_team3_assignment.DAL
         }
 
 
+        //Add ProjectMember
+        public int Add(ProjectMember projectMember)
+        {
+            SqlCommand cmd = new SqlCommand
+            ("INSERT INTO ProjectMember (StudentID, Role) " +
+            "OUTPUT INSERTED.ProjectID " +
+            "VALUES(@studentID, @role)", conn);
+
+            cmd.Parameters.AddWithValue("@studentID", projectMember.StudentId);
+            cmd.Parameters.AddWithValue("@role", projectMember.Role);
+
+            //open connection to run command
+            conn.Open();
+
+            //ExecuteScalar is used to retrieve the auto-generated
+            //ExecuteScalar RETURNs a single value
+            //StaffID after executing the INSERT SQL statement
+            projectMember.ProjectId = (int)cmd.ExecuteScalar();
+
+            //close connection
+            conn.Close();
+
+
+            //Return id when no error occurs.
+            return projectMember.ProjectId;
+        }
+
+
+
         public ProjectMember GetProjectMemberDetails(int projectId)
         {
             //Instantiate a SqlCommand object, supply it with a SELECT SQL

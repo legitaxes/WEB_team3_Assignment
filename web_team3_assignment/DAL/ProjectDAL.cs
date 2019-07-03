@@ -79,6 +79,8 @@ namespace web_team3_assignment.DAL
             return projectList;
         }
 
+
+        //Add Project
         public int Add(Project project)
         {
             SqlCommand cmd = new SqlCommand
@@ -107,7 +109,6 @@ namespace web_team3_assignment.DAL
             return project.ProjectId;        
         }
 
-     
 
         //public bool IsProjectExists(string ProjectId)
         //{
@@ -181,6 +182,9 @@ namespace web_team3_assignment.DAL
                 if (!DBNull.Value.Equals(table.Rows[0]["Description"]))
                     project.Description = table.Rows[0]["Description"].ToString();
 
+                if (!DBNull.Value.Equals(table.Rows[0]["ProjectURL"]))
+                    project.ProjectURL = table.Rows[0]["ProjectURL"].ToString();
+
                 return project; // No error occurs
             }
 
@@ -198,12 +202,13 @@ namespace web_team3_assignment.DAL
             //Instantiate a SqlCommand object, supply it with SQL statement UPDATE
             //and the connection object for connecting to the database.
             SqlCommand cmd = new SqlCommand
-            ("UPDATE Project SET Title=@title, Description=@description WHERE ProjectID = @selectedProjectID ", conn);
+            ("UPDATE Project SET Title=@title, Description=@description, ProjectURL=@projectURL WHERE ProjectID = @selectedProjectID ", conn);
 
             //Assign values to parameters
+            cmd.Parameters.AddWithValue("@selectedProjectID", project.ProjectId);
             cmd.Parameters.AddWithValue("@title", project.Title);
             cmd.Parameters.AddWithValue("@description", project.Description);
-            cmd.Parameters.AddWithValue("@selectedProjectID", project.ProjectId);
+            cmd.Parameters.AddWithValue("@projectURL", project.ProjectURL);
 
             //Open a database connection.
             conn.Open();
@@ -223,8 +228,7 @@ namespace web_team3_assignment.DAL
         {
             //Instantiate a SqlCommand object, supply it with a DELETE SQL statement
             //to delete a staff record specified by a Staff ID.
-            SqlCommand cmd = new SqlCommand("DELETE FROM Project " +
-            "WHERE ProjectId = @selectProjectId", conn);
+            SqlCommand cmd = new SqlCommand("DELETE FROM Project WHERE ProjectId = @selectProjectId", conn);
             cmd.Parameters.AddWithValue("@selectProjectId", projectId);
 
             //Open a database connection.
