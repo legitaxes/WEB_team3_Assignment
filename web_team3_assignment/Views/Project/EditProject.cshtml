@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4 class="PageTitle">Edit Project Record</h4>
+<h4 class="PageTitle">Update Project Record</h4>
 <hr />
 
 <form asp-action=" EditProject">
@@ -23,7 +23,7 @@
             <label asp-for="Title"
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="Title" value="@Model.Title"
+                <input asp-for="Title" readonly value="@Model.Title"
                        class="form-control-plaintext" />
             </div>
         </div>
