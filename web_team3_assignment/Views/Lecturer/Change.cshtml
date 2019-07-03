@@ -9,7 +9,7 @@
 <form asp-action="Change" id="passwordForm">
     <fieldset class="FormContent">
         <div class="form-group row">
-            <input asp-for="LecturerId" hidden/>
+            <input asp-for="LecturerId" hidden />
             <label class="col-sm-3 col-form-label">Current Password:</label>
             <div class="col-sm-9 col-md-5">
                 <input asp-for="Password" class="form-control-plaintext" readonly />
@@ -27,7 +27,7 @@
             <label asp-for="ConfirmPassword" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
                 <input asp-for="ConfirmPassword" id="ConfirmPassword" class="form-control" />
-                <span id="warning"></span>
+                <span id="warning"></span><br />
                 <span asp-validation-for="ConfirmPassword" class="text-danger">
                 </span>
             </div>
