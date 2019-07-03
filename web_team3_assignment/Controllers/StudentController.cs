@@ -26,5 +26,10 @@ namespace web_team3_assignment.Controllers
             List<Student> studentList = studentContext.GetAllStudent();
             return View(studentList);
         }
+
+        public IActionResult Update()
+        {
+            return View();
+        }
     }
 }

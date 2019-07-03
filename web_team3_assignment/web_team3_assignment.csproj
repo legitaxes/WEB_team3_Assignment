@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Student\" />
     <Folder Include="Views\ProjectMembers\" />
     <Folder Include="wwwroot\css\" />
   </ItemGroup>
