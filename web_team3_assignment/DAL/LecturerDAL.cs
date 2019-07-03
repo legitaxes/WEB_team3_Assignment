@@ -207,7 +207,9 @@ namespace web_team3_assignment.DAL
         public List<SelectListItem> GetMentees(int lecturerId)
         {
 
-            SqlCommand cmd = new SqlCommand("SELECT StudentID, Name FROM Student WHERE MentorID = @selectedMentorID", conn);
+            SqlCommand cmd = new SqlCommand("SELECT StudentID, Name FROM Student " +
+                "WHERE MentorID = @selectedMentorID " +
+                "ORDER BY Name ASC", conn);
             cmd.Parameters.AddWithValue("@selectedMentorID", lecturerId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet result = new DataSet();
