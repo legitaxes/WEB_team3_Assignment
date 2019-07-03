@@ -41,7 +41,7 @@ namespace web_team3_assignment.Models
         [EmailAddress]
         [ValidateEmailExists(ErrorMessage = "Email Address already exists!")]
         [StringLength(50, ErrorMessage = "Email Cannot Exceed 50 Characters!")]
-        public string Email { get; set; }
+        public string EmailAddr { get; set; }
 
         [DataType(DataType.Password)]
         [StringLength(255, ErrorMessage = "Password Length Cannot Exceed 255 Characters!")]

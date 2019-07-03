@@ -31,6 +31,30 @@ namespace web_team3_assignment.DAL
             conn = new SqlConnection(strConn);
         }
 
+        public int Add(Student student)
+        {
+            //sql command to add (i hope it works :pray:)
+            SqlCommand cmd = new SqlCommand
+                ("INSERT INTO Student (Name, Course, Photo, Description, Achievement, ExternalLink, EmailAddr, Password, MentorID)" +
+                " OUTPUT INSERTED.StudentID" +
+                " VALUES(@name, @course, @photo, @description, @achievement, @externallink, @email, @password, @mentorid)", conn);
+            cmd.Parameters.AddWithValue("@name", student.Name);
+            cmd.Parameters.AddWithValue("@course", student.Course);
+            cmd.Parameters.AddWithValue("@photo", student.Photo);
+            cmd.Parameters.AddWithValue("@description", student.Description);
+            cmd.Parameters.AddWithValue("@achievement", student.Achievement);
+            cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
+            cmd.Parameters.AddWithValue("@email", student.EmailAddr);
+            cmd.Parameters.AddWithValue("@password", student.Password);
+            cmd.Parameters.AddWithValue("@mentorid", student.MentorID);
+            //open connection to run command
+            conn.Open();
+            student.StudentID = (int)cmd.ExecuteScalar();
+            //close connection
+            conn.Close();
+            return student.StudentID;
+        }
+
         public List<Student> GetAllStudent()
         {
             //Instantiate a SqlCommand object, supply it with a
@@ -65,7 +89,7 @@ namespace web_team3_assignment.DAL
                     Description = row["Description"].ToString(),
                     Achievement = row["Achievement"].ToString(),
                     ExternalLink = row["ExternalLink"].ToString(),
-                    Email = row["EmailAddr"].ToString(),
+                    EmailAddr = row["EmailAddr"].ToString(),
                     Password = row["Password"].ToString(),
                     MentorID = Convert.ToInt32(row["MentorID"])
                 }

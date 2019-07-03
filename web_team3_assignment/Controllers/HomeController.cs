@@ -15,6 +15,7 @@ namespace web_team3_assignment.Controllers
     public class HomeController : Controller
     {
         private HomeDAL homeContext = new HomeDAL();
+        private StudentDAL studentContext = new StudentDAL();
 
         public IActionResult Index()
         {
@@ -107,6 +108,29 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return View();
+        }
+
+        public ActionResult CreateStudent()
+        {
+            return View();
+        }
+
+        // POST: Create student profile
+        [HttpPost]
+        public ActionResult CreateStudent(Student student)
+        {
+            student.Password = "p@55Student";
+            System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
+            if (ModelState.IsValid)
+            {
+                ViewData["Message"] = "Student profile Created Successfully!";
+                student.StudentID = studentContext.Add(student);
+                return View();
+            }
+            else
+            {
+                return View(student);
+            }
         }
 
         public ActionResult LogOut()
