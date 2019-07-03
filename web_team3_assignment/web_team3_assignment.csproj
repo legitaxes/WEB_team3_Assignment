@@ -5,8 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\ProjectMembers\**" />
+    <Content Remove="Views\ProjectMembers\**" />
+    <EmbeddedResource Remove="Views\ProjectMembers\**" />
+    <None Remove="Views\ProjectMembers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Views\Student\" />
-    <Folder Include="Views\ProjectMembers\" />
     <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
