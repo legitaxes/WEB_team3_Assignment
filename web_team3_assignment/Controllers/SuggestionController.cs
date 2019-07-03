@@ -201,12 +201,6 @@ namespace web_team3_assignment.Controllers
             status.Add(
                 new SelectListItem
                 {
-                    Value = "",
-                    Text = "--Select--"
-                });
-            status.Add(
-                new SelectListItem
-                {
                     Value = "Y",
                     Text = "Acknowledged"
                 });

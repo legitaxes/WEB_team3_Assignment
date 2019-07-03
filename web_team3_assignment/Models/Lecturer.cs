@@ -26,7 +26,7 @@ namespace web_team3_assignment.Models
         [StringLength(255, ErrorMessage = "Password Length Cannot Exceed 255 Characters!")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
+        //[Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [StringLength(3000, ErrorMessage = "Description Cannot Exceed 3000 Characters!")]
         public string Description { get; set; }
     }

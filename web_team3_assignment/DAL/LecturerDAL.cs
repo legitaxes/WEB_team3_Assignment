@@ -41,6 +41,10 @@ namespace web_team3_assignment.DAL
             cmd.Parameters.AddWithValue("@name", lecturer.Name);
             cmd.Parameters.AddWithValue("@email", lecturer.Email);
             cmd.Parameters.AddWithValue("@password", lecturer.Password);
+            if (lecturer.Description == null)
+            {
+                lecturer.Description = "";
+            }
             cmd.Parameters.AddWithValue("@description", lecturer.Description);
             //open connection to run command
             conn.Open();
