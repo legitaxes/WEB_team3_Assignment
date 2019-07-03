@@ -112,27 +112,33 @@ namespace web_team3_assignment.Controllers
             return View(skillset);
         }
 
-        // GET: SkillSet/Delete/5
-        public ActionResult Delete(int id)
+        // GET: Lecturer/Delete/5
+        public ActionResult SkillSetDelete(int? id)
         {
-            return View();
+            if ((HttpContext.Session.GetString("Role") == null) ||
+                (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+            SkillSet skillSet = SkillSetContext.GetDetails(id.Value);
+
+            return View(skillSet);
         }
 
         // POST: Lecturer/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult SkillSetDelete(SkillSet skillSet)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            // Delete the staff record from database
+            SkillSetContext.Delete(skillSet.SkillSetId);
+            // Call the Index action of Home controller
+            return RedirectToAction("Index", "Home");
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }
