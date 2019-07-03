@@ -109,8 +109,30 @@ namespace web_team3_assignment.DAL
             }
             return lecturerList;
         }
-
-        //get the details of the lecturer and return a lecturer object
+        public LecturerPassword getPasswordDetails(int lecturerId)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer WHERE LecturerID = @selectedLecturerID", conn);
+            cmd.Parameters.AddWithValue("@selectedLecturerID", lecturerId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "LecturerPasswordDetails");
+            conn.Close();
+            LecturerPassword lecturer = new LecturerPassword();
+            if (result.Tables["LecturerPasswordDetails"].Rows.Count > 0)
+            {
+                lecturer.LecturerId = lecturerId;
+                DataTable table = result.Tables["LecturerPasswordDetails"];
+                if (!DBNull.Value.Equals(table.Rows[0]["Password"]))
+                    lecturer.Password = table.Rows[0]["Password"].ToString();
+                return lecturer;
+            }
+            else
+            {
+                return null;
+            }
+        }
+            //get the details of the lecturer and return a lecturer object
         public Lecturer getLecturerDetails(int lecturerId)
         {
             SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer WHERE LecturerID = @selectedLecturerID", conn);
@@ -143,6 +165,29 @@ namespace web_team3_assignment.DAL
             {
                 return null; 
             }
+        }
+        //returns true if password is changed successfully without errors
+        public bool ChangePassword(LecturerPassword lecturer)
+        {
+            //numeric validation
+            //count the number of character in the password
+            int counter = lecturer.NewPassword.Length;
+            //use for loop to loop thru each character in the string 
+            for (int i = 0; i < counter; i++)
+            {
+                if (Char.IsDigit(lecturer.NewPassword, i))
+                {
+                    SqlCommand cmd = new SqlCommand("UPDATE Lecturer SET Password=@newPassword" +
+                    " WHERE LecturerID = @selectedLecturerID", conn);
+                    cmd.Parameters.AddWithValue("@newPassword", lecturer.NewPassword);
+                    cmd.Parameters.AddWithValue("@selectedLecturerID", lecturer.LecturerId);
+                    conn.Open();
+                    int count = cmd.ExecuteNonQuery();
+                    conn.Close();
+                    return true;
+                }
+            }
+            return false;
         }
 
         //deletes record from database

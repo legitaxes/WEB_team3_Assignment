@@ -26,10 +26,10 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index", "Home");
             }
             List<Lecturer> lecturerList = lecturerContext.GetAllLecturer();
-            if (ViewData["ErrorMessage"] != null)
-            {
-                ViewData["ErrorMessage"] = "You are not allowed to delete other lecturer's profile!";
-            }
+            //if (ViewData["ErrorMessage"] != null)
+            //{
+            //    ViewData["ErrorMessage"] = "You are not allowed to delete other lecturer's profile!";
+            //}
             return View(lecturerList);
         }
 
@@ -84,6 +84,65 @@ namespace web_team3_assignment.Controllers
             //}
         }
 
+        //GET: Lecturer/Change Function
+        public ActionResult Change()
+        {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+               (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            //get current lecturer ID through session get string
+            int? id = Convert.ToInt32(HttpContext.Session.GetString("ID"));
+
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+            //get all the lecturer details based on the ID
+            LecturerPassword lecturer = lecturerContext.getPasswordDetails(id.Value);
+
+            if (lecturer == null)
+            {
+                return RedirectToAction("Index");
+            }
+            ViewData["ShowResult"] = false;
+            return View(lecturer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Change(LecturerPassword lecturer)
+        {
+            //check whether the password field is empty
+            System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
+            System.Diagnostics.Debug.WriteLine("password: " + lecturer.Password);
+            System.Diagnostics.Debug.WriteLine("new pw: " + lecturer.NewPassword);
+            System.Diagnostics.Debug.WriteLine("confirm pw: " + lecturer.ConfirmPassword);
+
+            if (ModelState.IsValid)
+            {
+                //checks whether the password is the same
+                if (lecturer.NewPassword == lecturer.ConfirmPassword)
+                {
+                    if (lecturerContext.ChangePassword(lecturer))
+                    {
+                        ViewData["Message"] = "Password Changed Successfully!";
+                        return View(lecturer);
+                    }
+                }
+                //if password does not match
+                else
+                {
+                    ViewData["Message"] = "Password Does Not Match!";
+                    return View(lecturer);
+                }
+            }
+            //if password field is empty OR does not match the required model from Lecturer.cs, return to view with error message
+            ViewData["Message"] = "Password Field Did Not Meet Requirements!";
+            return View(lecturer);
+        }
+
         // GET: Lecturer/Edit/5
         //public ActionResult Edit(int? id)
         //{
@@ -133,6 +192,7 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index");
             }
+            //get all the lecturer details based on the ID
             Lecturer lecturer = lecturerContext.getLecturerDetails(id.Value);
             //check if lectuer object is empty or the lecturerID matches the currently logged in user
             if (lecturer == null || Convert.ToInt32(HttpContext.Session.GetString("ID")) != id.Value)
