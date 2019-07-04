@@ -41,7 +41,7 @@ namespace web_team3_assignment.Controllers
             }
             else
             {
-                TempData["LecturerMessage"] = "Invalid Login Credentials!";
+                TempData["Message"] = "Invalid Login Credentials!";
                 return RedirectToAction("Index");
             }
         }

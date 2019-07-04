@@ -44,6 +44,9 @@
                 <button class="btn btn-outline mb1 red" id="lecturerbtn">Lecturer Login</button>
                 <button class="btn btn-outline mb1 fuchsia" id="studentbtn">Student Login</button>
             </div>
+            <div class="d-flex justify-content-center">
+                <span style="color: red;"><b style="font-size:20px;">@TempData["Message"]</b></span>
+            </div>
             <form method="post" action="~/Home/StaffLogin" id="lecturerform">
                 <fieldset class="loginFieldset">
                     <legend>Lecturer Login</legend>
@@ -66,9 +69,6 @@
                         <div class="col-sm-9 offset-sm-3">
                             <input type="submit" id="btnStaffLogin"
                                    class="myButton" value="Login" />
-                        </div>
-                        <div class="col-sm-9 offset-sm-3">
-                            <span style="color: red;">@TempData["LecturerMessage"]</span>
                         </div>
                     </div>
                     <div>
@@ -100,9 +100,6 @@
                         <div class="col-sm-9 offset-sm-3">
                             <input type="submit" id="btnStduentLogin"
                                    class="myButton" value="Login" />
-                        </div>
-                        <div class="col-sm-9 offset-sm-3">
-                            <span style="color: red;">@TempData["Message"]</span>
                         </div>
                     </div>
                     <div>
