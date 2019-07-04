@@ -54,14 +54,14 @@ namespace web_team3_assignment.DAL
             conn.Open();
 
             //Use DataAdapter, which execute the SELECT SQL through its
-            //SqlCommand object to fetch data to a table "StaffDetails"
+            //SqlCommand object to fetch data to a table "ProjectDetails"
             //in DataSet "result".
             da.Fill(result, "ProjectDetails");
 
             //Close the database connection
             conn.Close();
 
-            //Transferring rows of data in DataSet’s table to “Staff” objects
+            //Transferring rows of data in DataSet’s table to “Project” objects
             List<Project> projectList = new List<Project>();
             foreach (DataRow row in result.Tables["ProjectDetails"].Rows)
             {

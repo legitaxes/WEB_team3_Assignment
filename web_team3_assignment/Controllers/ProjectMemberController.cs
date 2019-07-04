@@ -16,7 +16,7 @@ namespace web_team3_assignment.Controllers
         private ProjectMemberDAL projectMemberContext = new ProjectMemberDAL();
         //private StudentDAL studentContext = new StudentDAL();
 
-        public ActionResult Index(int id)
+        public ActionResult Index(int? id)
         {
             // Stop accessing the action if not logged in 
             // or account not in the "Staff" role
@@ -26,19 +26,19 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            //ProjectMemberViewModel pmVM = new ProjectMemberViewModel();
-            //pmVM.projectMemberList = pmContext.GetAllProjectMembers();
+            //ProjectMemberViewModel projectMemberVM = new ProjectMemberViewModel();
+            //projectMemberVM.projectMemberList = projectMemberContext.GetAllProjectMembers();
             //// BranchNo (id) present in the query string
             //if (id != null)
             //{
             //    ViewData["selectedProjectId"] = id.Value;
-            //    pmVM.projectList = pmContext.GetProjectpm(id.Value);
+            //    projectMemberVM.projectList = projectMemberContext.GetProjectpm(id.Value);
             //}
             //else
             //{
             //    ViewData["selectedProjectId"] = "";
             //}
-            //return View(pmVM);
+            //return View(projectMemberContext);
 
             return View();
         }

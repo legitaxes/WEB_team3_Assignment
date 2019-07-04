@@ -31,6 +31,7 @@ namespace web_team3_assignment.DAL
             conn = new SqlConnection(strConn);
         }
 
+    
         public List<ProjectMember> GetAllProjectMembers(int projectId)
         {
             SqlCommand cmd = new SqlCommand("SELECT * FROM ProjectMember" +
@@ -106,6 +107,8 @@ namespace web_team3_assignment.DAL
             }
             return projectList;
         }
+
+       
 
 
         //public int DetailsProject(ProjectMember projectMember)

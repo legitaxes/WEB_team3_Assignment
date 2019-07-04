@@ -25,6 +25,7 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+
             List<Project> ProjectList = projectContext.GetAllProject();
             return View(ProjectList);     
         }
@@ -44,7 +45,7 @@ namespace web_team3_assignment.Controllers
         // POST: ProjectMember/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Project project)
+        public ActionResult CreateProject(Project project)
         {
             if (ModelState.IsValid)
             {
@@ -145,10 +146,10 @@ namespace web_team3_assignment.Controllers
         //public ProjectViewModel MapToProjectVM(Project project)
         //{
         //    string Role = "";
-        //    if (project.Title != null)
+        //    if (project.ProjectId != null)
         //    {
-        //        List<ProjectMember> pmList = pmContext.GetAllpm();
-        //        foreach (ProjectMember projectMember in pmList)
+        //        List<ProjectMember> projectMemberList = projectMemberContext.GetAllProjectMembers();
+        //        foreach (ProjectMember projectMember in projectMemberList)
         //        {
         //            if (projectMember.ProjectId == project.ProjectId)
         //            {
@@ -158,11 +159,11 @@ namespace web_team3_assignment.Controllers
         //            }
         //        }
         //    }
-           
+
 
         //    ProjectViewModel projectVM = new ProjectViewModel
         //    {
-        //        ProjectId = project.ProjectId,
+        //        ProjectId = project.ProjectId,               
         //        Title = project.Title,
         //        ProjectURL = project.ProjectURL,
         //        Description = project.Description,

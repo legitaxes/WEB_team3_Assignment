@@ -10,5 +10,7 @@ namespace web_team3_assignment.Models
     {
         //Still trying 
         public List<Project> projectList { get; set; }
+
+        public List<ProjectMember> projectMemberList { get; set; }
     }
 }
