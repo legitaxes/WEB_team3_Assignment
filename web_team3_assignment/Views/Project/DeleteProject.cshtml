@@ -38,8 +38,17 @@
         </div>
 
         <div class="form-group row">
+            <label asp-for="ProjectURL"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="ProjectURL"
+                       class="form-control-plaintext" />
+            </div>
+        </div>
+
+        <div class="form-group row">
             <div class="col-sm-9 offset-sm-3">
-                <input type="submit" value="Delete"  
+                <input type="submit" value="Delete"
                        class="btn btn-primary mb1 black bg-aqua" />
             </div>
         </div>
