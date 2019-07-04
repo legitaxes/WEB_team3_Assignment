@@ -27,11 +27,6 @@ namespace web_team3_assignment.Controllers
             return View(SkillSetList);
         }
 
-        public ActionResult SkillSetCreate()
-        {
-            return View();
-        }
-
         // GET: SkillSet/Details/5
         public ActionResult Details(int id)
         {
@@ -39,7 +34,7 @@ namespace web_team3_assignment.Controllers
         }
 
         // GET: SkillSet/Create
-        public ActionResult Create(SkillSet skillset)
+        public ActionResult SkillSetCreate()
         {
             // Stop accessing the action if not logged in // or account not in the "Lecturer" role
             if ((HttpContext.Session.GetString("Role") == null) ||
@@ -47,8 +42,7 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            SkillSetContext.Add(skillset);
-            return RedirectToAction("Index", "SkillSet");
+            //SkillSetContext.Add(skillset);
             return View();
         }
 
@@ -57,17 +51,17 @@ namespace web_team3_assignment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SkillSetCreate(SkillSet skillSet)
         {
+            //if (skillSet.SkillSetName == null || skillSet.SkillSetName == "")
+            //{
+            //    ViewData["Message"] = "Skill Set Name Field is Empty!";
+            //    return View(skillSet);
+            //} 
             if (ModelState.IsValid)
             {
                 skillSet.SkillSetId = SkillSetContext.Add(skillSet);
                 return RedirectToAction("Index");
             }
-            else
-            {
-
-                return View(skillSet);
-            }
-
+            return View(skillSet);
         }
 
         // GET: SkillSet/Edit/5
@@ -109,7 +103,8 @@ namespace web_team3_assignment.Controllers
             }
             //Input validation fails, return to the view
             //to display error message
-            return View(skillset);
+            return View(skillset);
+
         }
 
         // GET: Lecturer/Delete/5
@@ -134,10 +129,10 @@ namespace web_team3_assignment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SkillSetDelete(SkillSet skillSet)
         {
-            // Delete the staff record from database
+            // Delete the skillset record from database
             SkillSetContext.Delete(skillSet.SkillSetId);
             // Call the Index action of Home controller
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "SkillSet");
 
         }
     }

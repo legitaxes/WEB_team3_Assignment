@@ -149,5 +149,22 @@ namespace web_team3_assignment.DAL
                 return null; // Record not found
             }
         }
+
+        public bool IsSkillSetExist(string skillset)
+        {
+            SqlCommand cmd = new SqlCommand
+            ("SELECT SkillSetID FROM SKillSet WHERE SkillSetName=@selectedSkillSetName", conn);
+            cmd.Parameters.AddWithValue("@selectedSkillSetName", skillset);
+            SqlDataAdapter daSkillSet = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            //Use DataAdapter to fetch data to a table "SkillSetDetails" in DataSet.
+            daSkillSet.Fill(result, "SkillSetDetails");
+            conn.Close();
+            if (result.Tables["SkillSetDetails"].Rows.Count > 0)
+                return true; //The email exists for another staff
+            else
+                return false; // The email address given does not exist
+        }
     }
 }
