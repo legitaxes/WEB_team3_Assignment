@@ -46,7 +46,7 @@ namespace web_team3_assignment.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateProfile(Student student)
+        public ActionResult Update(Student student)
         {
             if (ModelState.IsValid)
             {

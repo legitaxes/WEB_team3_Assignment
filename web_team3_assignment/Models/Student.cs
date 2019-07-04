@@ -25,11 +25,11 @@ namespace web_team3_assignment.Models
         public string Photo { get; set; }
 
         [Display(Name = "Description")]
-        [StringLength(255, ErrorMessage = "Name Cannot Exceed 3000 Characters!")]
+        [StringLength(3000, ErrorMessage = "Name Cannot Exceed 3000 Characters!")]
         public string Description { get; set; }
 
         [Display(Name = "Achievement")]
-        [StringLength(255, ErrorMessage = "Name Cannot Exceed 3000 Characters!")]
+        [StringLength(3000, ErrorMessage = "Name Cannot Exceed 3000 Characters!")]
         public string Achievement { get; set; }
 
         [Display(Name = "External Link")]
