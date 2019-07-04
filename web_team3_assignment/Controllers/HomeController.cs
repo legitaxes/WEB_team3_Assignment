@@ -53,10 +53,11 @@ namespace web_team3_assignment.Controllers
             // Email address converted to lowercase
             string studentLoginID = formData["txtLoginID"].ToString().ToLower();
             string studentPassword = formData["txtPassword"].ToString();
-
-            if (homeContext.studentLogin(studentLoginID, studentPassword))
+            Student student = homeContext.studentLogin(studentLoginID, studentPassword);
+            if (student.EmailAddr == studentLoginID && student.Password == studentPassword)
             {
                 HttpContext.Session.SetString("LoginName", studentLoginID);
+                HttpContext.Session.SetInt32("StudentID", student.StudentID);
                 HttpContext.Session.SetString("Role", "Student");
                 HttpContext.Session.SetString("currentTime", DateTime.Now.ToString());
                 // Redirect user to the "StudentMain" view through an action
@@ -117,6 +118,7 @@ namespace web_team3_assignment.Controllers
 
         // POST: Create student profile
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult CreateStudent(Student student)
         {
             student.Password = "p@55Student";

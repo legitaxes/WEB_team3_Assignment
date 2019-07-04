@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form asp-action="CreateStudent">
+<form asp-action="UpdateProfile">
     <fieldset class="FormContent">
         <legend>Input Profile Details Below</legend>
         <div class="form-group row">
@@ -81,12 +81,11 @@
 
         <div class="form-group row">
             <label asp-for="Password"
-                   class="col-sm-3 col-form-label">
-            </label>
+                   class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input class="form-control"
-                       title="This is the default password that will be set by the system. To change the password, click on Change Password on the menu to change your password"
-                       value="p@55Student" disabled />
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password"
+                      class="text-danger"></span>
             </div>
         </div>
 
@@ -102,8 +101,7 @@
 
         <div class="form-group row">
             <div class="col-sm-9 offset-sm-3">
-                <input type="submit" value="Create"
-                       class="btn btn-primary mb1 black bg-aqua" />
+                <input type="submit" value="Save" class="btn btn-primary mb1 bg-teal" />
             </div>
         </div>
         <div>

@@ -31,30 +31,6 @@ namespace web_team3_assignment.DAL
             conn = new SqlConnection(strConn);
         }
 
-        public int Add(Student student)
-        {
-            //sql command to add (i hope it works :pray:)
-            SqlCommand cmd = new SqlCommand
-                ("INSERT INTO Student (Name, Course, Photo, Description, Achievement, ExternalLink, EmailAddr, Password, MentorID)" +
-                " OUTPUT INSERTED.StudentID" +
-                " VALUES(@name, @course, @photo, @description, @achievement, @externallink, @email, @password, @mentorid)", conn);
-            cmd.Parameters.AddWithValue("@name", student.Name);
-            cmd.Parameters.AddWithValue("@course", student.Course);
-            cmd.Parameters.AddWithValue("@photo", student.Photo);
-            cmd.Parameters.AddWithValue("@description", student.Description);
-            cmd.Parameters.AddWithValue("@achievement", student.Achievement);
-            cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
-            cmd.Parameters.AddWithValue("@email", student.EmailAddr);
-            cmd.Parameters.AddWithValue("@password", student.Password);
-            cmd.Parameters.AddWithValue("@mentorid", student.MentorID);
-            //open connection to run command
-            conn.Open();
-            student.StudentID = (int)cmd.ExecuteScalar();
-            //close connection
-            conn.Close();
-            return student.StudentID;
-        }
-
         public List<Student> GetAllStudent()
         {
             //Instantiate a SqlCommand object, supply it with a
@@ -97,5 +73,129 @@ namespace web_team3_assignment.DAL
             }
             return studentList;
         }
+
+        public int Add(Student student)
+        {
+            //sql command to add (i hope it works :pray:)
+            SqlCommand cmd = new SqlCommand
+                ("INSERT INTO Student (Name, Course, Photo, Description, Achievement, ExternalLink, EmailAddr, Password, MentorID)" +
+                " OUTPUT INSERTED.StudentID" +
+                " VALUES(@name, @course, @photo, @description, @achievement, @externallink, @email, @password, @mentorid)", conn);
+            cmd.Parameters.AddWithValue("@name", student.Name);
+            cmd.Parameters.AddWithValue("@course", student.Course);
+            cmd.Parameters.AddWithValue("@photo", student.Photo);
+            cmd.Parameters.AddWithValue("@description", student.Description);
+            cmd.Parameters.AddWithValue("@achievement", student.Achievement);
+            cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
+            cmd.Parameters.AddWithValue("@email", student.EmailAddr);
+            cmd.Parameters.AddWithValue("@password", student.Password);
+            cmd.Parameters.AddWithValue("@mentorid", student.MentorID);
+            //open connection to run command
+            conn.Open();
+            student.StudentID = (int)cmd.ExecuteScalar();
+            //close connection
+            conn.Close();
+            return student.StudentID;
+        }
+
+        //Get student details
+        public Student GetStudentDetails(int studentID)
+        {
+            //Instantiate a SqlCommand object, supply it with a SELECT SQL
+            //statement which retrieves all attributes of a staff record.
+            SqlCommand cmd = new SqlCommand           
+            ("SELECT * FROM Student WHERE StudentID = @selectedStudentID", conn);
+
+
+            //Define the parameter used in SQL statement, value for the
+            //parameter is retrieved from the method parameter “staffId”.
+            cmd.Parameters.AddWithValue("@selectedStudentID", studentID);
+
+
+            //Instantiate a DataAdapter object, pass the SqlCommand
+            //object “cmd” as parameter.
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+
+            //Create a DataSet object “result"
+            DataSet studentresult = new DataSet();
+
+            //Open a database connection.
+            conn.Open();
+
+            //Use DataAdapter to fetch data to a table "StaffDetails" in DataSet. 
+            da.Fill(studentresult, "StudentDetails");
+
+            //Close the database connection 
+            conn.Close();
+
+            Student student = new Student();
+
+            if (studentresult.Tables["StudentDetails"].Rows.Count > 0)
+            {
+                student.StudentID = studentID;
+                // Fill staff object with values from the DataSet
+                DataTable table = studentresult.Tables["StudentDetails"];
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Name"]))
+                    student.Name = table.Rows[0]["Name"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Course"]))
+                    student.Course = table.Rows[0]["Course"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Photo"]))
+                    student.Photo = table.Rows[0]["Photo"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Description"]))
+                    student.Description = table.Rows[0]["Description"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Achievement"]))
+                    student.Achievement = table.Rows[0]["Achievement"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["ExternalLink"]))
+                    student.ExternalLink = table.Rows[0]["ExternalLink"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["EmailAddr"]))
+                    student.EmailAddr = table.Rows[0]["EmailAddr"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Password"]))
+                    student.Password = table.Rows[0]["Password"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["MentorID"]))
+                    student.MentorID = Convert.ToInt32(table.Rows[0]["MentorID"]);
+
+                return student; // No error occurs
+            }
+
+            else
+            {
+                return null; // Record not found
+            }
+        }
+
+        public int UpdateProfile(Student student)
+        {
+            SqlCommand cmd = new SqlCommand("UPDATE Student SET Name=@name, Course=@course, Photo=@photo, Description=@description, Achievement=@achievement, ExternalLink=@externallink, EmailAddr=@emailaddr, Password=@password, MentorID=mentorID" +
+                " WHERE StudentID = @selectedStudentID", conn);
+            
+            cmd.Parameters.AddWithValue("@name", student.Name);
+            cmd.Parameters.AddWithValue("@course", student.Course);
+            cmd.Parameters.AddWithValue("@photo", student.Photo);
+            cmd.Parameters.AddWithValue("@description", student.Description);
+            cmd.Parameters.AddWithValue("@achievement", student.Achievement);
+            cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
+            cmd.Parameters.AddWithValue("@emailaddr", student.EmailAddr);
+            cmd.Parameters.AddWithValue("@password", student.Password);
+            cmd.Parameters.AddWithValue("@mentorID", student.MentorID);
+            cmd.Parameters.AddWithValue("@selectedStudentID", student.StudentID);
+            conn.Open();
+
+            int count = cmd.ExecuteNonQuery();
+
+            conn.Close();
+
+            return count;
+        }
+
     }
 }

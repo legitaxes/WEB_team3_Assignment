@@ -54,7 +54,7 @@ namespace web_team3_assignment.DAL
             return lecturer;
         }
 
-        public bool studentLogin(string email, string password)
+        public Student studentLogin(string email, string password)
         {
             SqlCommand cmd = new SqlCommand("SELECT * FROM Student", conn);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -62,17 +62,20 @@ namespace web_team3_assignment.DAL
             conn.Open();
             da.Fill(result, "studentLoginDetails");
             conn.Close();
+            Student student = new Student();
             foreach (DataRow row in result.Tables["studentLoginDetails"].Rows)
             {
-                string emailaddress = row["EmailAddr"].ToString().ToLower();
-                string pass = row["Password"].ToString();
-
-                if (emailaddress == email && pass == password)
+                student.EmailAddr = row["EmailAddr"].ToString().ToLower();
+                student.Password = row["Password"].ToString();
+                if (student.EmailAddr == email && student.Password == password)
                 {
-                    return true;
+                    student.StudentID = Convert.ToInt32(row["StudentID"]);
+                    if (!DBNull.Value.Equals(row["Name"]))
+                        student.Name = row["Name"].ToString();
+                    break;
                 }
             }
-            return false;
+            return student;
         }
 
     }
