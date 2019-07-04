@@ -18,13 +18,14 @@ namespace web_team3_assignment.Controllers
         {
             // Stop accessing the action if not logged in 
             // or account not in the "Lecturer" role
+            int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
             if ((HttpContext.Session.GetString("Role") == null) ||
                 (HttpContext.Session.GetString("Role") != "Student"))
             {
                 return RedirectToAction("Index", "Home");
             }
-            List<Student> studentList = studentContext.GetAllStudent();
-            return View(studentList);
+            Student student = studentContext.GetStudentDetails(studentid);
+            return View(student);
         }
 
         public ActionResult Update()
