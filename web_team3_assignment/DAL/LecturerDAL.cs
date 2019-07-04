@@ -203,6 +203,67 @@ namespace web_team3_assignment.DAL
             return rowCount;
         }
 
+        //get mentees profile in a student list
+        public List<Student> GetMenteeDetails(int lecturerId)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Student" +
+                " WHERE MentorID = @selectedMentorID" +
+                " ORDER BY StudentID ASC", conn);
+            cmd.Parameters.AddWithValue("@selectedMentorID", lecturerId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "AllMentees");
+            conn.Close();
+            List<Student> studentList = new List<Student>();
+            foreach (DataRow row in result.Tables["AllMentees"].Rows)
+            {
+                //string photo;
+                //string description;
+                //string achievement;
+                //string externalLink;
+                //if (!DBNull.Value.Equals(row["Photo"]))
+                //    photo = (row["Photo"]).ToString();
+                //else
+                //{
+                //    photo = null;
+                //}
+                //if (!DBNull.Value.Equals(row["Description"]))
+                //    description = (row["Description"]).ToString();
+                //else
+                //{
+                //    description = null;
+                //}
+                //if (!DBNull.Value.Equals(row["Achievement"]))
+                //    achievement = (row["Achievement"]).ToString();
+                //else
+                //{
+                //    achievement = null;
+                //}
+                //if (!DBNull.Value.Equals(row["ExternalLink"]))
+                //    externalLink = (row["ExternalLink"]).ToString();
+                //else
+                //{
+                //    externalLink = null;
+                //}
+                studentList.Add(
+                    new Student
+                    {
+                        StudentID = Convert.ToInt32(row["StudentID"]),
+                        Name = row["Name"].ToString(),
+                        Course = row["Course"].ToString(),
+                        Photo = row["Photo"].ToString(),
+                        Description = row["Description"].ToString(),
+                        Achievement = row["Achievement"].ToString(),
+                        ExternalLink = row["ExternalLink"].ToString(),
+                        EmailAddr = row["EmailAddr"].ToString(),
+                        Password = row["Password"].ToString(),
+                        MentorID = Convert.ToInt32(row["MentorID"])
+                    });
+            }
+            return studentList;
+        }
+
         //get a list of mentees under the lecturer in a selectListItem List
         public List<SelectListItem> GetMentees(int lecturerId)
         {

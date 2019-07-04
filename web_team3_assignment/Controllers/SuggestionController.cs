@@ -158,8 +158,9 @@ namespace web_team3_assignment.Controllers
                 suggestionContext.Update(suggestion);
                 return RedirectToAction("Index");
             }
-            ViewData["Message"] = "Something Went Wrong With The Update!";
-            return View(suggestion);
+            ViewData["Message"] = "Description Field Cannot be Empty!";
+            SuggestionViewModel suggestionVM = MapToStudentVM(suggestion);
+            return View(suggestionVM);
         }
 
         // GET: Suggestion/Delete/5

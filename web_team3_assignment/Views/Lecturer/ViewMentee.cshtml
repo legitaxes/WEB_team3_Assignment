@@ -1,0 +1,54 @@
+﻿@model IEnumerable<web_team3_assignment.Models.Student>
+
+@{
+    ViewData["Title"] = "ViewMentee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<img class="img-fluid" src="~/images/viewmentees.png" style="display:block; margin:auto;" />
+@if (Model.ToList().Count > 0)
+{
+    <div class="table-responsive">
+        <table id="viewStaff" class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Course</th>
+                    <th>Photo</th>
+                    <th>Description</th>
+                    <th>Achievement</th>
+                    <th>External Link</th>
+                    <th>Email Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.StudentID.ToString()</td>
+                        <td>@item.Name</td>
+                        <td>@item.Course</td>
+                        <td>
+                            @{ string imageFileName = item.Photo + ".jpg"; }
+                        <img src="~/images/@imageFileName" style="width:50px" />
+                        </td>
+                        <td>@item.Description</td>
+                        <td>@item.Achievement</td>
+                        <td>@item.ExternalLink</td>
+                        <td>@item.EmailAddr</td>
+                        <td>
+                        <a asp-action="Edit" asp-controller="Student"
+                           asp-route-id="@item.StudentID">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <span style="color:red">No record found!</span>
+}

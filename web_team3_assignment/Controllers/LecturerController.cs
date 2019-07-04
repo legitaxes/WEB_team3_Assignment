@@ -60,7 +60,7 @@ namespace web_team3_assignment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Lecturer lecturer)
         {
-            lecturer.Password = "p@55Mentor";
+            lecturer.Password = "p@55Lecturer";
             System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {
@@ -216,6 +216,20 @@ namespace web_team3_assignment.Controllers
             return RedirectToAction("Index", "Home");
 
         }
+
+        //GET: Lecturer/ViewMentees
+        public ActionResult ViewMentee()
+        {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+                (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            List<Student> studentList = lecturerContext.GetMenteeDetails(Convert.ToInt32(HttpContext.Session.GetString("ID")));
+            return View(studentList);
+        }
+
 
         //// GET: Lecturer/PostSuggestion
         //public ActionResult PostSuggestion()
