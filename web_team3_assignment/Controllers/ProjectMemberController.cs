@@ -16,7 +16,7 @@ namespace web_team3_assignment.Controllers
         private ProjectMemberDAL projectMemberContext = new ProjectMemberDAL();
         //private StudentDAL studentContext = new StudentDAL();
 
-        public ActionResult Index(int? id)
+        public ActionResult Index(int id)
         {
             // Stop accessing the action if not logged in 
             // or account not in the "Staff" role

@@ -84,10 +84,10 @@ namespace web_team3_assignment.DAL
         public int Add(Project project)
         {
             SqlCommand cmd = new SqlCommand
-            ("INSERT INTO Project (Title, Description, ProjectPoster, ProjectURL) " + 
+            ("INSERT INTO Project (Title, Description, ProjectPoster, ProjectURL) " +
             "OUTPUT INSERTED.ProjectID " +
             "VALUES(@title, @description, @projectPoster, @projectURL)", conn);
-        
+
             cmd.Parameters.AddWithValue("@title", project.Title);
             cmd.Parameters.AddWithValue("@description", project.Description);
             cmd.Parameters.AddWithValue("@projectPoster", project.ProjectPoster);
@@ -106,7 +106,7 @@ namespace web_team3_assignment.DAL
 
 
             //Return id when no error occurs.
-            return project.ProjectId;        
+            return project.ProjectId;
         }
 
 
@@ -182,6 +182,9 @@ namespace web_team3_assignment.DAL
                 if (!DBNull.Value.Equals(table.Rows[0]["Description"]))
                     project.Description = table.Rows[0]["Description"].ToString();
 
+                if (!DBNull.Value.Equals(table.Rows[0]["ProjectPoster"]))
+                    project.ProjectPoster = table.Rows[0]["ProjectPoster"].ToString();
+
                 if (!DBNull.Value.Equals(table.Rows[0]["ProjectURL"]))
                     project.ProjectURL = table.Rows[0]["ProjectURL"].ToString();
 
@@ -202,13 +205,13 @@ namespace web_team3_assignment.DAL
             //Instantiate a SqlCommand object, supply it with SQL statement UPDATE
             //and the connection object for connecting to the database.
             SqlCommand cmd = new SqlCommand
-            ("UPDATE Project SET Title=@title, Description=@description, ProjectURL=@projectURL WHERE ProjectID = @selectedProjectID ", conn);
+            ("UPDATE Project SET Title=@Title, Description=@Description, ProjectURL=@ProjectURL WHERE ProjectID = @selectedProjectID ", conn);
 
             //Assign values to parameters
             cmd.Parameters.AddWithValue("@selectedProjectID", project.ProjectId);
-            cmd.Parameters.AddWithValue("@title", project.Title);
-            cmd.Parameters.AddWithValue("@description", project.Description);
-            cmd.Parameters.AddWithValue("@projectURL", project.ProjectURL);
+            cmd.Parameters.AddWithValue("@Title", project.Title);
+            cmd.Parameters.AddWithValue("@Description", project.Description);
+            cmd.Parameters.AddWithValue("@ProjectURL", project.ProjectURL);
 
             //Open a database connection.
             conn.Open();

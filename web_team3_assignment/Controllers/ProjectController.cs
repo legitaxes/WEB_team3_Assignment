@@ -25,9 +25,8 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-
             List<Project> ProjectList = projectContext.GetAllProject();
-            return View(ProjectList);     
+            return View(ProjectList);
         }
 
 
@@ -60,7 +59,9 @@ namespace web_team3_assignment.Controllers
                 return View(project);
             }
         }
-        
+
+
+
         //public ActionResult EditProject(int? id)
         //{
         //    // Stop accessing the action if not logged in // or account not in the "Lecturer" role
@@ -100,28 +101,27 @@ namespace web_team3_assignment.Controllers
             return View(project);
         }
 
-  
+
 
         // POST: Lecturer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Project project)
+        public ActionResult EditProject(Project project)
         {
-            //Get branch list for drop-down list
-            //in case of the need to return to Edit.cshtml view
             if (ModelState.IsValid)
             {
                 //Update staff record to database
                 projectContext.Update(project);
                 return RedirectToAction("Index");
             }
+
             //Input validation fails, return to the view
-            //to display error message
+            ViewData["Message"] = "Update failed!";
             return View(project);
         }
 
 
-        // GET: Suggestion/Details/5
+        // GET: Project/Details/5
         public ActionResult DetailsProject(int id)
         {
 
@@ -132,6 +132,7 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+
 
             //Project project = projectContext.GetProjectDetails(id);
             //ProjectViewModel projectVM = MapToProjectVM(project);
@@ -146,7 +147,7 @@ namespace web_team3_assignment.Controllers
         //public ProjectViewModel MapToProjectVM(Project project)
         //{
         //    string Role = "";
-        //    if (project.ProjectId != null)
+        //    if (project.Title != null)
         //    {
         //        List<ProjectMember> projectMemberList = projectMemberContext.GetAllProjectMembers();
         //        foreach (ProjectMember projectMember in projectMemberList)
@@ -163,33 +164,13 @@ namespace web_team3_assignment.Controllers
 
         //    ProjectViewModel projectVM = new ProjectViewModel
         //    {
-        //        ProjectId = project.ProjectId,               
+        //        ProjectId = project.ProjectId,
         //        Title = project.Title,
         //        ProjectURL = project.ProjectURL,
         //        Description = project.Description,
         //        ProjectPoster = project.ProjectPoster + ".jpg"
         //    };
         //    return projectVM;
-        //}
-
-
-
-        //// GET: ProjectMembers/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    // Stop accessing the action if not logged in
-        //    // or account not in the "Staff" role
-        //    if ((HttpContext.Session.GetString("Role") == null) ||
-        //    (HttpContext.Session.GetString("Role") != "Student"))
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-
-        //    return View();
-
-        //    //Project project = projectContext.GetProjectDetails(id);
-        //    //ProjectViewModel projectVM = MapToProjectVM(project);
-        //    //return View(projectVM);
         //}
 
 
