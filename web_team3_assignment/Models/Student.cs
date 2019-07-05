@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace web_team3_assignment.Models
 {
@@ -23,6 +24,8 @@ namespace web_team3_assignment.Models
         [Display(Name = "Photo")]
         [StringLength(255, ErrorMessage = "Name Cannot Exceed 255 Characters!")]
         public string Photo { get; set; }
+
+        public IFormFile FileToUpload { get; set; }
 
         [Display(Name = "Description")]
         [StringLength(3000, ErrorMessage = "Name Cannot Exceed 3000 Characters!")]

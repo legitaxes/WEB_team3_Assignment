@@ -38,7 +38,8 @@
         <label asp-for="Photo"
                class="col-sm-3 col-form-label"></label>
         <div class="col-sm-9 form-control-plaintext">
-            @Html.Display("Photo")
+            @{ string imageFileName = Model.Photo; }
+            <img src="~/images/@imageFileName" style="width:50px" />
         </div>
     </div>
 
