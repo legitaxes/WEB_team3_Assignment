@@ -14,9 +14,9 @@ namespace web_team3_assignment.Controllers
     {
         //private ProjectDAL projectContext = new ProjectDAL();
         private ProjectMemberDAL projectMemberContext = new ProjectMemberDAL();
-        //private StudentDAL studentContext = new StudentDAL();
 
-        public ActionResult Index(int id)
+
+        public ActionResult Index(int? id)
         {
             // Stop accessing the action if not logged in 
             // or account not in the "Staff" role
@@ -26,21 +26,22 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            //ProjectMemberViewModel projectMemberVM = new ProjectMemberViewModel();
-            //projectMemberVM.projectMemberList = projectMemberContext.GetAllProjectMembers();
-            //// BranchNo (id) present in the query string
-            //if (id != null)
-            //{
-            //    ViewData["selectedProjectId"] = id.Value;
-            //    projectMemberVM.projectList = projectMemberContext.GetProjectpm(id.Value);
-            //}
-            //else
-            //{
-            //    ViewData["selectedProjectId"] = "";
-            //}
-            //return View(projectMemberContext);
+            ProjectMemberViewModel projectMemberVM = new ProjectMemberViewModel();
+            projectMemberVM.projectMemberList = projectMemberContext.GetAllProjectMembers();
 
-            return View();
+            // BranchNo (id) present in the query string
+            if (id != null)
+            {
+                ViewData["selectedProjectId"] = id.Value;
+                projectMemberVM.projectList = projectMemberContext.GetProjectPM(id.Value);
+            }
+            else
+            {
+                ViewData["selectedProjectId"] = "";
+            }
+            return View(projectMemberVM);
+
+            //return View();
         }
 
         //public ActionResult Index()
@@ -62,25 +63,25 @@ namespace web_team3_assignment.Controllers
 
 
         // GET: Suggestion/Details/5
-        public ActionResult DetailsProject(int id)
-        {
+        //public ActionResult DetailProject(int id)
+        //{
 
-            // Stop accessing the action if not logged in 
-            // or account not in the "Staff" role
-            if ((HttpContext.Session.GetString("Role") == null) ||
-                (HttpContext.Session.GetString("Role") != "Student"))
-            {
-                return RedirectToAction("Index", "Home");
-            }
+        //    // Stop accessing the action if not logged in 
+        //    // or account not in the "Staff" role
+        //    if ((HttpContext.Session.GetString("Role") == null) ||
+        //        (HttpContext.Session.GetString("Role") != "Student"))
+        //    {
+        //        return RedirectToAction("Index", "Home");
+        //    }
 
-            return View();
+        //    return View();
 
-            //ProjectMember projectMember = projectMemberContext.GetProjectMemberDetails(id);
-            //ProjectMemberViewModel projectMemberVM = MapToProject(projectMember);
+        //    //ProjectMember projectMember = projectMemberContext.GetProjectMemberDetails(id);
+        //    //ProjectMemberViewModel projectMemberVM = MapToProject(projectMember);
 
-            //return View(projectMemberVM);
+        //    //return View(projectMemberVM);
 
-        }
+        //}
 
         //public ProjectMemberViewModel MapToProjectVM(ProjectMemberViewModel projectMember)
         //{

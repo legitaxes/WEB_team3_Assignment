@@ -1,0 +1,58 @@
+﻿@model web_team3_assignment.Models.ProjectViewModel
+
+@{
+    ViewData["ProjectTitle"] = "DetailProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*Still trying*@
+<h4 class="PageTitle">View Project Details</h4>
+<hr />
+<fieldset class="FormContent">
+    <div class="form-group row">
+        <label asp-for="ProjectId"
+               class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-9 form-control-plaintext">
+            @Html.Display("ProjectId")
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label asp-for="ProjectPoster" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-9">
+            <img src="~/images/@Model.projectphoto" style="width:80px" />
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Title" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-9 form-control-plaintext">
+            @Html.Display("Title")
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Description"
+               class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-9 form-control-plaintext">
+            @Html.Display("Description")
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ProjectURL" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-9 form-control-plaintext">
+            @Html.Display("ProjectURL")
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-9 offset-sm-3">
+            <a asp-action="Index"
+               asp-controller="Project">Back to List</a>
+        </div>
+    </div>
+</fieldset>

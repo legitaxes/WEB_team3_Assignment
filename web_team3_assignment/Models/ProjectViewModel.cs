@@ -37,11 +37,12 @@ namespace web_team3_assignment.Models
         [Display(Name = "Project URL")]
         public string ProjectURL { get; set; }
 
-
         [StringLength(3000, ErrorMessage = "Project Description Cannot Exceed 3000 Characters!")]
         [Display(Name = "Description")]
         public string Description { get; set; }
 
         public string projectphoto { get; set; }
+
+        public IFormFile posterToUpload { get; set; }
     }
 }

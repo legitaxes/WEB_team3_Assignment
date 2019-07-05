@@ -62,50 +62,50 @@ namespace web_team3_assignment.DAL
         }
 
 
-        //public List<Project> GetProjectPM(int projectId)
-        //{
-        //    //Instantiate a SqlCommand object, supply it with a SELECT SQL
-        //    //statement which retrieves all attributes of a branch record.
-        //    SqlCommand cmd = new SqlCommand
-        //    ("SELECT * FROM Project WHERE ProjectId = @selectedProjectId", conn);
+        public List<Project> GetProjectPM(int projectId)
+        {
+            //Instantiate a SqlCommand object, supply it with a SELECT SQL
+            //statement which retrieves all attributes of a branch record.
+            SqlCommand cmd = new SqlCommand
+            ("SELECT * FROM Project WHERE ProjectId = @selectedProjectId", conn);
 
-        //    //Define the parameter used in SQL statement, value for the
-        //    //parameter is retrieved from the branchNo property of the Branch class.
-        //    cmd.Parameters.AddWithValue("@selectedProjectId", projectId);
+            //Define the parameter used in SQL statement, value for the
+            //parameter is retrieved from the branchNo property of the Branch class.
+            cmd.Parameters.AddWithValue("@selectedProjectId", projectId);
 
-        //    //Instantiate a DataAdapter object, pass the SqlCommand
-        //    //object created as parameter.
-        //    SqlDataAdapter da = new SqlDataAdapter(cmd);
+            //Instantiate a DataAdapter object, pass the SqlCommand
+            //object created as parameter.
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
 
-        //    // Create a DataSet object result
-        //    DataSet result = new DataSet();
+            // Create a DataSet object result
+            DataSet result = new DataSet();
 
-        //    //Open a database connection.
-        //    conn.Open();
+            //Open a database connection.
+            conn.Open();
 
-        //    //Use DataAdapter to fetch data to a table "StaffDetails" in DataSet.
-        //    da.Fill(result, "ProjectDetails");
+            //Use DataAdapter to fetch data to a table "StaffDetails" in DataSet.
+            da.Fill(result, "ProjectDetails");
 
-        //    //Close database connection
-        //    conn.Close();
+            //Close database connection
+            conn.Close();
 
-        //    List<Project> projectList = new List<Project>();
-        //    foreach (DataRow row in result.Tables["ProjectDetails"].Rows)
-        //    {
-        //        projectList.Add(
-        //        new Project
-        //        {
-        //            ProjectId = Convert.ToInt32(row["ProjectID"]),
-        //            Title = row["Title"].ToString(),
-        //            Description = row["Description"].ToString(),
-        //            ProjectPoster = row["ProjectPoster"].ToString(),
-        //            ProjectURL = row["ProjectURL"].ToString(),
-        //        }
-        //        );
-        //    }
+            List<Project> projectList = new List<Project>();
+            foreach (DataRow row in result.Tables["ProjectDetails"].Rows)
+            {
+                projectList.Add(
+                new Project
+                {
+                    ProjectId = Convert.ToInt32(row["ProjectID"]),
+                    Title = row["Title"].ToString(),
+                    Description = row["Description"].ToString(),
+                    ProjectPoster = row["ProjectPoster"].ToString(),
+                    ProjectURL = row["ProjectURL"].ToString(),
+                }
+                );
+            }
 
-        //    return projectList;
-        //}
+            return projectList;
+        }
 
 
 
