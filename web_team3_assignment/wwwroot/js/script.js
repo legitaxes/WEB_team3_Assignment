@@ -40,8 +40,9 @@
         }
     });
 
-    $("#backbutton").click(function () {
-        window.history.back();
+    $("#backbutton").click(function(event) {
+        event.preventDefault();
+        history.back(1);
     });
 
 
