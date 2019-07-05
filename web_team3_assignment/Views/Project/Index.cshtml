@@ -4,10 +4,10 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<img class="img-fluid" src="~/images/viewprojectsstatic.png" style="display:block; margin:auto;" />
 
-<h4 class="PageTitle" style="font-size:large">View Project</h4><br />
-<img id="imgMainPic" src="~/images/nplogo.gif" class="img-fluid" style="display:block; margin:auto;" />
-<br />
-<p><a asp-action="CreateProject">Create New Project</a></p>
+<a asp-action="CreateProject">
+    <img class="img-fluid" src="~/images/createproject.gif" style="display:block; margin:auto;" />
+</a>
 <!-- Add a partial view to display a list of staff records in a tabular format. -->
 <partial name="~/Views/Project/_ViewProject.cshtml" model="@Model" />

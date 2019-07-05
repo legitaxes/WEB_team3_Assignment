@@ -4,6 +4,7 @@
     ViewData["Title"] = "SkillSetCreate";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<img class="img-fluid" src="~/images/createnewskillset.png" style="display:block; margin:auto;" />
 
 <form asp-action="SkillSetCreate">
     <fieldset class="FormContent">
@@ -12,8 +13,8 @@
             <label asp-for="SkillSetName"
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="SkillSetName" class="form-control"/>
-                 <span class="text-danger" asp-validation-for="SkillSetName"></span>
+                <input asp-for="SkillSetName" class="form-control" />
+                <span class="text-danger" asp-validation-for="SkillSetName"></span>
             </div>
         </div>
 
