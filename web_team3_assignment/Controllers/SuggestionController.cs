@@ -241,14 +241,18 @@ namespace web_team3_assignment.Controllers
         public ActionResult Edit(Suggestion suggestion)
         {
             ViewData["Status"] = GetSuggestionStatus();
+            if (suggestion.Description == null || suggestion.Description == " ")
+            {
+                ViewData["Message"] = "Description Field Cannot be Empty!";
+                SuggestionViewModel suggestionVM = MapToStudentVM(suggestion);
+                return View(suggestionVM);
+            }
             if (ModelState.IsValid)
             {
                 suggestionContext.Update(suggestion);
                 return RedirectToAction("Index");
             }
-            ViewData["Message"] = "Description Field Cannot be Empty!";
-            SuggestionViewModel suggestionVM = MapToStudentVM(suggestion);
-            return View(suggestionVM);
+            return View(suggestion);
         }
 
         // GET: Suggestion/Delete/5
