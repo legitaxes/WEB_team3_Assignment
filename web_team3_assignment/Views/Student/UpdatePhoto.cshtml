@@ -4,7 +4,7 @@
     ViewData["Title"] = "UpdatePhoto";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<img class="img-fluid" src="~/images/uploadprofile.png" style="display:block; margin:auto;" />
 <form asp-action="UpdatePhoto" enctype="multipart/form-data">
     <fieldset class="FormContent">
         <legend>Update Photo</legend>
@@ -15,7 +15,7 @@
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
                 <input asp-for="Name" readonly
-                       class="text-danger"/>
+                       class="text-danger" />
             </div>
         </div>
 
@@ -24,7 +24,7 @@
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
                 <input asp-for="Course" readonly
-                      class="text-danger"/>
+                       class="text-danger" />
             </div>
         </div>
 
@@ -38,12 +38,13 @@
         </div>
 
         <div class="form-group row">
-        <label asp-for="FileToUpload"
-            class="col-sm-3 col-form-label">
-            New Photo (jpg format)</label> 
-        <div class="col-sm-9"> 
-            <input asp-for="FileToUpload" accept="image/jpeg" />
-            </div> 
+            <label asp-for="FileToUpload"
+                   class="col-sm-3 col-form-label">
+                New Photo (jpg format)
+            </label>
+            <div class="col-sm-9">
+                <input asp-for="FileToUpload" accept="image/jpeg" />
+            </div>
         </div>
 
         <div class="form-group row">
@@ -51,7 +52,7 @@
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
                 <input asp-for="Description" readonly
-                       class="text-danger"/>
+                       class="text-danger" />
             </div>
 
         </div>
@@ -61,7 +62,7 @@
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
                 <input asp-for="Achievement" readonly
-                       class="text-danger"/>
+                       class="text-danger" />
             </div>
         </div>
 
@@ -70,7 +71,7 @@
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
                 <input asp-for="ExternalLink" readonly
-                       class="text-danger"/>
+                       class="text-danger" />
             </div>
         </div>
 
@@ -79,7 +80,7 @@
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
                 <input asp-for="EmailAddr" readonly
-                       class="text-danger"/>
+                       class="text-danger" />
             </div>
         </div>
 
@@ -88,7 +89,7 @@
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
                 <input asp-for="Password" readonly
-                       class="text-danger"/>
+                       class="text-danger" />
             </div>
         </div>
 
@@ -97,7 +98,7 @@
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
                 <input asp-for="MentorID" readonly
-                       class="text-danger"/>
+                       class="text-danger" />
             </div>
         </div>
 
