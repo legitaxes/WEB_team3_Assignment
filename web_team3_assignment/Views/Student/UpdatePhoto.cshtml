@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form asp-action="UpdatePhoto">
+<form asp-action="UpdatePhoto" enctype="multipart/form-data">
     <fieldset class="FormContent">
         <legend>Update Photo</legend>
         <input asp-for="StudentID" type="hidden" readonly class="form-control" />
@@ -109,10 +109,6 @@
         </div>
         <div>
             <a class="btn btn-secondary" role="button" asp-action="Index">Back</a>
-            @if (ViewData["Message"] != null)
-            {
-                <span class="text-danger">@ViewData["Message"]</span>
-            }
         </div>
     </fieldset>
 </form>

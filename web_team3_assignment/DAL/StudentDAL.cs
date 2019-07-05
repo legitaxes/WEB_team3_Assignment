@@ -83,19 +83,38 @@ namespace web_team3_assignment.DAL
                 " VALUES(@name, @course, @photo, @description, @achievement, @externallink, @email, @password, @mentorid)", conn);
             cmd.Parameters.AddWithValue("@name", student.Name);
             cmd.Parameters.AddWithValue("@course", student.Course);
-            cmd.Parameters.AddWithValue("@photo", student.Photo);
+            cmd.Parameters.AddWithValue("@photo",  student.Photo);
             cmd.Parameters.AddWithValue("@description", student.Description);
             cmd.Parameters.AddWithValue("@achievement", student.Achievement);
             cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
             cmd.Parameters.AddWithValue("@email", student.EmailAddr);
             cmd.Parameters.AddWithValue("@password", student.Password);
             cmd.Parameters.AddWithValue("@mentorid", student.MentorID);
+
             //open connection to run command
             conn.Open();
             student.StudentID = (int)cmd.ExecuteScalar();
             //close connection
             conn.Close();
             return student.StudentID;
+        }
+
+        public bool IsEmailExist(string email, int id)
+        {
+            SqlCommand cmd = new SqlCommand
+            ("SELECT StudentID FROM Student WHERE EmailAddr=@selectedEmail" + " AND StudentID = @selectedstudentID", conn);
+            cmd.Parameters.AddWithValue("@selectedEmail", email);
+            cmd.Parameters.AddWithValue("@selectedstudentID", id);
+            SqlDataAdapter daEmail = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            //Use DataAdapter to fetch data to a table "EmailDetails" in DataSet.
+            daEmail.Fill(result, "EmailDetails");
+            conn.Close();
+            if (result.Tables["EmailDetails"].Rows.Count > 0)
+                return true; //The email exists for another staff
+            else
+                return false; // The email address given does not exist
         }
 
         //Get student details
@@ -178,6 +197,30 @@ namespace web_team3_assignment.DAL
             SqlCommand cmd = new SqlCommand("UPDATE Student SET Name=@name, Course=@course, Photo=@photo, Description=@description, Achievement=@achievement, ExternalLink=@externallink, EmailAddr=@emailaddr, Password=@password, MentorID=mentorID" +
                 " WHERE StudentID=@selectedStudentID", conn);
             
+            cmd.Parameters.AddWithValue("@name", student.Name);
+            cmd.Parameters.AddWithValue("@course", student.Course);
+            cmd.Parameters.AddWithValue("@photo", student.Photo);
+            cmd.Parameters.AddWithValue("@description", student.Description);
+            cmd.Parameters.AddWithValue("@achievement", student.Achievement);
+            cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
+            cmd.Parameters.AddWithValue("@emailaddr", student.EmailAddr);
+            cmd.Parameters.AddWithValue("@password", student.Password);
+            cmd.Parameters.AddWithValue("@mentorID", student.MentorID);
+            cmd.Parameters.AddWithValue("@selectedStudentID", student.StudentID);
+            conn.Open();
+
+            int count = cmd.ExecuteNonQuery();
+
+            conn.Close();
+
+            return count;
+        }
+
+        public int UpdatePhoto(Student student)
+        {
+            SqlCommand cmd = new SqlCommand("UPDATE Student SET Name=@name, Course=@course, Photo=@photo, Description=@description, Achievement=@achievement, ExternalLink=@externallink, EmailAddr=@emailaddr, Password=@password, MentorID=mentorID" +
+                " WHERE StudentID=@selectedStudentID", conn);
+
             cmd.Parameters.AddWithValue("@name", student.Name);
             cmd.Parameters.AddWithValue("@course", student.Course);
             cmd.Parameters.AddWithValue("@photo", student.Photo);
