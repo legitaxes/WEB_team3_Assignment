@@ -22,20 +22,24 @@ namespace web_team3_assignment.Models
         public string Course { get; set; }
 
         [Display(Name = "Photo")]
+        [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [StringLength(255, ErrorMessage = "Name Cannot Exceed 255 Characters!")]
         public string Photo { get; set; }
 
         public IFormFile FileToUpload { get; set; }
 
         [Display(Name = "Description")]
+        [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [StringLength(3000, ErrorMessage = "Name Cannot Exceed 3000 Characters!")]
         public string Description { get; set; }
 
         [Display(Name = "Achievement")]
+        [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [StringLength(3000, ErrorMessage = "Name Cannot Exceed 3000 Characters!")]
         public string Achievement { get; set; }
 
         [Display(Name = "External Link")]
+        [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [StringLength(255, ErrorMessage = "Name Cannot Exceed 255 Characters!")]
         public string ExternalLink { get; set; }
 
@@ -49,6 +53,7 @@ namespace web_team3_assignment.Models
         [StringLength(255, ErrorMessage = "Password Length Cannot Exceed 255 Characters!")]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]  
         [Display(Name = "Mentor ID")]
         public int MentorID { get; set; }
     }

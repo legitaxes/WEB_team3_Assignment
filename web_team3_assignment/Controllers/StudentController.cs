@@ -14,7 +14,7 @@ namespace web_team3_assignment.Controllers
     public class StudentController : Controller
     {
         private StudentDAL studentContext = new StudentDAL();
-
+        
         public IActionResult Index(int? id)
         {
             // Stop accessing the action if not logged in 
@@ -56,6 +56,7 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
             Student student = studentContext.GetStudentDetails(studentid);
             return View(student);
         }
@@ -67,12 +68,13 @@ namespace web_team3_assignment.Controllers
             if (ModelState.IsValid)
             {
                 studentContext.UpdateProfile(student);
-                return RedirectToAction("Update");
+                ViewData["Message"] = "Student profile updated Successfully!";
+                return View("Update");
             }
             return View("Update");
         }
 
-        public ActionResult UpdatePhoto(int id)
+        public ActionResult UpdatePhoto()
         {
             // Stop accessing the action if not logged in 
             // or account not in the "Staff" role in
@@ -96,15 +98,16 @@ namespace web_team3_assignment.Controllers
                     // Find the filename extension of the file to be uploaded.
                     string fileExt = Path.GetExtension(student.FileToUpload.FileName);
                     // Rename the uploaded file with the staff’s name.
-                    string uploadedFile = student.Name + fileExt; 
+                    string uploadedFile = student.StudentID + fileExt;
                     // Get the complete path to the images folder in server
-                    string savePath = Path.Combine( Directory.GetCurrentDirectory(), "wwwroot\\images", uploadedFile);
+                    string savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", uploadedFile);
                     // Upload the file to server
                     using (var fileSteam = new FileStream(savePath, FileMode.Create))
                     {
                         await student.FileToUpload.CopyToAsync(fileSteam);
                     }
                     student.Photo = uploadedFile;
+                    studentContext.UpdatePhoto(student);
                     ViewData["Message"] = "File uploaded successfully.";
                 }
                 catch (IOException)
