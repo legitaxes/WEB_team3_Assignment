@@ -1,0 +1,54 @@
+﻿@model web_team3_assignment.Models.ProjectViewModel
+
+@{
+    ViewData["Title"] = "UploadPhoto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="PageTitle">Upload Project Photo</h4>
+<hr />
+<form asp-action="UploadPhoto" enctype="multipart/form-data">
+    <fieldset class="FormContent">
+        <div class="form-group row">
+            <label asp-for="ProjectId"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="ProjectId" readonly
+                       class="form-control-plaintext" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Title"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="Title" readonly
+                       class="form-control-plaintext" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="ProjectPoster"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <img src="~/images/@Model.projectphoto" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="posterToUpload"
+                   class="col-sm-3 col-form-label">
+                New Photo (jpg format)
+            </label>
+            <div class="col-sm-9">
+                <input asp-for="posterToUpload" accept="image/jpeg" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <input type="submit" value="Upload"  class="btn btn-primary mb1 black bg-gray"/>
+                <span style="color:red;">@ViewData["Message"]</span>
+            </div>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-primary mb1 black bg-gray">Back to List</a>
+        </div>
+    </fieldset>
+</form>

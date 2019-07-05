@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using web_team3_assignment.DAL;
 using web_team3_assignment.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IO;
 
 namespace web_team3_assignment.Controllers
 {
@@ -127,7 +128,7 @@ namespace web_team3_assignment.Controllers
             return View(projectVM);
 
 
-           
+
 
         }
 
@@ -196,5 +197,64 @@ namespace web_team3_assignment.Controllers
             // Call the Index action of Home controller
             return RedirectToAction("Index");
         }
+
+
+        public ActionResult UploadPhoto(int id)
+        {
+            // Stop accessing the action if not logged in
+            // or account not in the "Staff" role
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            Project project = projectContext.GetProjectDetails(id);
+            ProjectViewModel projectVM = MapToProjectVM(project);
+            return View(projectVM);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadPhoto(ProjectViewModel projectVM)
+        {
+            if (projectVM.posterToUpload != null &&
+            projectVM.posterToUpload.Length > 0)
+            {
+                try
+                {
+                    // Find the filename extension of the file to be uploaded.
+                    string fileExt = Path.GetExtension(
+                     projectVM.posterToUpload.FileName);
+
+                    // Rename the uploaded file with the staff’s name.
+                    string uploadedFile = projectVM.ProjectId + fileExt;
+
+                    // Get the complete path to the images folder in server
+                    string savePath = Path.Combine(
+                     Directory.GetCurrentDirectory(),
+                     "wwwroot\\images", uploadedFile);
+
+                    // Upload the file to server
+                    using (var fileSteam = new FileStream(
+                     savePath, FileMode.Create))
+                    {
+                        await projectVM.posterToUpload.CopyToAsync(fileSteam);
+                    }
+                    projectVM.projectphoto = uploadedFile;
+                    ViewData["Message"] = "File uploaded successfully.";
+                }
+                catch (IOException)
+                {
+                    //File IO error, could be due to access rights denied
+                    ViewData["Message"] = "File uploading fail!";
+                }
+                catch (Exception ex) //Other type of error
+                {
+                    ViewData["Message"] = ex.Message;
+                }
+            }
+            return View(projectVM);
+        }
+
     }
 }
