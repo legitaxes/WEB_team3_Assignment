@@ -56,7 +56,7 @@ namespace web_team3_assignment.Controllers
             Student student = homeContext.studentLogin(studentLoginID, studentPassword);
             if (student.EmailAddr == studentLoginID && student.Password == studentPassword)
             {
-                HttpContext.Session.SetString("LoginName", studentLoginID);
+                HttpContext.Session.SetString("LoginName", student.Name);
                 HttpContext.Session.SetInt32("StudentID", student.StudentID);
                 HttpContext.Session.SetInt32("StudentsMentorID", student.MentorID);
                 HttpContext.Session.SetString("Role", "Student");
