@@ -20,8 +20,8 @@
                 <tr>
                     <td>@item.ProjectId.ToString()</td>
                     <td>@item.Title.ToString()</td>
-                    @*<td>@item.Description.ToString()</td>
-                    <td>
+                    @*<td>@item.Description.ToString()</td>*@
+                    @*<td>
                         @{ string imageFileName = item.ProjectPoster + ".jpg"; }
                         <img src="~/images/@imageFileName" style="width:80px" />
                     </td>*@
@@ -34,7 +34,7 @@
                         <a asp-action="UploadProject" asp-controller="Project"
                            asp-route-id="@item.ProjectId">Upload</a>
 
-                        <a asp-action="DetailsProject" asp-controller="Project"
+                        <a asp-action="DetailProject" asp-controller="Project"
                            asp-route-id="@item.ProjectId">Details</a>
 
                         <a asp-action="DeleteProject" asp-controller="Project"

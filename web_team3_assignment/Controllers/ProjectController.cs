@@ -61,19 +61,6 @@ namespace web_team3_assignment.Controllers
         }
 
 
-
-        //public ActionResult EditProject(int? id)
-        //{
-        //    // Stop accessing the action if not logged in // or account not in the "Lecturer" role
-        //    if ((HttpContext.Session.GetString("Role") == null) ||
-        //        (HttpContext.Session.GetString("Role") != "Student"))
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    Project project = projectContext.GetProjectDetails(id.Value);
-        //    return View(project);
-        //}
-
         // GET: Lecturer/Edit/5
         public ActionResult EditProject(int? id)
         {
@@ -122,7 +109,7 @@ namespace web_team3_assignment.Controllers
 
 
         // GET: Project/Details/5
-        public ActionResult DetailsProject(int id)
+        public ActionResult DetailProject(int id)
         {
 
             // Stop accessing the action if not logged in 
@@ -134,44 +121,44 @@ namespace web_team3_assignment.Controllers
             }
 
 
-            //Project project = projectContext.GetProjectDetails(id);
-            //ProjectViewModel projectVM = MapToProjectVM(project);
+            Project project = projectContext.GetProjectDetails(id);
+            ProjectViewModel projectVM = MapToProjectVM(project);
 
-            //return View(projectVM);
+            return View(projectVM);
 
 
-            return View();
+           
 
         }
 
-        //public ProjectViewModel MapToProjectVM(Project project)
-        //{
-        //    string Role = "";
-        //    if (project.Title != null)
-        //    {
-        //        List<ProjectMember> projectMemberList = projectMemberContext.GetAllProjectMembers();
-        //        foreach (ProjectMember projectMember in projectMemberList)
-        //        {
-        //            if (projectMember.ProjectId == project.ProjectId)
-        //            {
-        //                Role = projectMember.Role;
-        //                //Exit the foreach loop once the name is found
-        //                break;
-        //            }
-        //        }
-        //    }
+        public ProjectViewModel MapToProjectVM(Project project)
+        {
+            string Role = "";
+            if (project.Title != null)
+            {
+                List<ProjectMember> projectMemberList = projectMemberContext.GetAllProjectMembers();
+                foreach (ProjectMember projectMember in projectMemberList)
+                {
+                    if (projectMember.ProjectId == project.ProjectId)
+                    {
+                        Role = projectMember.Role;
+                        //Exit the foreach loop once the name is found
+                        break;
+                    }
+                }
+            }
 
 
-        //    ProjectViewModel projectVM = new ProjectViewModel
-        //    {
-        //        ProjectId = project.ProjectId,
-        //        Title = project.Title,
-        //        ProjectURL = project.ProjectURL,
-        //        Description = project.Description,
-        //        ProjectPoster = project.ProjectPoster + ".jpg"
-        //    };
-        //    return projectVM;
-        //}
+            ProjectViewModel projectVM = new ProjectViewModel
+            {
+                ProjectId = project.ProjectId,
+                Title = project.Title,
+                ProjectURL = project.ProjectURL,
+                Description = project.Description,
+                ProjectPoster = project.ProjectPoster + ".jpg"
+            };
+            return projectVM;
+        }
 
 
         // GET: Lecturer/Delete/5
