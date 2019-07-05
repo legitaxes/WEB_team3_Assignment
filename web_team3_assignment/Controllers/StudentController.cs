@@ -18,16 +18,32 @@ namespace web_team3_assignment.Controllers
         {
             // Stop accessing the action if not logged in 
             // or account not in the "Lecturer" role
-            int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
+            //int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
             if ((HttpContext.Session.GetString("Role") == null) ||
                 (HttpContext.Session.GetString("Role") != "Student"))
             {
                 return RedirectToAction("Index", "Home");
             }
-            Student student = studentContext.GetStudentDetails(studentid);
-            return View(student);
+            //Student student = studentContext.GetStudentDetails(studentid);
+            return View();
         }
+        public ActionResult Details(int? id)
+        {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student") || (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            if (id == null)
+            {
+                int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
+                Student student = studentContext.GetStudentDetails(studentid);
+                return View(student);
+            }
+            Student Lecturerstudent = studentContext.GetStudentDetails(id.Value);
+            return View(Lecturerstudent);
 
+        }
         public ActionResult Update()
         {
             int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));

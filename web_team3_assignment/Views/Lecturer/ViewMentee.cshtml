@@ -16,10 +16,6 @@
                     <th>Name</th>
                     <th>Course</th>
                     <th>Photo</th>
-                    <th>Description</th>
-                    <th>Achievement</th>
-                    <th>External Link</th>
-                    <th>Email Address</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -31,16 +27,12 @@
                         <td>@item.Name</td>
                         <td>@item.Course</td>
                         <td>
-                            @{ string imageFileName = item.Photo + ".jpg"; }
+                            @{ string imageFileName = item.Photo; }
                         <img src="~/images/@imageFileName" style="width:50px" />
                         </td>
-                        <td>@item.Description</td>
-                        <td>@item.Achievement</td>
-                        <td>@item.ExternalLink</td>
-                        <td>@item.EmailAddr</td>
                         <td>
-                        <a asp-action="Edit" asp-controller="Student"
-                           asp-route-id="@item.StudentID">Edit</a>
+                        <a asp-action="Details" asp-controller="Student"
+                           asp-route-id="@item.StudentID">Details</a>
                         </td>
                     </tr>
                 }
