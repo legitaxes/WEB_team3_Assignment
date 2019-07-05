@@ -58,6 +58,7 @@ namespace web_team3_assignment.Controllers
             {
                 HttpContext.Session.SetString("LoginName", studentLoginID);
                 HttpContext.Session.SetInt32("StudentID", student.StudentID);
+                HttpContext.Session.SetInt32("StudentsMentorID", student.MentorID);
                 HttpContext.Session.SetString("Role", "Student");
                 HttpContext.Session.SetString("currentTime", DateTime.Now.ToString());
                 // Redirect user to the "StudentMain" view through an action

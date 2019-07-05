@@ -33,19 +33,11 @@ namespace web_team3_assignment.Controllers
             }
             return View(suggestionVMList);
         }
-
-        // GET: Suggestion/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
+   
         public SuggestionViewModel MapToStudentVM(Suggestion suggestion)
         {
             if (suggestion != null)
             {
-
-
                 string studentName = "";
                 List<Student> studentList = studentContext.GetAllStudent();
                 foreach (Student student in studentList)
@@ -78,6 +70,102 @@ namespace web_team3_assignment.Controllers
             }
             else
                 return null;
+        }
+
+        // GET: Suggestion
+        public ActionResult StudentSuggestion()
+        {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            List<StudentViewModel> studentsuggestionVMList = new List<StudentViewModel>();
+            List<Suggestion> suggestionList = suggestionContext.GetSuggestionPostedByStudentsMentor(Convert.ToInt32(HttpContext.Session.GetInt32("StudentID")));
+            foreach (Suggestion suggestion in suggestionList)
+            {
+                StudentViewModel suggestionVM = MapToLecturerVM(suggestion);
+                studentsuggestionVMList.Add(suggestionVM);
+            }
+            return View(studentsuggestionVMList);
+        }
+
+        public StudentViewModel MapToLecturerVM(Suggestion suggestion)
+        {
+            if (suggestion != null)
+            {
+                string lecturerName = "";
+                List<Lecturer> lecturerList = lecturerContext.GetAllLecturer();
+                Student student = studentContext.GetStudentDetails(Convert.ToInt32(HttpContext.Session.GetInt32("StudentID")));
+                foreach (Lecturer lecturer in lecturerList)
+                {
+                    if (lecturer.LecturerId == suggestion.LecturerId && lecturer.LecturerId == student.MentorID && student.StudentID == suggestion.StudentId)
+                    {
+                        lecturerName = lecturer.Name;
+                        break;
+                    }
+                }
+                string suggestionStatus;
+                if (suggestion.Status == 'N')
+                {
+                    suggestionStatus = "Not Acknowledged";
+                }
+                else
+                {
+                    suggestionStatus = "Acknowledged";
+                }
+                StudentViewModel studentVM = new StudentViewModel
+                {
+                    SuggestionId = suggestion.SuggestionId,
+                    LecturerId = suggestion.LecturerId,
+                    StudentId = suggestion.StudentId,
+                    Description = suggestion.Description,
+                    Status = suggestionStatus,
+                    DateCreated = suggestion.DateCreated,
+                    LecturerName = lecturerName
+                };
+               return studentVM;
+            }
+            else
+                return null;
+        }
+
+        // GET: Suggestion/Delete/5
+        public ActionResult Acknowledge(int? id)
+        {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+            Suggestion suggestion = suggestionContext.GetSuggestionDetails(id.Value);
+            StudentViewModel suggestionVM = MapToLecturerVM(suggestion);
+            if (suggestion == null)
+            {
+                return RedirectToAction("StudentSuggestion");
+            }
+            return View(suggestionVM);
+        }
+
+        // POST: Suggestion/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Acknowledge(Suggestion suggestion)
+        {
+            // Delete the staff record from database
+            suggestionContext.Acknowledge(suggestion.SuggestionId);
+            return RedirectToAction("StudentSuggestion");
+        }
+
+        // GET: Suggestion/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
         }
 
         // GET: Suggestion/PostSuggestion

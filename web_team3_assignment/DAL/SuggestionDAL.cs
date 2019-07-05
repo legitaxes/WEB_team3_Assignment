@@ -116,6 +116,47 @@ namespace web_team3_assignment.DAL
             return suggestList; 
         }
 
+        public List<Suggestion> GetSuggestionPostedByStudentsMentor(int studentID)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Suggestion" +
+                " WHERE StudentID = @selectedstudentID" + " AND Status = 'N'", conn);
+            cmd.Parameters.AddWithValue("@selectedstudentID", studentID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "SuggestDetails");
+            conn.Close();
+            List<Suggestion> suggestList = new List<Suggestion>();
+            foreach (DataRow row in result.Tables["SuggestDetails"].Rows)
+            {
+                suggestList.Add(
+                    new Suggestion
+                    {
+                        SuggestionId = Convert.ToInt32(row["SuggestionID"]),
+                        LecturerId = Convert.ToInt32(row["LecturerID"]),
+                        StudentId = Convert.ToInt32(row["StudentID"]),
+                        Description = row["Description"].ToString(),
+                        Status = Convert.ToChar(row["Status"]),
+                        DateCreated = Convert.ToDateTime(row["DateCreated"])
+                    }
+                    );
+            }
+            return suggestList;
+        }
+
+        public int Acknowledge(int suggestionId)
+        {
+            SqlCommand cmd = new SqlCommand("UPDATE Suggestion " +
+            " SET Status = 'Y'" + " WHERE SuggestionID = @selectsuggestionID", conn);
+
+            cmd.Parameters.AddWithValue("@selectSuggestionID", suggestionId);
+            conn.Open();
+            int rowCount;
+            rowCount = cmd.ExecuteNonQuery();
+            conn.Close();
+            return rowCount;
+        }
+
         public int Update(Suggestion suggestion)
         {
             SqlCommand cmd = new SqlCommand("UPDATE Suggestion SET Description=@description, Status=@status" +
