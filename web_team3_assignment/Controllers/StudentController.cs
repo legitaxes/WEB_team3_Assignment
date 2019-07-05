@@ -14,36 +14,36 @@ namespace web_team3_assignment.Controllers
     {
         private StudentDAL studentContext = new StudentDAL();
 
-        public IActionResult Index()
+        public IActionResult Index(int? id)
         {
             // Stop accessing the action if not logged in 
             // or account not in the "Lecturer" role
-            //int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
-            if ((HttpContext.Session.GetString("Role") == null) ||
-                (HttpContext.Session.GetString("Role") != "Student"))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            //Student student = studentContext.GetStudentDetails(studentid);
-            return View();
-        }
-        public ActionResult Details(int? id)
-        {
-            if ((HttpContext.Session.GetString("Role") == null) ||
-            (HttpContext.Session.GetString("Role") != "Student") || (HttpContext.Session.GetString("Role") != "Lecturer"))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            if (id == null)
-            {
-                int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
-                Student student = studentContext.GetStudentDetails(studentid);
-                return View(student);
-            }
-            Student Lecturerstudent = studentContext.GetStudentDetails(id.Value);
-            return View(Lecturerstudent);
+            System.Diagnostics.Debug.WriteLine((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student") || (HttpContext.Session.GetString("Role") != "Lecturer"));
 
+            if ((HttpContext.Session.GetString("Role") == null))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            if ((HttpContext.Session.GetString("Role") == "Student") || (HttpContext.Session.GetString("Role") == "Lecturer"))
+            {
+                if (id == null)
+                {
+                    int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
+                    Student student = studentContext.GetStudentDetails(studentid);
+                    return View(student);
+                }
+                else
+                {
+                    Student Lecturerstudent = studentContext.GetStudentDetails(id.Value);
+                    return View(Lecturerstudent);
+                }
+                //Student student = studentContext.GetStudentDetails(studentid);
+                //return View();
+            }
+            return RedirectToAction("Index", "Home");
         }
+
         public ActionResult Update()
         {
             int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));

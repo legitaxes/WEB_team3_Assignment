@@ -40,6 +40,10 @@
         }
     });
 
+    $("#backbutton").click(function () {
+        window.history.back();
+    });
+
 
     //$('#NewPassword, #ConfirmPassword').on('keyup', function () {
     //    if ($('#NewPassword').val() == $('#ConfirmPassword').val()) {
@@ -47,9 +51,5 @@
     //    } else
     //        $('#warning').html('Not Matching').css('color', 'red');
     //});
-
-});
-
-$(window).on(function() {
 
 });

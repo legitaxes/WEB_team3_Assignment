@@ -1,9 +1,11 @@
 ﻿@model web_team3_assignment.Models.Student
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<h2>Details</h2>
 
 <h4 class="PageTitle">Your portfolio</h4>
 <hr />
@@ -91,8 +93,9 @@
 
     <div class="form-group row">
         <div class="col-sm-9 offset-sm-3">
-            <a asp-action="StudentMain"
-               asp-controller="Home">Back to List</a>
+            <button id="backbutton" class="btn btn-primary mb1 black bg-gray">Back</button>
         </div>
     </div>
 </fieldset>
+<script>
+</script>
