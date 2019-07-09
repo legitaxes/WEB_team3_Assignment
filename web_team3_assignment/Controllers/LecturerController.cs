@@ -89,20 +89,15 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index", "Home");
             }
             //get current lecturer ID through session get string
-            int? id = Convert.ToInt32(HttpContext.Session.GetString("ID"));
-
-            if (id == null)
-            {
-                return RedirectToAction("Index");
-            }
+            int id = Convert.ToInt32(HttpContext.Session.GetString("ID"));
             //get all the lecturer details based on the ID
-            LecturerPassword lecturer = lecturerContext.getPasswordDetails(id.Value);
-
-            if (lecturer == null)
-            {
-                return RedirectToAction("Index");
-            }
-            ViewData["ShowResult"] = false;
+            //LecturerPassword lecturer = lecturerContext.getPasswordDetails(id);
+            LecturerPassword lecturer = new LecturerPassword();
+            lecturer.LecturerId = Convert.ToInt32(HttpContext.Session.GetString("ID"));
+            //if (lecturer == null)
+            //{
+            //    return RedirectToAction("Index");
+            //}
             return View(lecturer);
         }
 
@@ -110,6 +105,14 @@ namespace web_team3_assignment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Change(LecturerPassword lecturer)
         {
+            //get password details for currently logged in lecturer
+            LecturerPassword currentLecturer = lecturerContext.getPasswordDetails(Convert.ToInt32(HttpContext.Session.GetString("ID")));
+            //if the password the user key in DOES NOT match the database password...
+            if (lecturer.Password != currentLecturer.Password)
+            {
+                ViewData["Message"] = "Current Password Is Incorrect!";
+                return View(lecturer);
+            }
             //check whether the password field is empty
             System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
             System.Diagnostics.Debug.WriteLine("password: " + lecturer.Password);
@@ -221,7 +224,7 @@ namespace web_team3_assignment.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //GET: Lecturer/ViewMentees
+        //GET: Lecturer/Mentees
         public ActionResult Mentee()
         {
             if ((HttpContext.Session.GetString("Role") == null) ||
@@ -233,41 +236,5 @@ namespace web_team3_assignment.Controllers
             List<Student> studentList = lecturerContext.GetMenteeDetails(Convert.ToInt32(HttpContext.Session.GetString("ID")));
             return View(studentList);
         }
-
-
-        //// GET: Lecturer/PostSuggestion
-        //public ActionResult PostSuggestion()
-        //{
-        //    if ((HttpContext.Session.GetString("Role") == null) ||
-        //        (HttpContext.Session.GetString("Role") != "Lecturer"))
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    ViewData["MenteeList"] = lecturerContext.GetMentees(Convert.ToInt32(HttpContext.Session.GetString("ID")));
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //// POST: Lecturer/PostSuggestion
-        //public ActionResult PostSuggestion(Suggestion suggest)
-        //{
-        //    suggest.LecturerId = Convert.ToInt32(HttpContext.Session.GetString("ID"));
-        //    suggest.Status = 'N';
-        //    System.Diagnostics.Debug.WriteLine(suggest.StudentId);
-        //    System.Diagnostics.Debug.WriteLine(suggest.Description);
-        //    System.Diagnostics.Debug.WriteLine(suggest.LecturerId);
-        //    System.Diagnostics.Debug.WriteLine(suggest.Status);
-        //    if (ModelState.IsValid)
-        //    {
-        //        suggest.SuggestionId = suggestionContext.PostSuggestion(suggest);
-        //        ViewData["Message"] = "Suggestion Posted Successfully";
-        //        return View();
-        //    }
-        //    else
-        //    {
-        //        return View(suggest);
-        //    }
-        //}
     }
 }
