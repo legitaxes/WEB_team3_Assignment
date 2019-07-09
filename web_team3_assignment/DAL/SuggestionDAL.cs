@@ -91,7 +91,7 @@ namespace web_team3_assignment.DAL
         public List<Suggestion> GetSuggestionPostedByMentor(int lecturerId)
         {
             SqlCommand cmd = new SqlCommand("SELECT * FROM Suggestion" +
-                " WHERE LecturerID = @selectedLecturerID", conn);
+                " WHERE LecturerID = @selectedLecturerID ORDER BY DateCreated DESC", conn);
             cmd.Parameters.AddWithValue("@selectedLecturerID", lecturerId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet result = new DataSet();
