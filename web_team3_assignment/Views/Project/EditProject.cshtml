@@ -11,7 +11,7 @@
 <form asp-action="EditProject">
     <fieldset class="FormContent">
         <br />
-        <input asp-for="ProjectPoster" readonly  value="@Model.ProjectPoster" type="hidden" />
+        <input asp-for="ProjectPoster" readonly value="@Model.ProjectPoster" type="hidden" />
 
         <div class="form-group row">
             <label asp-for="ProjectId"
@@ -52,6 +52,15 @@
         </div>
 
         <div class="form-group row">
+            <label asp-for="ProjectPoster"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="ProjectPoster" value="@Model.ProjectPoster"
+                       class="form-control-plaintext" />
+            </div>
+        </div>
+
+        <div class="form-group row">
             <div class="col-sm-9 offset-sm-3">
                 <input type="submit" value="Update"
                        class="btn btn-primary mb1 black bg-aqua" />
@@ -61,7 +70,7 @@
         <div>
             <a asp-action="Index" class="btn btn-primary mb1 black bg-gray">Back to List</a>
             <a asp-action="UploadPhoto"
-               asp-route-id="@Model.ProjectId"  class="btn btn-primary mb1 black bg-gray">Upload Photo</a>
+               asp-route-id="@Model.ProjectId" class="btn btn-primary mb1 black bg-gray">Upload Photo</a>
         </div>
     </fieldset>
 </form>
