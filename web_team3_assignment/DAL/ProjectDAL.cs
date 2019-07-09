@@ -110,29 +110,29 @@ namespace web_team3_assignment.DAL
         }
 
 
-        //public bool IsProjectExists(string ProjectId)
-        //{
-        //    SqlCommand cmd = new SqlCommand
-        //        ("SELECT ProjectID FROM Project WHERE ProjectID=@selectedProjectID", conn);
+        public bool IsProjectTitleExists(string Title)
+        {
+            SqlCommand cmd = new SqlCommand
+                ("SELECT Title FROM Project WHERE Title=@selectedTitle", conn);
 
-        //    cmd.Parameters.AddWithValue("@selectedProjectID", ProjectId);
+            cmd.Parameters.AddWithValue("@selectedTitle", Title);
 
-        //    SqlDataAdapter daProjectId = new SqlDataAdapter(cmd);
-        //    DataSet result = new DataSet();
+            SqlDataAdapter daTitle = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
 
-        //    conn.Open();
+            conn.Open();
 
-        //    //Use DataAdapter to fetch data to a table "EmailDetails" in DataSet. 
-        //    daProjectId.Fill(result, "ProjectIdDetails");
-        //    conn.Close();
+            //Use DataAdapter to fetch data to a table "EmailDetails" in DataSet. 
+            daTitle.Fill(result, "ProjectTitleDetails");
+            conn.Close();
 
-        //    if (result.Tables["ProjectIdDetails"].Rows.Count > 0)
-        //        return true; //The email exists for another staff
+            if (result.Tables["ProjectTitleDetails"].Rows.Count > 0)
+                return true; //The email exists for another staff
 
-        //    else
-        //        return false; // The email address given does not exist 
+            else
+                return false; // The email address given does not exist 
 
-        //}
+        }
 
 
         //Get project details

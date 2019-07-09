@@ -135,7 +135,7 @@ namespace web_team3_assignment.Controllers
         public ProjectViewModel MapToProjectVM(Project project)
         {
             string Role = "";
-            if (project.Title != null)
+            if (project != null)
             {
                 List<ProjectMember> projectMemberList = projectMemberContext.GetAllProjectMembers();
                 foreach (ProjectMember projectMember in projectMemberList)
@@ -156,7 +156,7 @@ namespace web_team3_assignment.Controllers
                 Title = project.Title,
                 ProjectURL = project.ProjectURL,
                 Description = project.Description,
-                ProjectPoster = project.ProjectPoster + ".jpg"
+                projectphoto = project.ProjectPoster + ".jpg"
             };
             return projectVM;
         }
