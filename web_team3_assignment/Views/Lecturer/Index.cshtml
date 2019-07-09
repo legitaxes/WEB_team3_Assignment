@@ -1,16 +1,17 @@
 ﻿@model IEnumerable<web_team3_assignment.Models.Lecturer>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "View All Lecturers";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <img class="img-fluid" src="~/images/viewstaffstatic.png" style="display:block; margin:auto;" />
 
 <a asp-action="Create"><img src="~/images/createnewlecturerprofile.gif" class="img-fluid" style="display:block; margin:auto;" /></a>
-@if (ViewData["ErrorMessage"] != null)
+@if (TempData["ErrorMessage"] != null)
 {
-    <span class="text-danger">@ViewData["ErrorMessage"]</span>
+    <p class="text-danger" style="text-align:center; font-size:25px;"><b>@TempData["ErrorMessage"]</b></p>
+    TempData["ErrorMessage"] = "";
 }
 
 <!-- Add a partial view to display a list of staff records in a tabular format. -->

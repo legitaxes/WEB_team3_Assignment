@@ -132,7 +132,7 @@ namespace web_team3_assignment.DAL
                 return null;
             }
         }
-            //get the details of the lecturer and return a lecturer object
+        //get the details of the lecturer and return a lecturer object
         public Lecturer getLecturerDetails(int lecturerId)
         {
             SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer WHERE LecturerID = @selectedLecturerID", conn);
@@ -163,7 +163,7 @@ namespace web_team3_assignment.DAL
             }
             else
             {
-                return null; 
+                return null;
             }
         }
         //returns true if password is changed successfully without errors
@@ -188,6 +188,39 @@ namespace web_team3_assignment.DAL
                 }
             }
             return false;
+        }
+
+        //this method checks whether there are students are under the currently logged in lecturer
+        public bool CheckIsUsed(int lecturerId)
+        {
+            SqlCommand cmd = new SqlCommand("Select Name FROM Student" +
+                " WHERE MentorID = @selectedlecturerID", conn);
+            cmd.Parameters.AddWithValue("@selectedlecturerID", lecturerId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "CheckMentorID");
+            conn.Close();
+            List<Student> studentCount = new List<Student>();
+            foreach (DataRow row in result.Tables["CheckMentorID"].Rows)
+            {
+                studentCount.Add(
+                    new Student
+                    {
+                        Name = row["Name"].ToString(),
+                    });
+            }
+            //if there are students under the lecturer, return true
+            if (studentCount.Count > 0)
+            {
+                //ViewData["StudentNames"] = 
+                return true;
+            }
+            //if not return false
+            else
+            {
+                return false;
+            }
         }
 
         //deletes record from database

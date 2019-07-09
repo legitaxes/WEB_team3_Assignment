@@ -1,11 +1,5 @@
 ﻿@model IEnumerable<web_team3_assignment.Models.Student>
 
-@{
-    ViewData["Title"] = "ViewMentee";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<img class="img-fluid" src="~/images/viewmentees.png" style="display:block; margin:auto;" />
 @if (Model.ToList().Count > 0)
 {
     <div class="table-responsive">
@@ -28,11 +22,11 @@
                         <td>@item.Course</td>
                         <td>
                             @{ string imageFileName = item.Photo; }
-                        <img src="~/images/@imageFileName" style="width:50px" />
+                            <img src="~/images/@imageFileName" style="width:50px" />
                         </td>
                         <td>
-                        <a asp-action="Index" asp-controller="Student"
-                           asp-route-id="@item.StudentID">Details</a>
+                            <a asp-action="Index" asp-controller="Student"
+                               asp-route-id="@item.StudentID">Details</a>
                         </td>
                     </tr>
                 }

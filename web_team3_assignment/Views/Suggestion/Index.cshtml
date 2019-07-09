@@ -24,8 +24,17 @@
             </thead>
             <tbody>
                 @foreach (var item in Model)
-                 {
-                    <tr>
+                {
+                    string selectedRow = "";
+                    if (item.Status == "Acknowledged")
+                    {
+                        selectedRow = "class='table-success'";
+                    }
+                    else if (item.Status == "Not Acknowledged")
+                    {
+                        selectedRow = "class='table-danger'";
+                    }
+                    <tr @Html.Raw(selectedRow)>
                         <td>@item.SuggestionId.ToString()</td>
                         <td>@item.StudentName</td>
                         <td>@item.Description</td>

@@ -26,10 +26,6 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index", "Home");
             }
             List<Lecturer> lecturerList = lecturerContext.GetAllLecturer();
-            //if (ViewData["ErrorMessage"] != null)
-            //{
-            //    ViewData["ErrorMessage"] = "You are not allowed to delete other lecturer's profile!";
-            //}
             return View(lecturerList);
         }
 
@@ -192,12 +188,21 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index");
             }
+
             //get all the lecturer details based on the ID
             Lecturer lecturer = lecturerContext.getLecturerDetails(id.Value);
-            //check if lectuer object is empty or the lecturerID matches the currently logged in user
+            //check if lecturer object is empty or the lecturerID matches the currently logged in user
             if (lecturer == null || Convert.ToInt32(HttpContext.Session.GetString("ID")) != id.Value)
             {
-                ViewData["ErrorMessage"] = "You are not allowed to delete other lecturer's profile!";
+                TempData["ErrorMessage"] = "You are not allowed to delete other lecturer's profile!";
+                return RedirectToAction("Index");
+            }
+
+            //checks whether the mentorID is under another student
+            //if its true
+            if (lecturerContext.CheckIsUsed(Convert.ToInt32(HttpContext.Session.GetString("ID"))))
+            {
+                TempData["ErrorMessage"] = "You are not allowed to delete your profile! There are still students are under your profile!";
                 return RedirectToAction("Index");
             }
             return View(lecturer);
@@ -214,11 +219,10 @@ namespace web_team3_assignment.Controllers
             HttpContext.Session.Clear();
             // Call the Index action of Home controller
             return RedirectToAction("Index", "Home");
-
         }
 
         //GET: Lecturer/ViewMentees
-        public ActionResult ViewMentee()
+        public ActionResult Mentee()
         {
             if ((HttpContext.Session.GetString("Role") == null) ||
                 (HttpContext.Session.GetString("Role") != "Lecturer"))
