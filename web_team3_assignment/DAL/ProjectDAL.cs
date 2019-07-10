@@ -110,29 +110,7 @@ namespace web_team3_assignment.DAL
         }
 
 
-        public bool IsProjectTitleExists(string Title)
-        {
-            SqlCommand cmd = new SqlCommand
-                ("SELECT Title FROM Project WHERE Title=@selectedTitle", conn);
-
-            cmd.Parameters.AddWithValue("@selectedTitle", Title);
-
-            SqlDataAdapter daTitle = new SqlDataAdapter(cmd);
-            DataSet result = new DataSet();
-
-            conn.Open();
-
-            //Use DataAdapter to fetch data to a table "EmailDetails" in DataSet. 
-            daTitle.Fill(result, "ProjectTitleDetails");
-            conn.Close();
-
-            if (result.Tables["ProjectTitleDetails"].Rows.Count > 0)
-                return true; //The email exists for another staff
-
-            else
-                return false; // The email address given does not exist 
-
-        }
+      
 
 
         //Get project details
@@ -155,13 +133,13 @@ namespace web_team3_assignment.DAL
             SqlDataAdapter da = new SqlDataAdapter(cmd);
 
 
-            //Create a DataSet object “result"
+            //Create a DataSet object “projectresult"
             DataSet projectresult = new DataSet();
 
             //Open a database connection.
             conn.Open();
 
-            //Use DataAdapter to fetch data to a table "StaffDetails" in DataSet. 
+            //Use DataAdapter to fetch data to a table "ProjectDetails" in DataSet. 
             da.Fill(projectresult, "ProjectDetails");
 
             //Close the database connection 
@@ -173,7 +151,7 @@ namespace web_team3_assignment.DAL
             {
                 project.ProjectId = projectId;
 
-                // Fill staff object with values from the DataSet
+                // Fill project object with values from the DataSet
                 DataTable table = projectresult.Tables["ProjectDetails"];
 
                 if (!DBNull.Value.Equals(table.Rows[0]["Title"]))
@@ -205,13 +183,14 @@ namespace web_team3_assignment.DAL
             //Instantiate a SqlCommand object, supply it with SQL statement UPDATE
             //and the connection object for connecting to the database.
             SqlCommand cmd = new SqlCommand
-            ("UPDATE Project SET Title=@Title, Description=@Description, ProjectURL=@ProjectURL WHERE ProjectID = @selectedProjectID ", conn);
+            ("UPDATE Project SET Title=@Title, Description=@Description, ProjectURL=@ProjectURL, ProjectPoster=@ProjectPoster WHERE ProjectID = @selectedProjectID ", conn);
 
             //Assign values to parameters
             cmd.Parameters.AddWithValue("@selectedProjectID", project.ProjectId);
             cmd.Parameters.AddWithValue("@Title", project.Title);
             cmd.Parameters.AddWithValue("@Description", project.Description);
             cmd.Parameters.AddWithValue("@ProjectURL", project.ProjectURL);
+            cmd.Parameters.AddWithValue("@ProjectPoster", project.ProjectPoster);
 
             //Open a database connection.
             conn.Open();
@@ -246,6 +225,55 @@ namespace web_team3_assignment.DAL
 
             //Return number of row of staff record deleted.
             return rowCount;
+        }
+
+
+        public bool IsProjectTitleExists(string Title)
+        {
+            SqlCommand cmd = new SqlCommand
+                ("SELECT ProjectID FROM Project WHERE Title=@selectedTitle", conn);
+
+            cmd.Parameters.AddWithValue("@selectedTitle", Title);
+
+            SqlDataAdapter daTitle = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+
+            conn.Open();
+
+            //Use DataAdapter to fetch data to a table "ProjectTitleDetails" in DataSet. 
+            daTitle.Fill(result, "ProjectTitleDetails");
+            conn.Close();
+
+            if (result.Tables["ProjectTitleDetails"].Rows.Count > 0)
+                return true; //The title exists for another project
+
+            else
+                return false; // The project given does not exist 
+
+        }
+
+        public bool UpdateTitle(string Title)
+        {
+            SqlCommand cmd = new SqlCommand
+                ("SELECT ProjectID FROM Project WHERE Title=@selectedTitle", conn);
+
+            cmd.Parameters.AddWithValue("@selectedTitle", Title);
+
+            SqlDataAdapter daTitle = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+
+            conn.Open();
+
+            //Use DataAdapter to fetch data to a table "ProjectTitleDetails" in DataSet. 
+            daTitle.Fill(result, "ProjectTitleDetails");
+            conn.Close();
+
+            if (result.Tables["ProjectTitleDetails"].Rows.Count > 0)
+                return true; //The title exists for another project
+
+            else
+                return false; // The project given does not exist 
+
         }
 
     }
