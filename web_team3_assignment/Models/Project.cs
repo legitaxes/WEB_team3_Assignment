@@ -11,13 +11,12 @@ namespace web_team3_assignment.Models
         [Key]
         [Required]
         [Display(Name = "Project ID")]
-        //[ValidateProjectExists(ErrorMessage = "ProjectId already exists!")]
         public int ProjectId { get; set; }
 
         [Required(ErrorMessage = "Please Do not Leave Title Field Blank!")]
         [StringLength(255, ErrorMessage = "Project Title Cannot Exceed 255 Characters!")]
-        // Custom Validation Attribute for checking SkillSet exists
-        [ValidateTitleExists(ErrorMessage = "Title already exists!")]
+        //// Custom Validation Attribute for checking Title exists
+        //[ValidateTitleExists(ErrorMessage = "Title already exists!")]
         [Display(Name = "Title")]
         public string Title { get; set; }
 

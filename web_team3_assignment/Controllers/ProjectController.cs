@@ -66,7 +66,7 @@ namespace web_team3_assignment.Controllers
         public ActionResult EditProject(int? id)
         {
             // Stop accessing the action if not logged in
-            // or account not in the "Staff" role
+            // or account not in the "Student" role
             if ((HttpContext.Session.GetString("Role") == null) ||
             (HttpContext.Session.GetString("Role") != "Student"))
             {
@@ -91,11 +91,12 @@ namespace web_team3_assignment.Controllers
 
 
 
-        // POST: Lecturer/Edit/5
+        // POST: Project/EditProject/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditProject(Project project)
         {
+            System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {
                 //Update staff record to database
@@ -162,7 +163,7 @@ namespace web_team3_assignment.Controllers
         }
 
 
-        // GET: Lecturer/Delete/5
+        // GET: Project/DeleteProject/5
         public ActionResult DeleteProject(int? id)
         {
             // Stop accessing the action if not logged in
@@ -186,7 +187,7 @@ namespace web_team3_assignment.Controllers
             return View(project);
         }
 
-        //POST: Lecturer/Delete/5
+        //POST: Project/DeleteProject/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteProject(Project project)

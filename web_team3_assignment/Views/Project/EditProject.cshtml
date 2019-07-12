@@ -11,7 +11,7 @@
 <form asp-action="EditProject">
     <fieldset class="FormContent">
         <br />
-        <input asp-for="ProjectPoster" readonly value="@Model.ProjectPoster" type="hidden" />
+        @*<input asp-for="ProjectPoster" readonly value="@Model.ProjectPoster" type="hidden" />*@
 
         <div class="form-group row">
             <label asp-for="ProjectId"
@@ -47,7 +47,7 @@
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
                 <input asp-for="ProjectURL" value="@Model.ProjectURL"
-                       class="form-control-plaintext" />
+                       class="form-control" />
             </div>
         </div>
 
