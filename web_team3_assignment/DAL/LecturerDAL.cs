@@ -8,6 +8,8 @@ using System.Data;
 using System.Data.SqlClient;
 using web_team3_assignment.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace web_team3_assignment.DAL
 {
@@ -177,9 +179,13 @@ namespace web_team3_assignment.DAL
             {
                 if (Char.IsDigit(lecturer.NewPassword, i))
                 {
+                    //hashed the new password
+                    var sha1 = new SHA1CryptoServiceProvider();
+                    var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(lecturer.NewPassword));
+                    string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
                     SqlCommand cmd = new SqlCommand("UPDATE Lecturer SET Password=@newPassword" +
                     " WHERE LecturerID = @selectedLecturerID", conn);
-                    cmd.Parameters.AddWithValue("@newPassword", lecturer.NewPassword);
+                    cmd.Parameters.AddWithValue("@newPassword", hashedPassword);
                     cmd.Parameters.AddWithValue("@selectedLecturerID", lecturer.LecturerId);
                     conn.Open();
                     int count = cmd.ExecuteNonQuery();
@@ -251,34 +257,6 @@ namespace web_team3_assignment.DAL
             List<Student> studentList = new List<Student>();
             foreach (DataRow row in result.Tables["AllMentees"].Rows)
             {
-                //string photo;
-                //string description;
-                //string achievement;
-                //string externalLink;
-                //if (!DBNull.Value.Equals(row["Photo"]))
-                //    photo = (row["Photo"]).ToString();
-                //else
-                //{
-                //    photo = null;
-                //}
-                //if (!DBNull.Value.Equals(row["Description"]))
-                //    description = (row["Description"]).ToString();
-                //else
-                //{
-                //    description = null;
-                //}
-                //if (!DBNull.Value.Equals(row["Achievement"]))
-                //    achievement = (row["Achievement"]).ToString();
-                //else
-                //{
-                //    achievement = null;
-                //}
-                //if (!DBNull.Value.Equals(row["ExternalLink"]))
-                //    externalLink = (row["ExternalLink"]).ToString();
-                //else
-                //{
-                //    externalLink = null;
-                //}
                 studentList.Add(
                     new Student
                     {

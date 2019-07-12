@@ -30,6 +30,7 @@ namespace web_team3_assignment.DAL
             conn = new SqlConnection(strConn);
         }
 
+        //lecturerlogin query
         public Lecturer lecturerLogin(string email, string password)
         {
             SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer" , conn);

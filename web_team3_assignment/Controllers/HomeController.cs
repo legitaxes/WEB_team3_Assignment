@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using web_team3_assignment.DAL;
 using web_team3_assignment.Models;
 using System.IO;
-
+using System.Security.Cryptography;
+using System.Text;
 
 namespace web_team3_assignment.Controllers
 {
@@ -29,8 +30,15 @@ namespace web_team3_assignment.Controllers
             // Email address converted to lowercase
             string loginID = formData["txtLecturerID"].ToString().ToLower();
             string password = formData["txtLecturerPassword"].ToString();
-            Lecturer lecturer = homeContext.lecturerLogin(loginID, password);
-            if (lecturer.Email == loginID && lecturer.Password == password)
+            //hashing the keyed in password
+            var sha1 = new SHA1CryptoServiceProvider();
+            var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
+            //convert to a string
+            string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
+            Lecturer lecturer = homeContext.lecturerLogin(loginID, hashedPassword);
+            //var sha1Password = sha1.ComputeHash(Encoding.UTF8.GetBytes(lecturer.Password));
+            //System.Diagnostics.Debug.WriteLine(sha1Password);
+            if (lecturer.Email == loginID && lecturer.Password == hashedPassword)
             {
                 HttpContext.Session.SetString("LoginName", lecturer.Name.ToString());
                 HttpContext.Session.SetString("ID", lecturer.LecturerId.ToString());
@@ -53,8 +61,11 @@ namespace web_team3_assignment.Controllers
             // Email address converted to lowercase
             string studentLoginID = formData["txtLoginID"].ToString().ToLower();
             string studentPassword = formData["txtPassword"].ToString();
-            Student student = homeContext.studentLogin(studentLoginID, studentPassword);
-            if (student.EmailAddr == studentLoginID && student.Password == studentPassword)
+            var sha1 = new SHA1CryptoServiceProvider();
+            var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(studentPassword));
+            string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
+            Student student = homeContext.studentLogin(studentLoginID, hashedPassword);
+            if (student.EmailAddr == studentLoginID && student.Password == hashedPassword)
             {
                 HttpContext.Session.SetString("LoginName", student.Name);
                 HttpContext.Session.SetInt32("StudentID", student.StudentID);
@@ -122,7 +133,10 @@ namespace web_team3_assignment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateStudent(Student student)
         {
-            student.Password = "p@55Student";
+            var sha1 = new SHA1CryptoServiceProvider();
+            var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes("p@55Student"));
+            string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
+            student.Password = hashedPassword;
             System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {

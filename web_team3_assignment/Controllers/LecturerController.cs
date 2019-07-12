@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -56,7 +58,13 @@ namespace web_team3_assignment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Lecturer lecturer)
         {
-            lecturer.Password = "p@55Lecturer";
+            //set the default password for the lecturer account to 'p@55Mentor' but hashed
+            var sha1 = new SHA1CryptoServiceProvider();
+            var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes("p@55Mentor"));
+            string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
+            System.Diagnostics.Debug.WriteLine(hash);
+            System.Diagnostics.Debug.WriteLine(hashedPassword);
+            lecturer.Password = hashedPassword;
             System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {
@@ -68,16 +76,6 @@ namespace web_team3_assignment.Controllers
             {
                 return View(lecturer);
             }
-            //try
-            //{
-            //    // TODO: Add insert logic here
-
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
         }
 
         //GET: Lecturer/Change Function
@@ -93,11 +91,7 @@ namespace web_team3_assignment.Controllers
             //get all the lecturer details based on the ID
             //LecturerPassword lecturer = lecturerContext.getPasswordDetails(id);
             LecturerPassword lecturer = new LecturerPassword();
-            lecturer.LecturerId = Convert.ToInt32(HttpContext.Session.GetString("ID"));
-            //if (lecturer == null)
-            //{
-            //    return RedirectToAction("Index");
-            //}
+            lecturer.LecturerId = id;
             return View(lecturer);
         }
 
@@ -107,8 +101,12 @@ namespace web_team3_assignment.Controllers
         {
             //get password details for currently logged in lecturer
             LecturerPassword currentLecturer = lecturerContext.getPasswordDetails(Convert.ToInt32(HttpContext.Session.GetString("ID")));
+            var sha1 = new SHA1CryptoServiceProvider();
+            var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(lecturer.Password));
+            string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
+
             //if the password the user key in DOES NOT match the database password...
-            if (lecturer.Password != currentLecturer.Password)
+            if (hashedPassword != currentLecturer.Password)
             {
                 ViewData["Message"] = "Current Password Is Incorrect!";
                 return View(lecturer);
