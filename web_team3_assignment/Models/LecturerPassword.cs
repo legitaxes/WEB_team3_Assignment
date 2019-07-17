@@ -11,7 +11,8 @@ namespace web_team3_assignment.Models
         [Display(Name = "Lecturer ID")]
         public int LecturerId { get; set; }
 
-        //[DataType(DataType.Password)]
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [StringLength(255, ErrorMessage = "Password Length Cannot Exceed 255 Characters!")]
         public string Password { get; set; }
 
@@ -26,7 +27,7 @@ namespace web_team3_assignment.Models
         [Display(Name = "Confirm Password:")]
         [DataType(DataType.Password)]
         [StringLength(255, ErrorMessage = "Password Length Cannot Exceed 255 Characters!")]
-        [MinLength(8, ErrorMessage = "Password Should Be At least 8 Characters Long!")]
+        //[MinLength(8, ErrorMessage = "Password Should Be At least 8 Characters Long!")]
         public string ConfirmPassword { get; set; }
 
 

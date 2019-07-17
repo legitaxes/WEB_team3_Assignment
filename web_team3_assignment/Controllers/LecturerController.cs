@@ -61,7 +61,7 @@ namespace web_team3_assignment.Controllers
         {
             //set the default password for the lecturer account to 'p@55Mentor' but hashed
             var sha1 = new SHA1CryptoServiceProvider();
-            var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes("p@55Mentor"));
+            var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(lecturer.Password));
             string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
             Debug.WriteLine(hash);
             Debug.WriteLine(hashedPassword);
@@ -100,6 +100,10 @@ namespace web_team3_assignment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Change(LecturerPassword lecturer)
         {
+            if (lecturer.Password == null)
+            {
+                return View(lecturer);
+            }
             //get password details for currently logged in lecturer
             LecturerPassword currentLecturer = lecturerContext.getPasswordDetails(Convert.ToInt32(HttpContext.Session.GetString("ID")));
             var sha1 = new SHA1CryptoServiceProvider();
@@ -136,42 +140,38 @@ namespace web_team3_assignment.Controllers
             return View(lecturer);
         }
 
-        // GET: Lecturer/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if ((HttpContext.Session.GetString("Role") == null) ||
-        //        (HttpContext.Session.GetString("Role") != "Lecturer"))
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    if (id == null)
-        //    {
-        //        return RedirectToAction("Index");   
-        //    }
-        //    Lecturer lecturer = lecturerContext.getLecturerDetails(id.Value);
-        //    if (lecturer == null)
-        //    {
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(lecturer);
-        //}
+        //GET: Lecturer/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+                (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            //check if id is null or if the id matches the currently logged in user
+            if (id == null || Convert.ToInt32(HttpContext.Session.GetString("ID")) != id.Value)
+            {
+                return RedirectToAction("Index");
+            }
+            //get the lecturer details and prepare to return it to the edit view
+            Lecturer lecturer = lecturerContext.getLecturerDetails(id.Value);
+            //check whether lecturer actually exists and whether the ID matches the logged in lecturer ID
+            if (lecturer == null || Convert.ToInt32(HttpContext.Session.GetString("ID")) != lecturer.LecturerId)
+            {
+                TempData["ErrorMessage"] = "You are not allowed to edit other lecturer's profile!";
+                return RedirectToAction("Index");
+            }
 
-        //// POST: Lecturer/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add update logic here
+            return View(lecturer);
+        }
 
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+        // POST: Lecturer/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Lecturer lecturer)
+        {
+            return View();
+        }
 
         // GET: Lecturer/Delete/5
         public ActionResult Delete(int? id)
@@ -183,6 +183,7 @@ namespace web_team3_assignment.Controllers
             }
             if (id == null)
             {
+                TempData["ErrorMessage"] = "You are not allowed to delete other lecturer's profile!";
                 return RedirectToAction("Index");
             }
 

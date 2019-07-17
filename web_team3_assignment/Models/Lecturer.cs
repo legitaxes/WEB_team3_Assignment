@@ -22,7 +22,8 @@ namespace web_team3_assignment.Models
         [StringLength(50, ErrorMessage = "Email Cannot Exceed 50 Characters!")]
         public string Email { get; set; }
     
-        //[DataType(DataType.Password)]
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Please Do Not Leave This Field Blank!")]
         [StringLength(255, ErrorMessage = "Password Length Cannot Exceed 255 Characters!")]
         public string Password { get; set; }
 

@@ -22,7 +22,7 @@
                     if (Context.Session.GetString("LoginName") == item.Name.ToString())
                     {
                         selectedRow = "class='table-primary'";
-                        delete = "color: green;";
+                        delete = "color: green; font-weight: bold;";
                     }
                     <tr @Html.Raw(selectedRow)>
                         <td>@item.LecturerId.ToString()</td>
@@ -37,8 +37,11 @@
                         <td>
                             @if (item.LecturerId == Convert.ToInt32(Context.Session.GetString("ID")))
                             {
+                                <a asp-action="Edit" asp-controller="Lecturer"
+                                   asp-route-id="@item.LecturerId" style="@Html.Raw(delete)">Edit</a>
+                                @:|
                                 <a asp-action="Delete" asp-controller="Lecturer"
-                                   asp-route-id="@item.LecturerId" style="@Html.Raw(delete)"><b>Delete</b></a>
+                                   asp-route-id="@item.LecturerId" style="@Html.Raw(delete)">Delete</a>
                             }
                             else
                             {

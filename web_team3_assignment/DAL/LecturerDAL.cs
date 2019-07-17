@@ -43,11 +43,10 @@ namespace web_team3_assignment.DAL
             cmd.Parameters.AddWithValue("@name", lecturer.Name);
             cmd.Parameters.AddWithValue("@email", lecturer.Email);
             cmd.Parameters.AddWithValue("@password", lecturer.Password);
-            if (lecturer.Description == null)
-            {
-                lecturer.Description = "";
-            }
-            cmd.Parameters.AddWithValue("@description", lecturer.Description);
+            if (lecturer.Description!= null)
+                cmd.Parameters.AddWithValue("@description", lecturer.Description);
+            else
+                cmd.Parameters.AddWithValue("@description", DBNull.Value);
             //open connection to run command
             conn.Open();
             lecturer.LecturerId = (int)cmd.ExecuteScalar();
@@ -300,6 +299,25 @@ namespace web_team3_assignment.DAL
                     });
             }
             return menteesList;
+        }
+        public int Update(Lecturer lecturer)
+        {
+            SqlCommand cmd = new SqlCommand("UPDATE Lecturer SET Name=@name, EmailAddr=@email, Description=@desc" +
+                "WHERE LecturerID = @selectedLecturerID", conn);
+            cmd.Parameters.AddWithValue("@name", lecturer.Name);
+            cmd.Parameters.AddWithValue("@email", lecturer.Email);
+
+            if (lecturer.Description != null)
+                cmd.Parameters.AddWithValue("@desc", lecturer.Description);
+            else
+                cmd.Parameters.AddWithValue("@desc", DBNull.Value);
+
+            cmd.Parameters.AddWithValue("@selectedLecturerID", lecturer.LecturerId);
+            conn.Open();
+            int count = cmd.ExecuteNonQuery();
+            conn.Close();
+            return count;
+
         }
     }
 
