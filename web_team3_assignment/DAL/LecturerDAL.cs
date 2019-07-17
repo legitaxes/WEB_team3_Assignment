@@ -174,7 +174,7 @@ namespace web_team3_assignment.DAL
             //numeric validation
             //count the number of character in the password
             int counter = lecturer.NewPassword.Length;
-            //use for loop to loop thru each character in the string 
+            //use for loop to loop thru each character in the string, checks through the whole string for numbers
             for (int i = 0; i < counter; i++)
             {
                 if (Char.IsDigit(lecturer.NewPassword, i))

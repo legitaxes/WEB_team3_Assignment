@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using web_team3_assignment.DAL;
 using web_team3_assignment.Models;
+using System.Diagnostics;
 
 namespace web_team3_assignment.Controllers
 {
@@ -62,10 +63,10 @@ namespace web_team3_assignment.Controllers
             var sha1 = new SHA1CryptoServiceProvider();
             var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes("p@55Mentor"));
             string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
-            System.Diagnostics.Debug.WriteLine(hash);
-            System.Diagnostics.Debug.WriteLine(hashedPassword);
+            Debug.WriteLine(hash);
+            Debug.WriteLine(hashedPassword);
             lecturer.Password = hashedPassword;
-            System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
+            Debug.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {
                 ViewData["Message"] = "Employee Created Successfully!";
@@ -111,12 +112,7 @@ namespace web_team3_assignment.Controllers
                 ViewData["Message"] = "Current Password Is Incorrect!";
                 return View(lecturer);
             }
-            //check whether the password field is empty
-            System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
-            System.Diagnostics.Debug.WriteLine("password: " + lecturer.Password);
-            System.Diagnostics.Debug.WriteLine("new pw: " + lecturer.NewPassword);
-            System.Diagnostics.Debug.WriteLine("confirm pw: " + lecturer.ConfirmPassword);
-
+            Debug.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {
                 //checks whether the password is the same
