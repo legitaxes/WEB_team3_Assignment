@@ -18,7 +18,7 @@
                 @foreach (var item in Model)
                 {
                     string selectedRow = "";
-                    string delete = "color: red; ";
+                    string delete = "color: #990000; cursor: default; font-weight: bold;";
                     if (Context.Session.GetString("LoginName") == item.Name.ToString())
                     {
                         selectedRow = "class='table-primary'";
@@ -35,8 +35,15 @@
                         <td>@item.Email</td>
                         <td>@item.Description</td>
                         <td>
-                            <a asp-action="Delete" asp-controller="Lecturer"
-                               asp-route-id="@item.LecturerId" style="@Html.Raw(delete)"><b>Delete</b></a>
+                            @if (item.LecturerId == Convert.ToInt32(Context.Session.GetString("ID")))
+                            {
+                                <a asp-action="Delete" asp-controller="Lecturer"
+                                   asp-route-id="@item.LecturerId" style="@Html.Raw(delete)"><b>Delete</b></a>
+                            }
+                            else
+                            {
+                                <span style="@Html.Raw(delete)" title="You are not allowed to delete other lecturer's profile!">Delete</span>
+                            }
                         </td>
                     </tr>
                 }
