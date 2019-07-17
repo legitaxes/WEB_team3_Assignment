@@ -154,7 +154,7 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
             //get the lecturer details and prepare to return it to the edit view
-            Lecturer lecturer = lecturerContext.getLecturerDetails(id.Value);
+            LecturerEdit lecturer = lecturerContext.EditLecturerDetails(id.Value);
             //check whether lecturer actually exists and whether the ID matches the logged in lecturer ID
             if (lecturer == null || Convert.ToInt32(HttpContext.Session.GetString("ID")) != lecturer.LecturerId)
             {
@@ -168,9 +168,16 @@ namespace web_team3_assignment.Controllers
         // POST: Lecturer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Lecturer lecturer)
+        public ActionResult Edit(LecturerEdit lecturer)
         {
-            return View();
+            if (ModelState.IsValid)
+            { //Update staff record to database 
+                lecturerContext.Update(lecturer);
+                HttpContext.Session.SetString("LoginName", lecturer.Name.ToString());
+                return RedirectToAction("Index");
+            }
+            ViewData["Message"] = "Check your fields again!";
+            return View(lecturer);
         }
 
         // GET: Lecturer/Delete/5

@@ -167,6 +167,40 @@ namespace web_team3_assignment.DAL
                 return null;
             }
         }
+        public LecturerEdit EditLecturerDetails(int lecturerId)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer WHERE LecturerID = @selectedLecturerID", conn);
+            cmd.Parameters.AddWithValue("@selectedLecturerID", lecturerId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "LecturerDetails");
+            conn.Close();
+            LecturerEdit lecturer = new LecturerEdit();
+            if (result.Tables["LecturerDetails"].Rows.Count > 0)
+            {
+                lecturer.LecturerId = lecturerId;
+                DataTable table = result.Tables["LecturerDetails"];
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Name"]))
+                    lecturer.Name = table.Rows[0]["Name"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["EmailAddr"]))
+                    lecturer.Email = table.Rows[0]["EmailAddr"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Password"]))
+                    lecturer.Password = table.Rows[0]["Password"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Description"]))
+                    lecturer.Description = table.Rows[0]["Description"].ToString();
+                return lecturer;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         //returns true if password is changed successfully without errors
         public bool ChangePassword(LecturerPassword lecturer)
         {
@@ -300,10 +334,10 @@ namespace web_team3_assignment.DAL
             }
             return menteesList;
         }
-        public int Update(Lecturer lecturer)
+        public int Update(LecturerEdit lecturer)
         {
             SqlCommand cmd = new SqlCommand("UPDATE Lecturer SET Name=@name, EmailAddr=@email, Description=@desc" +
-                "WHERE LecturerID = @selectedLecturerID", conn);
+               " WHERE LecturerID = @selectedLecturerID", conn);
             cmd.Parameters.AddWithValue("@name", lecturer.Name);
             cmd.Parameters.AddWithValue("@email", lecturer.Email);
 

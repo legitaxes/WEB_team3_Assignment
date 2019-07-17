@@ -1,4 +1,4 @@
-﻿@model web_team3_assignment.Models.Lecturer
+﻿@model web_team3_assignment.Models.LecturerEdit
 
 @{
     ViewData["Title"] = "Edit Profile";
@@ -21,7 +21,7 @@
         <div class="form-group row">
             <label asp-for="Email" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="form-control-plaintext" readonly/>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
         </div>
@@ -36,8 +36,16 @@
                 <input type="submit" value="Save" class="btn btn-primary mb1 black bg-aqua" />
             </div>
         </div>
-        <div> 
-            <a asp-action="Index" class="btn btn-primary mb1 black bg-gray">Back to List</a> 
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                @if (ViewData["Message"] != null)
+                {
+                    <span class="text-danger">@ViewData["Message"]</span>
+                }
+            </div>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-primary mb1 black bg-gray">Back to List</a>
         </div>
 
     </fieldset>

@@ -19,7 +19,7 @@
                 {
                     string selectedRow = "";
                     string delete = "color: #990000; cursor: default; font-weight: bold;";
-                    if (Context.Session.GetString("LoginName") == item.Name.ToString())
+                    if (Convert.ToInt32(Context.Session.GetString("ID")) == item.LecturerId)
                     {
                         selectedRow = "class='table-primary'";
                         delete = "color: green; font-weight: bold;";
@@ -45,7 +45,9 @@
                             }
                             else
                             {
-                                <span style="@Html.Raw(delete)" title="You are not allowed to delete other lecturer's profile!">Delete</span>
+                                <span style="@Html.Raw(delete)" title="You are not allowed to Edit other lecturer's profile!">Edit</span> 
+                                @:|
+                                <span style="@Html.Raw(delete)" title="You are not allowed to Delete other lecturer's profile!">Delete</span>
                             }
                         </td>
                     </tr>
