@@ -43,11 +43,10 @@ namespace web_team3_assignment.DAL
             cmd.Parameters.AddWithValue("@name", lecturer.Name);
             cmd.Parameters.AddWithValue("@email", lecturer.Email);
             cmd.Parameters.AddWithValue("@password", lecturer.Password);
-            if (lecturer.Description == null)
-            {
-                lecturer.Description = "";
-            }
-            cmd.Parameters.AddWithValue("@description", lecturer.Description);
+            if (lecturer.Description!= null)
+                cmd.Parameters.AddWithValue("@description", lecturer.Description);
+            else
+                cmd.Parameters.AddWithValue("@description", DBNull.Value);
             //open connection to run command
             conn.Open();
             lecturer.LecturerId = (int)cmd.ExecuteScalar();
@@ -168,13 +167,47 @@ namespace web_team3_assignment.DAL
                 return null;
             }
         }
+        public LecturerEdit EditLecturerDetails(int lecturerId)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer WHERE LecturerID = @selectedLecturerID", conn);
+            cmd.Parameters.AddWithValue("@selectedLecturerID", lecturerId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "LecturerDetails");
+            conn.Close();
+            LecturerEdit lecturer = new LecturerEdit();
+            if (result.Tables["LecturerDetails"].Rows.Count > 0)
+            {
+                lecturer.LecturerId = lecturerId;
+                DataTable table = result.Tables["LecturerDetails"];
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Name"]))
+                    lecturer.Name = table.Rows[0]["Name"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["EmailAddr"]))
+                    lecturer.Email = table.Rows[0]["EmailAddr"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Password"]))
+                    lecturer.Password = table.Rows[0]["Password"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Description"]))
+                    lecturer.Description = table.Rows[0]["Description"].ToString();
+                return lecturer;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         //returns true if password is changed successfully without errors
         public bool ChangePassword(LecturerPassword lecturer)
         {
             //numeric validation
             //count the number of character in the password
             int counter = lecturer.NewPassword.Length;
-            //use for loop to loop thru each character in the string 
+            //use for loop to loop thru each character in the string, checks through the whole string for numbers
             for (int i = 0; i < counter; i++)
             {
                 if (Char.IsDigit(lecturer.NewPassword, i))
@@ -300,6 +333,25 @@ namespace web_team3_assignment.DAL
                     });
             }
             return menteesList;
+        }
+        public int Update(LecturerEdit lecturer)
+        {
+            SqlCommand cmd = new SqlCommand("UPDATE Lecturer SET Name=@name, EmailAddr=@email, Description=@desc" +
+               " WHERE LecturerID = @selectedLecturerID", conn);
+            cmd.Parameters.AddWithValue("@name", lecturer.Name);
+            cmd.Parameters.AddWithValue("@email", lecturer.Email);
+
+            if (lecturer.Description != null)
+                cmd.Parameters.AddWithValue("@desc", lecturer.Description);
+            else
+                cmd.Parameters.AddWithValue("@desc", DBNull.Value);
+
+            cmd.Parameters.AddWithValue("@selectedLecturerID", lecturer.LecturerId);
+            conn.Open();
+            int count = cmd.ExecuteNonQuery();
+            conn.Close();
+            return count;
+
         }
     }
 

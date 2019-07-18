@@ -18,11 +18,11 @@
                 @foreach (var item in Model)
                 {
                     string selectedRow = "";
-                    string delete = "color: red; ";
-                    if (Context.Session.GetString("LoginName") == item.Name.ToString())
+                    string delete = "color: #990000; cursor: default; font-weight: bold;";
+                    if (Convert.ToInt32(Context.Session.GetString("ID")) == item.LecturerId)
                     {
                         selectedRow = "class='table-primary'";
-                        delete = "color: green;";
+                        delete = "color: green; font-weight: bold;";
                     }
                     <tr @Html.Raw(selectedRow)>
                         <td>@item.LecturerId.ToString()</td>
@@ -35,8 +35,20 @@
                         <td>@item.Email</td>
                         <td>@item.Description</td>
                         <td>
-                            <a asp-action="Delete" asp-controller="Lecturer"
-                               asp-route-id="@item.LecturerId" style="@Html.Raw(delete)"><b>Delete</b></a>
+                            @if (item.LecturerId == Convert.ToInt32(Context.Session.GetString("ID")))
+                            {
+                                <a asp-action="Edit" asp-controller="Lecturer"
+                                   asp-route-id="@item.LecturerId" style="@Html.Raw(delete)">Edit</a>
+                                @:|
+                                <a asp-action="Delete" asp-controller="Lecturer"
+                                   asp-route-id="@item.LecturerId" style="@Html.Raw(delete)">Delete</a>
+                            }
+                            else
+                            {
+                                <span style="@Html.Raw(delete)" title="You are not allowed to Edit other lecturer's profile!">Edit</span> 
+                                @:|
+                                <span style="@Html.Raw(delete)" title="You are not allowed to Delete other lecturer's profile!">Delete</span>
+                            }
                         </td>
                     </tr>
                 }

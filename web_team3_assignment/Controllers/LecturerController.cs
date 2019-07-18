@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using web_team3_assignment.DAL;
 using web_team3_assignment.Models;
+using System.Diagnostics;
 
 namespace web_team3_assignment.Controllers
 {
@@ -60,12 +61,12 @@ namespace web_team3_assignment.Controllers
         {
             //set the default password for the lecturer account to 'p@55Mentor' but hashed
             var sha1 = new SHA1CryptoServiceProvider();
-            var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes("p@55Mentor"));
+            var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(lecturer.Password));
             string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
-            System.Diagnostics.Debug.WriteLine(hash);
-            System.Diagnostics.Debug.WriteLine(hashedPassword);
+            Debug.WriteLine(hash);
+            Debug.WriteLine(hashedPassword);
             lecturer.Password = hashedPassword;
-            System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
+            Debug.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {
                 ViewData["Message"] = "Employee Created Successfully!";
@@ -99,6 +100,10 @@ namespace web_team3_assignment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Change(LecturerPassword lecturer)
         {
+            if (lecturer.Password == null)
+            {
+                return View(lecturer);
+            }
             //get password details for currently logged in lecturer
             LecturerPassword currentLecturer = lecturerContext.getPasswordDetails(Convert.ToInt32(HttpContext.Session.GetString("ID")));
             var sha1 = new SHA1CryptoServiceProvider();
@@ -111,12 +116,7 @@ namespace web_team3_assignment.Controllers
                 ViewData["Message"] = "Current Password Is Incorrect!";
                 return View(lecturer);
             }
-            //check whether the password field is empty
-            System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
-            System.Diagnostics.Debug.WriteLine("password: " + lecturer.Password);
-            System.Diagnostics.Debug.WriteLine("new pw: " + lecturer.NewPassword);
-            System.Diagnostics.Debug.WriteLine("confirm pw: " + lecturer.ConfirmPassword);
-
+            Debug.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {
                 //checks whether the password is the same
@@ -140,42 +140,45 @@ namespace web_team3_assignment.Controllers
             return View(lecturer);
         }
 
-        // GET: Lecturer/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if ((HttpContext.Session.GetString("Role") == null) ||
-        //        (HttpContext.Session.GetString("Role") != "Lecturer"))
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    if (id == null)
-        //    {
-        //        return RedirectToAction("Index");   
-        //    }
-        //    Lecturer lecturer = lecturerContext.getLecturerDetails(id.Value);
-        //    if (lecturer == null)
-        //    {
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(lecturer);
-        //}
+        //GET: Lecturer/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+                (HttpContext.Session.GetString("Role") != "Lecturer"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            //check if id is null or if the id matches the currently logged in user
+            if (id == null || Convert.ToInt32(HttpContext.Session.GetString("ID")) != id.Value)
+            {
+                return RedirectToAction("Index");
+            }
+            //get the lecturer details and prepare to return it to the edit view
+            LecturerEdit lecturer = lecturerContext.EditLecturerDetails(id.Value);
+            //check whether lecturer actually exists and whether the ID matches the logged in lecturer ID
+            if (lecturer == null || Convert.ToInt32(HttpContext.Session.GetString("ID")) != lecturer.LecturerId)
+            {
+                TempData["ErrorMessage"] = "You are not allowed to edit other lecturer's profile!";
+                return RedirectToAction("Index");
+            }
 
-        //// POST: Lecturer/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add update logic here
+            return View(lecturer);
+        }
 
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+        // POST: Lecturer/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(LecturerEdit lecturer)
+        {
+            if (ModelState.IsValid)
+            { //Update staff record to database 
+                lecturerContext.Update(lecturer);
+                HttpContext.Session.SetString("LoginName", lecturer.Name.ToString());
+                return RedirectToAction("Index");
+            }
+            ViewData["Message"] = "Check your fields again!";
+            return View(lecturer);
+        }
 
         // GET: Lecturer/Delete/5
         public ActionResult Delete(int? id)
@@ -187,6 +190,7 @@ namespace web_team3_assignment.Controllers
             }
             if (id == null)
             {
+                TempData["ErrorMessage"] = "You are not allowed to delete other lecturer's profile!";
                 return RedirectToAction("Index");
             }
 
