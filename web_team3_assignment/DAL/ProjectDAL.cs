@@ -34,14 +34,19 @@ namespace web_team3_assignment.DAL
         }
 
 
-
-        public List<Project> GetAllProject()
+        //studentId can either have interger value or null value
+        public List<Project> GetAllProject(int? studentId)
         {
             //Instantiate a SqlCommand object, supply it with a
             //SELECT SQL statement that operates against the database,
             //and the connection object for connecting to the database.
+            //Join project table and projectmember table where studentID is the selected studentID
             SqlCommand cmd = new SqlCommand(
-            "SELECT * FROM Project ORDER BY ProjectID", conn);
+            "SELECT * FROM Project p" +
+            " INNER JOIN ProjectMember pm ON p.ProjectID = pm.ProjectID" +
+            " WHERE StudentID = @selectedstudentID" , conn);
+
+            cmd.Parameters.AddWithValue("@selectedstudentID", studentId);
 
             //Instantiate a DataAdapter object and pass the
             //SqlCommand object created as parameter.
@@ -87,7 +92,6 @@ namespace web_team3_assignment.DAL
             ("INSERT INTO Project (Title, Description, ProjectPoster, ProjectURL) " +
             "OUTPUT INSERTED.ProjectID " +
             "VALUES(@title, @description, @projectPoster, @projectURL)", conn);
-
             cmd.Parameters.AddWithValue("@title", project.Title);
             cmd.Parameters.AddWithValue("@description", project.Description);
             cmd.Parameters.AddWithValue("@projectPoster", project.ProjectPoster);
@@ -96,11 +100,11 @@ namespace web_team3_assignment.DAL
             //open connection to run command
             conn.Open();
 
-            //ExecuteScalar is used to retrieve the auto-generated
-            //ExecuteScalar RETURNs a single value
-            //StaffID after executing the INSERT SQL statement
+            //ExecuteScalar is used to retrieve the auto-generated primary key value
+            //ExecuteScalar get and RETURNs a single value (integer) from SQL in the first column of the first row, 
+            //ProjectID after executing the INSERT SQL statement
             project.ProjectId = (int)cmd.ExecuteScalar();
-
+                
             //close connection
             conn.Close();
 
@@ -108,23 +112,56 @@ namespace web_team3_assignment.DAL
             //Return id when no error occurs.
             return project.ProjectId;
         }
+        public int AddProjectAsLeader(ProjectMember projectMember)
+        {
+            SqlCommand cmd = new SqlCommand
+            ("INSERT INTO ProjectMember (ProjectID, StudentID, Role) " +
+            "VALUES(@pid, @sid, @role)", conn);
+            cmd.Parameters.AddWithValue("@pid", projectMember.ProjectId);
+            cmd.Parameters.AddWithValue("@sid", projectMember.StudentId);
+            cmd.Parameters.AddWithValue("@role", projectMember.Role);
+            conn.Open();
+            int count = cmd.ExecuteNonQuery();
+            conn.Close();
+            return count;
+        }
 
-
-      
-
+        //this returns a list of projectmember which is to be used in the view to show the colors for leader and member
+        public List<ProjectMember> GetProjectMemberDetails(int? studentId)
+        {
+            SqlCommand cmd = new SqlCommand("Select * from projectmember where StudentID = @selectedStudentID", conn);
+            cmd.Parameters.AddWithValue("@selectedStudentID", studentId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "ProjectMemberDetails");
+            conn.Close();
+            List<ProjectMember> projectMemberList = new List<ProjectMember>();
+            foreach (DataRow row in result.Tables["ProjectMemberDetails"].Rows)
+            {
+                projectMemberList.Add(
+                    new ProjectMember
+                    {
+                        ProjectId = Convert.ToInt32(row["ProjectID"]),
+                        StudentId = Convert.ToInt32(row["StudentID"]),
+                        Role = row["Role"].ToString()
+                    });
+            }
+            return projectMemberList;
+        }
 
         //Get project details
         public Project GetProjectDetails(int projectId)
         {
 
             //Instantiate a SqlCommand object, supply it with a SELECT SQL
-            //statement which retrieves all attributes of a staff record.
+            //statement which retrieves all attributes of a project record.
             SqlCommand cmd = new SqlCommand
             ("SELECT * FROM Project WHERE ProjectID = @selectedProjectID", conn);
 
 
             //Define the parameter used in SQL statement, value for the
-            //parameter is retrieved from the method parameter “staffId”.
+            //parameter is retrieved from the method parameter “projectId”.
             cmd.Parameters.AddWithValue("@selectedProjectID", projectId);
 
 
@@ -145,8 +182,11 @@ namespace web_team3_assignment.DAL
             //Close the database connection 
             conn.Close();
 
+            //Create a new variable called project to store datas
             Project project = new Project();
 
+
+            //If "ProjectDetails" in projectresult table rows is more than 0
             if (projectresult.Tables["ProjectDetails"].Rows.Count > 0)
             {
                 project.ProjectId = projectId;
@@ -209,7 +249,7 @@ namespace web_team3_assignment.DAL
         public int Delete(int projectId)
         {
             //Instantiate a SqlCommand object, supply it with a DELETE SQL statement
-            //to delete a staff record specified by a Staff ID.
+            //to delete a project record specified by a ProjectID.
             SqlCommand cmd = new SqlCommand("DELETE FROM Project WHERE ProjectId = @selectProjectId", conn);
             cmd.Parameters.AddWithValue("@selectProjectId", projectId);
 
@@ -217,17 +257,17 @@ namespace web_team3_assignment.DAL
             conn.Open();
             int rowCount;
 
-            //Execute the DELETE SQL to remove the staff record.
+            //Execute the DELETE SQL to remove the project record.
             rowCount = cmd.ExecuteNonQuery();
 
             //Close database connection.
             conn.Close();
 
-            //Return number of row of staff record deleted.
+            //Return number of row of project record deleted.
             return rowCount;
         }
 
-
+        //Check if project Title exists
         public bool IsProjectTitleExists(string Title)
         {
             SqlCommand cmd = new SqlCommand
@@ -242,13 +282,15 @@ namespace web_team3_assignment.DAL
 
             //Use DataAdapter to fetch data to a table "ProjectTitleDetails" in DataSet. 
             daTitle.Fill(result, "ProjectTitleDetails");
+
+            //Close connection
             conn.Close();
 
             if (result.Tables["ProjectTitleDetails"].Rows.Count > 0)
-                return true; //The title exists for another project
+                return true; //Return true is the title exists for another project
 
             else
-                return false; // The project given does not exist 
+                return false; //Return false if the project given does not exist 
 
         }
 

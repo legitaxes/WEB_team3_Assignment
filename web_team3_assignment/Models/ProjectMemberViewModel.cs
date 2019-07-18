@@ -8,9 +8,7 @@ namespace web_team3_assignment.Models
 {
     public class ProjectMemberViewModel
     {
-        //Still trying 
-        public List<Project> projectList { get; set; }
-
         public List<ProjectMember> projectMemberList { get; set; }
+        public List<Project> projectList { get; set; }
     }
 }

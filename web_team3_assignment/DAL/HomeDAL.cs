@@ -33,7 +33,7 @@ namespace web_team3_assignment.DAL
         //lecturerlogin query
         public Lecturer lecturerLogin(string email, string password)
         {
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer" , conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Lecturer", conn);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet result = new DataSet();
             conn.Open();
@@ -79,5 +79,56 @@ namespace web_team3_assignment.DAL
             return student;
         }
 
+        //Get projectID by integer studentID
+        public ProjectMember getProjectID(int studentId)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT * FROM ProjectMember WHERE StudentID = @selectedstudentId", conn);
+            cmd.Parameters.AddWithValue("@selectedstudentId", studentId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "projectDetails");
+            conn.Close();
+            ProjectMember projectmember = new ProjectMember();
+            foreach (DataRow row in result.Tables["projectDetails"].Rows)
+            {
+                projectmember.ProjectId = Convert.ToInt32(row["ProjectID"]);
+                projectmember.Role = row["Role"].ToString();
+                projectmember.StudentId = Convert.ToInt32(row["StudentID"]);
+            }
+            return projectmember;
+        }
+
+        //get a list of roles that is under projectmember in projectmember model
+        public List<ProjectMember> GetRole(int studentId)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT * FROM ProjectMember WHERE StudentID = @selectedStudentID", conn);
+
+            cmd.Parameters.AddWithValue("@selectedStudentID", studentId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+            DataSet result = new DataSet();
+
+            conn.Open();
+
+            da.Fill(result, "ProjectMemberRole");
+
+            conn.Close();
+
+            List<ProjectMember> projectMemberList = new List<ProjectMember>();
+
+            foreach (DataRow row in result.Tables["ProjectMemberRole"].Rows)
+            {
+                projectMemberList.Add(
+                    new ProjectMember
+                    {
+                        StudentId = Convert.ToInt32(row["StudentID"]),
+                        Role = row["Role"].ToString(),
+                        ProjectId = Convert.ToInt32(row["ProjectID"])
+                    });
+            }
+            return projectMemberList;
+        }
     }
 }

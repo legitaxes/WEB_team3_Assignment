@@ -1,12 +1,12 @@
 ﻿@model web_team3_assignment.Models.ProjectMemberViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "View ProjectMembers";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h4 class="PageTitle">View ProjectMember</h4>
-<!-- Display a list of branches -->
+<!-- Display a list of projectmembers -->
 <div class="table-responsive">
     <table id="viewProjectMember" class="table table-striped table-bordered">
         <thead class="thead-dark">
@@ -14,6 +14,7 @@
                 <th>ProjectID</th>
                 <th>StudentID</th>
                 <th>Role</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -27,33 +28,33 @@
                     selectedRow = "class='table-primary'";
                 }
             <tr @Html.Raw(selectedRow)>
-                @*<td>@item.ProjectId.ToString()</td>*@
+                <td>@item.ProjectId.ToString()</td>
                 <td>@item.StudentId.ToString()</td>
                 <td>@item.Role</td>
                 <td>
-                    <a asp-action="Index" asp-controller="Branch"
-                       asp-route-id="@item.ProjectId">View Staff</a>
+                    <a asp-action="Index" asp-controller="ProjectMember"
+                       asp-route-id="@item.ProjectId">View Project</a>
                 </td>
             </tr>
             }
         </tbody>
     </table>
 </div>
-<!-- Display a list of staff members for each branch -->
-@if (ViewData["selectedProjectId"].ToString() != "")
+<!-- Display a list of project for each projectmembers -->
+@if (ViewData["selectedProjectID"].ToString() != "")
 {
     if (Model.projectList.Count != 0)
     {
         <h5>
-            Staff working in Branch
-            @ViewData["selectedProjectId"].ToString() :
+            ProjectMembers working under the Project
+            @ViewData["selectedProjectID"].ToString() :
         </h5>
         <partial name="~/Views/Project/_ViewProject.cshtml"
                  model="@Model.projectList" />
     }
     else
     {
-        <h5>No staff for selected branch!</h5>
+        <h5>No project for selected projectmembers!</h5>
     }
 }
 

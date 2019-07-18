@@ -41,6 +41,9 @@ namespace web_team3_assignment.Models
         [Display(Name = "Description")]
         public string Description { get; set; }
 
+        [Display(Name = "ProjectMember")]
+        public string ProjectMemberName { get; set; }
+
         public string projectphoto { get; set; }
 
         public IFormFile posterToUpload { get; set; }

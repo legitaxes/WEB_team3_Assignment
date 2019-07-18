@@ -13,28 +13,49 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @{
+                    int i = 0;
+                }
+                @foreach (var item in Model) //first loop is project 1, second loop is project 2
                 {
-                <tr>
-                    <td>@item.ProjectId.ToString()</td>
-                    <td>@item.Title.ToString()</td>
-                    <td>@item.ProjectURL.ToString()</td>
 
-                    <td style="width:100px">
-                        <a asp-action="EditProject" asp-controller="Project"
-                           asp-route-id="@item.ProjectId">Edit</a>
+                    string selectedRow = "";
+                    //if projectrole is a Leader, table colour will be green
+                    var projectmemberList = ViewData["ProjectList"] as List<web_team3_assignment.Models.ProjectMember>;
 
-                        <a asp-action="UploadPhoto" asp-controller="Project"
-                           asp-route-id="@item.ProjectId">Upload</a>
+                    if (projectmemberList[i].Role == "Leader")
+                    {
+                        selectedRow = "class='table-warning'";
+                    }
+                    else
+                    {
+                        selectedRow = "class='table-info'";
+                    }
+                    i++;
 
-                        <a asp-action="DetailProject" asp-controller="Project"
-                           asp-route-id="@item.ProjectId">Details</a>
+                    @if (selectedRow != "")
+                    {
+                        <tr @Html.Raw(selectedRow)>
+                            <td>@item.ProjectId.ToString()</td>
+                            <td>@item.Title.ToString()</td>
+                            <td>@item.ProjectURL.ToString()</td>
 
-                        <a asp-action="DeleteProject" asp-controller="Project"
-                           asp-route-id="@item.ProjectId">Delete</a>
-                    </td>
+                            <td style="width:100px">
+                                <a asp-action="EditProject" asp-controller="Project"
+                                   asp-route-id="@item.ProjectId">Edit</a>
 
-                </tr>
+                                <a asp-action="UploadPhoto" asp-controller="Project"
+                                   asp-route-id="@item.ProjectId">Upload</a>
+
+                                <a asp-action="DetailProject" asp-controller="Project"
+                                   asp-route-id="@item.ProjectId">Details</a>
+
+                                <a asp-action="DeleteProject" asp-controller="Project"
+                                   asp-route-id="@item.ProjectId">Delete</a>
+                            </td>
+                        </tr>
+                        selectedRow = "";
+                    }
                 }
             </tbody>
         </table>

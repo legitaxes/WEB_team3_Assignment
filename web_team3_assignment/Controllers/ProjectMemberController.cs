@@ -12,7 +12,7 @@ namespace web_team3_assignment.Controllers
 {
     public class ProjectMemberController : Controller
     {
-        //private ProjectDAL projectContext = new ProjectDAL();
+        private ProjectDAL projectContext = new ProjectDAL();
         private ProjectMemberDAL projectMemberContext = new ProjectMemberDAL();
 
 
