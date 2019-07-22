@@ -14,7 +14,7 @@
                 <th>ProjectID</th>
                 <th>StudentID</th>
                 <th>Role</th>
-                <th></th>
+                @*<th></th>*@
             </tr>
         </thead>
         <tbody>
@@ -31,16 +31,16 @@
                 <td>@item.ProjectId.ToString()</td>
                 <td>@item.StudentId.ToString()</td>
                 <td>@item.Role</td>
-                <td>
+                @*<td>
                     <a asp-action="Index" asp-controller="ProjectMember"
                        asp-route-id="@item.ProjectId">View Project</a>
-                </td>
+                </td>*@
             </tr>
             }
         </tbody>
     </table>
 </div>
-<!-- Display a list of project for each projectmembers -->
+ @*Display a list of project for each projectmembers 
 @if (ViewData["selectedProjectID"].ToString() != "")
 {
     if (Model.projectList.Count != 0)
@@ -56,5 +56,5 @@
     {
         <h5>No project for selected projectmembers!</h5>
     }
-}
+}*@
 

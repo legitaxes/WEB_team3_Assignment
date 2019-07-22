@@ -46,6 +46,7 @@ namespace web_team3_assignment.DAL
             " INNER JOIN ProjectMember pm ON p.ProjectID = pm.ProjectID" +
             " WHERE StudentID = @selectedstudentID" , conn);
 
+            //Assign values to parameters
             cmd.Parameters.AddWithValue("@selectedstudentID", studentId);
 
             //Instantiate a DataAdapter object and pass the
@@ -112,17 +113,29 @@ namespace web_team3_assignment.DAL
             //Return id when no error occurs.
             return project.ProjectId;
         }
+
+        //add project as leader in projectMember
         public int AddProjectAsLeader(ProjectMember projectMember)
         {
             SqlCommand cmd = new SqlCommand
             ("INSERT INTO ProjectMember (ProjectID, StudentID, Role) " +
             "VALUES(@pid, @sid, @role)", conn);
+
+            //Assign values to parameters
             cmd.Parameters.AddWithValue("@pid", projectMember.ProjectId);
             cmd.Parameters.AddWithValue("@sid", projectMember.StudentId);
             cmd.Parameters.AddWithValue("@role", projectMember.Role);
+
+            //open the connection
             conn.Open();
+
+            //count variable will not return any data, it will only return the number of rows affected by an Insert, Update or Delete.
             int count = cmd.ExecuteNonQuery();
+
+            //close the connection
             conn.Close();
+
+
             return count;
         }
 
@@ -139,6 +152,7 @@ namespace web_team3_assignment.DAL
             List<ProjectMember> projectMemberList = new List<ProjectMember>();
             foreach (DataRow row in result.Tables["ProjectMemberDetails"].Rows)
             {
+                //  Add new created projectmember into projectMemberList
                 projectMemberList.Add(
                     new ProjectMember
                     {
@@ -245,27 +259,27 @@ namespace web_team3_assignment.DAL
         }
 
 
-        //DELETE Project
-        public int Delete(int projectId)
-        {
-            //Instantiate a SqlCommand object, supply it with a DELETE SQL statement
-            //to delete a project record specified by a ProjectID.
-            SqlCommand cmd = new SqlCommand("DELETE FROM Project WHERE ProjectId = @selectProjectId", conn);
-            cmd.Parameters.AddWithValue("@selectProjectId", projectId);
+        ////DELETE Project
+        //public int Delete(int projectId)
+        //{
+        //    //Instantiate a SqlCommand object, supply it with a DELETE SQL statement
+        //    //to delete a project record specified by a ProjectID.
+        //    SqlCommand cmd = new SqlCommand("DELETE FROM Project WHERE ProjectId = @selectProjectId", conn);
+        //    cmd.Parameters.AddWithValue("@selectProjectId", projectId);
 
-            //Open a database connection.
-            conn.Open();
-            int rowCount;
+        //    //Open a database connection.
+        //    conn.Open();
+        //    int rowCount;
 
-            //Execute the DELETE SQL to remove the project record.
-            rowCount = cmd.ExecuteNonQuery();
+        //    //Execute the DELETE SQL to remove the project record.
+        //    rowCount = cmd.ExecuteNonQuery();
 
-            //Close database connection.
-            conn.Close();
+        //    //Close database connection.
+        //    conn.Close();
 
-            //Return number of row of project record deleted.
-            return rowCount;
-        }
+        //    //Return number of row of project record deleted.
+        //    return rowCount;
+        //}
 
         //Check if project Title exists
         public bool IsProjectTitleExists(string Title)
