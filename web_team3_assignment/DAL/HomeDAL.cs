@@ -79,7 +79,7 @@ namespace web_team3_assignment.DAL
             return student;
         }
 
-        //Get projectID by integer studentID
+        //Get projectID by studentID in integer
         public ProjectMember getProjectID(int studentId)
         {
             SqlCommand cmd = new SqlCommand("SELECT * FROM ProjectMember WHERE StudentID = @selectedstudentId", conn);
@@ -97,38 +97,6 @@ namespace web_team3_assignment.DAL
                 projectmember.StudentId = Convert.ToInt32(row["StudentID"]);
             }
             return projectmember;
-        }
-
-        //get a list of roles that is under projectmember in projectmember model
-        public List<ProjectMember> GetRole(int studentId)
-        {
-            SqlCommand cmd = new SqlCommand("SELECT * FROM ProjectMember WHERE StudentID = @selectedStudentID", conn);
-
-            cmd.Parameters.AddWithValue("@selectedStudentID", studentId);
-
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-            DataSet result = new DataSet();
-
-            conn.Open();
-
-            da.Fill(result, "ProjectMemberRole");
-
-            conn.Close();
-
-            List<ProjectMember> projectMemberList = new List<ProjectMember>();
-
-            foreach (DataRow row in result.Tables["ProjectMemberRole"].Rows)
-            {
-                projectMemberList.Add(
-                    new ProjectMember
-                    {
-                        StudentId = Convert.ToInt32(row["StudentID"]),
-                        Role = row["Role"].ToString(),
-                        ProjectId = Convert.ToInt32(row["ProjectID"])
-                    });
-            }
-            return projectMemberList;
         }
     }
 }

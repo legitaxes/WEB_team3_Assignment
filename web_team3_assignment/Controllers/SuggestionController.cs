@@ -80,17 +80,17 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            List<StudentViewModel> studentsuggestionVMList = new List<StudentViewModel>();
+            List<StudentSuggestionViewModel> studentsuggestionVMList = new List<StudentSuggestionViewModel>();
             List<Suggestion> suggestionList = suggestionContext.GetSuggestionPostedByStudentsMentor(Convert.ToInt32(HttpContext.Session.GetInt32("StudentID")));
             foreach (Suggestion suggestion in suggestionList)
             {
-                StudentViewModel suggestionVM = MapToLecturerVM(suggestion);
+                StudentSuggestionViewModel suggestionVM = MapToLecturerVM(suggestion);
                 studentsuggestionVMList.Add(suggestionVM);
             }
             return View(studentsuggestionVMList);
         }
 
-        public StudentViewModel MapToLecturerVM(Suggestion suggestion)
+        public StudentSuggestionViewModel MapToLecturerVM(Suggestion suggestion)
         {
             if (suggestion != null)
             {
@@ -114,7 +114,7 @@ namespace web_team3_assignment.Controllers
                 {
                     suggestionStatus = "Acknowledged";
                 }
-                StudentViewModel studentVM = new StudentViewModel
+                StudentSuggestionViewModel studentVM = new StudentSuggestionViewModel
                 {
                     SuggestionId = suggestion.SuggestionId,
                     LecturerId = suggestion.LecturerId,
@@ -144,7 +144,7 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
             Suggestion suggestion = suggestionContext.GetSuggestionDetails(id.Value);
-            StudentViewModel suggestionVM = MapToLecturerVM(suggestion);
+            StudentSuggestionViewModel suggestionVM = MapToLecturerVM(suggestion);
             if (suggestion == null)
             {
                 return RedirectToAction("StudentSuggestion");

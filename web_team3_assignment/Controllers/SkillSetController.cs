@@ -88,6 +88,23 @@ namespace web_team3_assignment.Controllers
             return View(skillset);
         }
 
+        // POST: SkillSet/Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SkillSetDelete(SkillSet skillSet)
+        {
+            try
+            {
+                SkillSetContext.Delete(skillSet.SkillSetId);
+                return RedirectToAction("Index", "SkillSet");
+            }
+            catch
+            {
+                ViewData["Message"] = "There are already students using this SkillSet!";
+                return View();
+            }
+        }
+
         // POST: SkillSet/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -120,21 +137,25 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
             SkillSet skillSet = SkillSetContext.GetDetails(id.Value);
+            if (skillSet == null)
+            {
+                return RedirectToAction("Index");
+            }
 
             return View(skillSet);
         }
 
-        // POST: Lecturer/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult SkillSetDelete(SkillSet skillSet)
-        {
-            // Delete the skillset record from database
-            SkillSetContext.Delete(skillSet.SkillSetId);
-            // Call the Index action of Home controller
-            return RedirectToAction("Index", "SkillSet");
+        //// POST: Lecturer/Delete/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult SkillSetDelete(SkillSet skillSet)
+        //{
+        //    // Delete the skillset record from database
+        //    SkillSetContext.Delete(skillSet.SkillSetId);
+        //    // Call the Index action of Home controller
+        //    return RedirectToAction("Index", "SkillSet");
 
-        }
+        //}
     }
 }
     
