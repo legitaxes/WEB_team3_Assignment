@@ -32,7 +32,11 @@ namespace web_team3_assignment.Controllers
             //ProjectList = GetAllProject by studentID in Integer 
             List<Project> ProjectList = projectContext.GetAllProject(HttpContext.Session.GetInt32("StudentID"));
             System.Diagnostics.Debug.WriteLine(HttpContext.Session.GetString("ProjectRole"));
+
+            //projectContext method will getprojectmemeberdetails by studentID in integer
             List<ProjectMember> projectMemberList = projectContext.GetProjectMemberDetails(HttpContext.Session.GetInt32("StudentID"));
+
+            //To be able to view projectmemberList on _ViewProject.cshtml
             ViewData["ProjectList"] = projectMemberList;
             return View(ProjectList);
         }
@@ -61,12 +65,20 @@ namespace web_team3_assignment.Controllers
             if (ModelState.IsValid)
             {
                 ProjectMember projectMember = new ProjectMember();
+
                 //Add project record to database
                 project.ProjectId = projectContext.Add(project);
+
                 //set the property values for the projectmember to be prepared to insert into the database
                 projectMember.ProjectId = project.ProjectId;
+
+                //get the values for projectMember's studentID and set it to integer value
                 projectMember.StudentId = HttpContext.Session.GetInt32("StudentID").Value;
+
+                //projectmember role is = to  Leader
                 projectMember.Role = "Leader";
+
+                //projectContext method will add project as leader in projectmember
                 projectContext.AddProjectAsLeader(projectMember);
 
                 //Redirect user to Project/Index view
@@ -241,41 +253,37 @@ namespace web_team3_assignment.Controllers
         }
 
 
-        // GET: Project/DeleteProject/5
-        public ActionResult DeleteProject(int? id)
-        {
-            // Stop accessing the action if not logged in
-            // or account not in the "Student" role
-            if ((HttpContext.Session.GetString("Role") == null) ||
-            (HttpContext.Session.GetString("Role") != "Student"))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            if (id == null)
-            {
-                //Return to listing page, not allowed to edit
-                return RedirectToAction("Index");
-            }
-            Project project = projectContext.GetProjectDetails(id.Value);
-            //if (project == null)
-            //{
-            //    //Return to listing page, not allowed to edit
-            //    return RedirectToAction("Index");
-            //}
-            return View(project);
-        }
+        //// GET: Project/DeleteProject/5
+        //public ActionResult DeleteProject(int? id)
+        //{
+        //    // Stop accessing the action if not logged in
+        //    // or account not in the "Student" role
+        //    if ((HttpContext.Session.GetString("Role") == null) ||
+        //    (HttpContext.Session.GetString("Role") != "Student"))
+        //    {
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    if (id == null)
+        //    {
+        //        //Return to listing page, not allowed to edit
+        //        return RedirectToAction("Index");
+        //    }
+        //    Project project = projectContext.GetProjectDetails(id.Value);
+    
+        //    return View(project);
+        //}
 
-        //POST: Project/DeleteProject/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteProject(Project project)
-        {
-            // Delete the project record from database
-            projectContext.Delete(project.ProjectId);
+        ////POST: Project/DeleteProject/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult DeleteProject(Project project)
+        //{
+        //    // Delete the project record from database
+        //    projectContext.Delete(project.ProjectId);
 
-            // Call the Index action of Home controller
-            return RedirectToAction("Index");
-        }
+        //    // Call the Index action of Home controller
+        //    return RedirectToAction("Index");
+        //}
 
 
         public ActionResult UploadPhoto(int id)

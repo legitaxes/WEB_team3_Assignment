@@ -130,7 +130,7 @@ namespace web_team3_assignment.Controllers
                 return null;
         }
 
-        // GET: Suggestion/Delete/5
+        // GET: Suggestion/Acknowledge/5
         public ActionResult Acknowledge(int? id)
         {
             if ((HttpContext.Session.GetString("Role") == null) ||
@@ -152,7 +152,7 @@ namespace web_team3_assignment.Controllers
             return View(suggestionVM);
         }
 
-        // POST: Suggestion/Delete/5
+        // POST: Suggestion/Acknowledge/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Acknowledge(Suggestion suggestion)
@@ -160,12 +160,6 @@ namespace web_team3_assignment.Controllers
             // Delete the staff record from database
             suggestionContext.Acknowledge(suggestion.SuggestionId);
             return RedirectToAction("StudentSuggestion");
-        }
-
-        // GET: Suggestion/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
         }
 
         // GET: Suggestion/PostSuggestion
@@ -202,17 +196,6 @@ namespace web_team3_assignment.Controllers
             {
                 return View(suggest);
             }
-
-            //try
-            //{
-            //    // TODO: Add insert logic here
-
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
         }
 
         // GET: Suggestion/Edit/5
@@ -229,8 +212,29 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewData["Status"] = GetSuggestionStatus();
+            ViewData["Status"] = GetSuggestionStatus(id.Value);
+            //gets the suggestion information based on the URL ID
             Suggestion suggestion = suggestionContext.GetSuggestionDetails(id.Value);
+            //foreach (var item in ViewData["Status"] as List<SelectListItem>)
+            //{
+            //    if (item.Value == suggestion.Status.ToString())
+            //    {
+            //        item.Selected = true;
+            //        break;
+            //    }
+            //}
+            //if the suggestion cannot be found, itll return null and return a message to the index action
+            if (suggestion == null)
+            {
+                TempData["Message"] = "The Suggestion does not exist!";
+                return RedirectToAction("Index");
+            }
+            //if the suggestion's lecturer id does not match with the logged in lecturer's ID
+            if (suggestion.LecturerId != Convert.ToInt32(HttpContext.Session.GetString("ID")))
+            {
+                TempData["Message"] = "You are not allowed to edit other lecturer's suggestion!";
+                return RedirectToAction("Index");
+            }
             SuggestionViewModel suggestionVM = MapToStudentVM(suggestion);
             return View(suggestionVM);
         }
@@ -240,7 +244,7 @@ namespace web_team3_assignment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Suggestion suggestion)
         {
-            ViewData["Status"] = GetSuggestionStatus();
+            ViewData["Status"] = GetSuggestionStatus(suggestion.SuggestionId);
             if (suggestion.Description == null || suggestion.Description == " ")
             {
                 ViewData["Message"] = "Description Field Cannot be Empty!";
@@ -269,11 +273,21 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
             Suggestion suggestion = suggestionContext.GetSuggestionDetails(id.Value);
-            SuggestionViewModel suggestionVM = MapToStudentVM(suggestion);
+            //check if suggestion exists
             if (suggestion == null)
             {
+                TempData["Message"] = "The Suggestion does not exist!";
                 return RedirectToAction("Index");
             }
+            //check if it's lecturer's suggestion
+            if (suggestion.LecturerId != Convert.ToInt32(HttpContext.Session.GetString("ID")))
+            {
+                TempData["Message"] = "You are not allowed to delete other lecturer's suggestion!";
+                return RedirectToAction("Index");
+            }
+
+            SuggestionViewModel suggestionVM = MapToStudentVM(suggestion);
+
             return View(suggestionVM);
         }
 
@@ -288,20 +302,23 @@ namespace web_team3_assignment.Controllers
         }
 
         //get a selectlistitem for status 
-        private List<SelectListItem> GetSuggestionStatus()
+        private List<SelectListItem> GetSuggestionStatus(int id)
         {
+            Suggestion suggestion = suggestionContext.GetSuggestionDetails(id);
             List<SelectListItem> status = new List<SelectListItem>();
             status.Add(
                 new SelectListItem
                 {
                     Value = "Y",
-                    Text = "Acknowledged"
+                    Text = "Acknowledged",
+                    Selected = suggestion.Status == 'Y' ? true : false
                 });
             status.Add(
                 new SelectListItem
                 {
                     Value = "N",
-                    Text = "Not Acknowledged"
+                    Text = "Not Acknowledged",
+                    Selected = suggestion.Status == 'N' ? true : false
                 });
             return status;
         }
