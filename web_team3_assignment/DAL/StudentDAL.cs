@@ -83,10 +83,22 @@ namespace web_team3_assignment.DAL
                 " VALUES(@name, @course, @photo, @description, @achievement, @externallink, @email, @password, @mentorid)", conn);
             cmd.Parameters.AddWithValue("@name", student.Name);
             cmd.Parameters.AddWithValue("@course", student.Course);
-            cmd.Parameters.AddWithValue("@photo",  student.Photo);
-            cmd.Parameters.AddWithValue("@description", student.Description);
-            cmd.Parameters.AddWithValue("@achievement", student.Achievement);
-            cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
+            if (student.Photo != null)
+                cmd.Parameters.AddWithValue("@photo", student.Photo);
+            else
+                cmd.Parameters.AddWithValue("@photo", DBNull.Value);
+            if (student.Description != null)
+                cmd.Parameters.AddWithValue("@description", student.Description);
+            else
+                cmd.Parameters.AddWithValue("@description", DBNull.Value);
+            if (student.Achievement != null)
+                cmd.Parameters.AddWithValue("@achievement", student.Achievement);
+            else
+                cmd.Parameters.AddWithValue("@achievement", DBNull.Value);
+            if (student.ExternalLink != null)
+                cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
+            else
+                cmd.Parameters.AddWithValue("@externallink", DBNull.Value);
             cmd.Parameters.AddWithValue("@email", student.EmailAddr);
             cmd.Parameters.AddWithValue("@password", student.Password);
             cmd.Parameters.AddWithValue("@mentorid", student.MentorID);
@@ -199,10 +211,22 @@ namespace web_team3_assignment.DAL
             
             cmd.Parameters.AddWithValue("@name", student.Name);
             cmd.Parameters.AddWithValue("@course", student.Course);
-            cmd.Parameters.AddWithValue("@photo", student.Photo);
-            cmd.Parameters.AddWithValue("@description", student.Description);
-            cmd.Parameters.AddWithValue("@achievement", student.Achievement);
-            cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
+            if (student.Photo != null)
+                cmd.Parameters.AddWithValue("@photo", student.Photo);
+            else
+                cmd.Parameters.AddWithValue("@photo", DBNull.Value);
+            if (student.Description != null)
+                cmd.Parameters.AddWithValue("@description", student.Description);
+            else
+                cmd.Parameters.AddWithValue("@description", DBNull.Value);
+            if (student.Achievement != null)
+                cmd.Parameters.AddWithValue("@achievement", student.Achievement);
+            else
+                cmd.Parameters.AddWithValue("@achievement", DBNull.Value);
+            if (student.ExternalLink != null)
+                cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
+            else
+                cmd.Parameters.AddWithValue("@externallink", DBNull.Value);
             cmd.Parameters.AddWithValue("@emailaddr", student.EmailAddr);
             cmd.Parameters.AddWithValue("@password", student.Password);
             cmd.Parameters.AddWithValue("@mentorID", student.MentorID);
@@ -223,10 +247,22 @@ namespace web_team3_assignment.DAL
 
             cmd.Parameters.AddWithValue("@name", student.Name);
             cmd.Parameters.AddWithValue("@course", student.Course);
-            cmd.Parameters.AddWithValue("@photo", student.Photo);
-            cmd.Parameters.AddWithValue("@description", student.Description);
-            cmd.Parameters.AddWithValue("@achievement", student.Achievement);
-            cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
+            if (student.Photo != null)
+                cmd.Parameters.AddWithValue("@photo", student.Photo);
+            else
+                cmd.Parameters.AddWithValue("@photo", DBNull.Value);
+            if (student.Description != null)
+                cmd.Parameters.AddWithValue("@description", student.Description);
+            else
+                cmd.Parameters.AddWithValue("@description", DBNull.Value);
+            if (student.Achievement != null)
+                cmd.Parameters.AddWithValue("@achievement", student.Achievement);
+            else
+                cmd.Parameters.AddWithValue("@achievement", DBNull.Value);
+            if (student.ExternalLink != null)
+                cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
+            else
+                cmd.Parameters.AddWithValue("@achievement", DBNull.Value);
             cmd.Parameters.AddWithValue("@emailaddr", student.EmailAddr);
             cmd.Parameters.AddWithValue("@password", student.Password);
             cmd.Parameters.AddWithValue("@mentorID", student.MentorID);

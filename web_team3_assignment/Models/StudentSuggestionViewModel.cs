@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace web_team3_assignment.Models
 {
-    public class StudentViewModel
+    public class StudentSuggestionViewModel
     {
         [Display(Name = "Suggestion ID")]
         public int SuggestionId { get; set; }
