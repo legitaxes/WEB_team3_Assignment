@@ -9,19 +9,19 @@ namespace web_team3_assignment.Models
 {
     public class Acknowledge
     {
-        public char Status { get; set; }
-        public IEnumerable<SelectListItem> StatusList
-        {
-            get
-            {
-                List<SelectListItem> list = new List<SelectListItem>
-                {
-                    new SelectListItem() { Text = "Acknowledge", Value = "Y"},
-                    new SelectListItem() { Text = "Not Acknowledged", Value = "N" }
-                };
-                return list.Select(l => new SelectListItem { Selected = (l.Value == Status.ToString()), Text = l.Text, Value = l.Value });
-            }
-        }
+        //public char Status { get; set; }
+        //public IEnumerable<SelectListItem> StatusList
+        //{
+        //    get
+        //    {
+        //        List<SelectListItem> list = new List<SelectListItem>
+        //        {
+        //            new SelectListItem() { Text = "Acknowledge", Value = "Y"},
+        //            new SelectListItem() { Text = "Not Acknowledged", Value = "N" }
+        //        };
+        //        return list.Select(l => new SelectListItem { Selected = (l.Value == Status.ToString()), Text = l.Text, Value = l.Value });
+        //    }
+        //}
     }
 
     public class Suggestion

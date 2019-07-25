@@ -212,7 +212,7 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewData["Status"] = GetSuggestionStatus(id.Value);
+           
             //gets the suggestion information based on the URL ID
             Suggestion suggestion = suggestionContext.GetSuggestionDetails(id.Value);
             //foreach (var item in ViewData["Status"] as List<SelectListItem>)
@@ -223,7 +223,7 @@ namespace web_team3_assignment.Controllers
             //        break;
             //    }
             //}
-            //if the suggestion cannot be found, itll return null and return a message to the index action
+            //if the suggestion cannot be found, return null and return a message to the index action
             if (suggestion == null)
             {
                 TempData["Message"] = "The Suggestion does not exist!";
@@ -236,6 +236,7 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
             SuggestionViewModel suggestionVM = MapToStudentVM(suggestion);
+            //suggestionVM.SelectedStatusItem = GetSuggestionStatus(id.Value);
             return View(suggestionVM);
         }
 
