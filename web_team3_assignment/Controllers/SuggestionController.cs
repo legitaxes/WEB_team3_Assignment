@@ -236,7 +236,12 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
             SuggestionViewModel suggestionVM = MapToStudentVM(suggestion);
-            //suggestionVM.SelectedStatusItem = GetSuggestionStatus(id.Value);
+            //if (GetSuggestionStatus(suggestionVM.Status))
+            //{
+
+            //}
+            //else
+            //{ }
             return View(suggestionVM);
         }
 
@@ -245,7 +250,7 @@ namespace web_team3_assignment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Suggestion suggestion)
         {
-            ViewData["Status"] = GetSuggestionStatus(suggestion.SuggestionId);
+            //ViewData["Status"] = GetSuggestionStatus(suggestion.SuggestionId);
             if (suggestion.Description == null || suggestion.Description == " ")
             {
                 ViewData["Message"] = "Description Field Cannot be Empty!";
@@ -303,25 +308,13 @@ namespace web_team3_assignment.Controllers
         }
 
         //get a selectlistitem for status 
-        private List<SelectListItem> GetSuggestionStatus(int id)
-        {
-            Suggestion suggestion = suggestionContext.GetSuggestionDetails(id);
-            List<SelectListItem> status = new List<SelectListItem>();
-            status.Add(
-                new SelectListItem
-                {
-                    Value = "Y",
-                    Text = "Acknowledged",
-                    Selected = suggestion.Status == 'Y' ? true : false
-                });
-            status.Add(
-                new SelectListItem
-                {
-                    Value = "N",
-                    Text = "Not Acknowledged",
-                    Selected = suggestion.Status == 'N' ? true : false
-                });
-            return status;
-        }
+        //private bool GetSuggestionStatus(string status)
+        //{
+        //    if (status == "Acknowledged")
+        //        return true;
+            
+        //    else
+        //        return false;
+        //}
     }
 }
