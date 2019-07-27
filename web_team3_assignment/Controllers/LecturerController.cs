@@ -18,6 +18,7 @@ namespace web_team3_assignment.Controllers
         private LecturerDAL lecturerContext = new LecturerDAL();
         private SuggestionDAL suggestionContext = new SuggestionDAL();
 
+        //Gets all Lecturer details and display it in a table
         // GET: Lecturer
         public ActionResult Index()
         {
@@ -32,14 +33,7 @@ namespace web_team3_assignment.Controllers
             return View(lecturerList);
         }
 
-        //Done
-        // GET: Lecturer/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        //Done
+        //Create Lecturer Page
         // GET: Lecturer/Create
         public ActionResult Create()
         {
@@ -51,9 +45,7 @@ namespace web_team3_assignment.Controllers
             }
             return View();
         }
-
-        //Done
-
+        //Create Lecturer Page
         // POST: Lecturer/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -63,13 +55,10 @@ namespace web_team3_assignment.Controllers
             var sha1 = new SHA1CryptoServiceProvider();
             var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(lecturer.Password));
             string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
-            Debug.WriteLine(hash);
-            Debug.WriteLine(hashedPassword);
             lecturer.Password = hashedPassword;
-            Debug.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {
-                ViewData["Message"] = "Employee Created Successfully!";
+                ViewData["Message"] = "Lecturer Created Successfully!";
                 lecturer.LecturerId = lecturerContext.Add(lecturer);
                 return View();
             }
@@ -79,6 +68,7 @@ namespace web_team3_assignment.Controllers
             }
         }
 
+        //Change Password Page
         //GET: Lecturer/Change Function
         public ActionResult Change()
         {
@@ -87,15 +77,14 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            //get current lecturer ID through session get string
+            //set a variable from the session string logged in Lecturer's ID
             int id = Convert.ToInt32(HttpContext.Session.GetString("ID"));
             //get all the lecturer details based on the ID
-            //LecturerPassword lecturer = lecturerContext.getPasswordDetails(id);
             LecturerPassword lecturer = new LecturerPassword();
             lecturer.LecturerId = id;
             return View(lecturer);
         }
-
+        //Change Password Page
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Change(LecturerPassword lecturer)
@@ -110,18 +99,19 @@ namespace web_team3_assignment.Controllers
             var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(lecturer.Password));
             string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
 
-            //if the password the user key in DOES NOT match the database password...
+            //if password DOES NOT match the database password...
             if (hashedPassword != currentLecturer.Password)
             {
                 ViewData["Message"] = "Current Password Is Incorrect!";
                 return View(lecturer);
             }
-            Debug.WriteLine(ModelState.IsValid);
+            //else continue what is needed to be done
             if (ModelState.IsValid)
             {
                 //checks whether the password is the same
                 if (lecturer.NewPassword == lecturer.ConfirmPassword)
                 {
+                    //Checks the password whether it contains a digit, hashes the password using SHA-1 and updates the password into the database
                     if (lecturerContext.ChangePassword(lecturer))
                     {
                         ViewData["Message"] = "Password Changed Successfully!";
@@ -140,6 +130,7 @@ namespace web_team3_assignment.Controllers
             return View(lecturer);
         }
 
+        //Edit Lecturer Profile Page
         //GET: Lecturer/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -148,23 +139,27 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            //set a variable from the session string logged in Lecturer's ID
+            int lecturerid = Convert.ToInt32(HttpContext.Session.GetString("ID"));
+
             //check if id is null or if the id matches the currently logged in user
-            if (id == null || Convert.ToInt32(HttpContext.Session.GetString("ID")) != id.Value)
+            if (id == null || lecturerid != id.Value)
             {
                 return RedirectToAction("Index");
             }
             //get the lecturer details and prepare to return it to the edit view
             LecturerEdit lecturer = lecturerContext.EditLecturerDetails(id.Value);
             //check whether lecturer actually exists and whether the ID matches the logged in lecturer ID
-            if (lecturer == null || Convert.ToInt32(HttpContext.Session.GetString("ID")) != lecturer.LecturerId)
+            if (lecturer == null || lecturerid != lecturer.LecturerId)
             {
                 TempData["ErrorMessage"] = "You are not allowed to edit other lecturer's profile!";
                 return RedirectToAction("Index");
             }
-
+            //if everything is ok, return the lecturer object to the view
             return View(lecturer);
         }
 
+        // Edit Lecturer's Profile Page
         // POST: Lecturer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -188,16 +183,21 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+
+            //set a variable from the session string logged in Lecturer's ID
+            int lecturerid = Convert.ToInt32(HttpContext.Session.GetString("ID"));
+
+            //check whether the id is null or not
             if (id == null)
             {
-                TempData["ErrorMessage"] = "You are not allowed to delete other lecturer's profile!";
+                TempData["ErrorMessage"] = "You can only delete your own profile!";
                 return RedirectToAction("Index");
             }
 
             //get all the lecturer details based on the ID
             Lecturer lecturer = lecturerContext.getLecturerDetails(id.Value);
             //check if lecturer object is empty or the lecturerID matches the currently logged in user
-            if (lecturer == null || Convert.ToInt32(HttpContext.Session.GetString("ID")) != id.Value)
+            if (lecturer == null || lecturerid != id.Value)
             {
                 TempData["ErrorMessage"] = "You are not allowed to delete other lecturer's profile!";
                 return RedirectToAction("Index");
@@ -205,7 +205,7 @@ namespace web_team3_assignment.Controllers
 
             //checks whether the mentorID is under another student
             //if its true
-            if (lecturerContext.CheckIsUsed(Convert.ToInt32(HttpContext.Session.GetString("ID"))))
+            if (lecturerContext.CheckIsUsed(lecturerid))
             {
                 TempData["ErrorMessage"] = "You are not allowed to delete your profile! There are still students are under your profile!";
                 return RedirectToAction("Index");
@@ -234,7 +234,7 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-
+            //gets a list of student using GetMenteeDetails method
             List<Student> studentList = lecturerContext.GetMenteeDetails(Convert.ToInt32(HttpContext.Session.GetString("ID")));
             return View(studentList);
         }
