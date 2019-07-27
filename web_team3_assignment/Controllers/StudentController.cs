@@ -28,19 +28,31 @@ namespace web_team3_assignment.Controllers
             }
             if ((HttpContext.Session.GetString("Role") == "Student") || (HttpContext.Session.GetString("Role") == "Lecturer"))
             {
+                //check if the query string is empty, if it is empty, it displays under the student's context
                 if (id == null)
                 {
                     int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
                     Student student = studentContext.GetStudentDetails(studentid);
                     return View(student);
                 }
+                //display under lecturer's context
                 else
                 {
-                    Student Lecturerstudent = studentContext.GetStudentDetails(id.Value);
-                    return View(Lecturerstudent);
+                    Student lecturerStudent = studentContext.GetStudentDetails(id.Value);
+                    //checks whether the student ID exists
+                    if (lecturerStudent == null)
+                    {
+                        TempData["ErrorMessage"] = "Mentee does not exist!";
+                        return RedirectToAction("Mentee", "Lecturer");
+                    }
+                    //checks whether the student's mentor ID matches with the logged in lecturer's ID
+                    if (lecturerStudent.MentorID != Convert.ToInt32(HttpContext.Session.GetString("ID")))
+                    {
+                        TempData["ErrorMessage"] = "You are not allowed to view students that are not your Mentees!";
+                        return RedirectToAction("Mentee", "Lecturer");
+                    }
+                    return View(lecturerStudent);
                 }
-                //Student student = studentContext.GetStudentDetails(studentid);
-                //return View();
             }
             return RedirectToAction("Index", "Home");
         }

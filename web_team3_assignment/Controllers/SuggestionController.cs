@@ -212,17 +212,8 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
 
-           
             //gets the suggestion information based on the URL ID
             Suggestion suggestion = suggestionContext.GetSuggestionDetails(id.Value);
-            //foreach (var item in ViewData["Status"] as List<SelectListItem>)
-            //{
-            //    if (item.Value == suggestion.Status.ToString())
-            //    {
-            //        item.Selected = true;
-            //        break;
-            //    }
-            //}
             //if the suggestion cannot be found, return null and return a message to the index action
             if (suggestion == null)
             {
