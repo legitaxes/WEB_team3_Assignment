@@ -187,7 +187,13 @@ namespace web_team3_assignment.Controllers
         public ActionResult PostSuggestion(Suggestion suggest)
         {
             int lecturerid = Convert.ToInt32(HttpContext.Session.GetString("ID"));
-            ViewData["MenteeList"] = lecturerContext.GetMentees(lecturerid);
+            List<SelectListItem> menteeList = new List<SelectListItem>(lecturerContext.GetMentees(lecturerid));
+            if (menteeList.Count() == 0)
+            {
+                ViewData["Message"] = "You Must Have A Mentee To Post!";
+                return View();
+            }
+            ViewData["MenteeList"] = menteeList;
             suggest.LecturerId = lecturerid;
             suggest.Status = 'N';
             if (ModelState.IsValid)
