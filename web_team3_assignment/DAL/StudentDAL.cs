@@ -62,6 +62,7 @@ namespace web_team3_assignment.DAL
                     StudentID = Convert.ToInt32(row["StudentID"]),
                     Name = row["Name"].ToString(),
                     Course = row["Course"].ToString(),
+                    Photo = row["Photo"].ToString(),
                     Description = row["Description"].ToString(),
                     Achievement = row["Achievement"].ToString(),
                     ExternalLink = row["ExternalLink"].ToString(),

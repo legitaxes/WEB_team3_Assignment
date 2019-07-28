@@ -24,7 +24,7 @@
             <label asp-for="Course"
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="Course" class="form-control" />
+                <select asp-for="Course" asp-items="@ViewData["CourseSelect"] as List<SelectListItem>" class="form-control"> </select>
                 <span asp-validation-for="Course"
                       class="text-danger"></span>
             </div>
@@ -48,7 +48,6 @@
                 <span asp-validation-for="Description"
                       class="text-danger"></span>
             </div>
-
         </div>
 
         <div class="form-group row">
@@ -96,7 +95,7 @@
             <label asp-for="MentorID"
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="MentorID" class="form-control" />
+                <select asp-for="MentorID" asp-items="@ViewData["LecturerSelect"] as List<SelectListItem>" class="form-control"> </select>
                 <span asp-validation-for="MentorID"
                       class="text-danger"></span>
             </div>

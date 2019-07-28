@@ -8,7 +8,7 @@
 <form asp-action="UpdatePhoto" enctype="multipart/form-data">
     <fieldset class="FormContent">
         <legend>Update Photo</legend>
-        <input asp-for="StudentID" type="hidden" readonly class="form-control" />
+        <input asp-for="StudentID" type="hidden" hidden readonly class="form-control" />
 
         <div class="form-group row">
             <label asp-for="Name"
@@ -20,10 +20,10 @@
         </div>
 
         <div class="form-group row">
-            <label asp-for="Course"
+            <label asp-for="Course" hidden readonly
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="Course" readonly
+                <input asp-for="Course" hidden readonly
                        class="text-danger" />
             </div>
         </div>
@@ -48,56 +48,56 @@
         </div>
 
         <div class="form-group row">
-            <label asp-for="Description"
+            <label asp-for="Description" hidden readonly
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="Description" readonly
+                <input asp-for="Description" hidden readonly
                        class="text-danger" />
             </div>
 
         </div>
 
         <div class="form-group row">
-            <label asp-for="Achievement"
+            <label asp-for="Achievement" hidden readonly
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="Achievement" readonly
+                <input asp-for="Achievement" hidden readonly
                        class="text-danger" />
             </div>
         </div>
 
         <div class="form-group row">
-            <label asp-for="ExternalLink"
+            <label asp-for="ExternalLink" hidden readonly
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="ExternalLink" readonly
+                <input asp-for="ExternalLink" hidden readonly
                        class="text-danger" />
             </div>
         </div>
 
         <div class="form-group row">
-            <label asp-for="EmailAddr"
+            <label asp-for="EmailAddr" hidden readonly
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="EmailAddr" readonly
+                <input asp-for="EmailAddr" hidden readonly
                        class="text-danger" />
             </div>
         </div>
 
         <div class="form-group row">
-            <label asp-for="Password"
+            <label asp-for="Password" hidden readonly
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="Password" readonly
+                <input asp-for="Password" hidden readonly
                        class="text-danger" />
             </div>
         </div>
 
         <div class="form-group row">
-            <label asp-for="MentorID"
+            <label asp-for="MentorID" hidden readonly
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="MentorID" readonly
+                <input asp-for="MentorID" hidden readonly
                        class="text-danger" />
             </div>
         </div>
