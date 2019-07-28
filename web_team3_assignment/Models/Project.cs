@@ -34,5 +34,9 @@ namespace web_team3_assignment.Models
         [StringLength(255, ErrorMessage = "URL Cannot Exceed 255 Characters!")]
         [Display(Name = "Project URL")]
         public string ProjectURL { get; set; }
+
+        //[Display(Name = "ProjectMember")]
+        //public List<ProjectMember> ProjectMemberList { get; set; }
+
     }
 }

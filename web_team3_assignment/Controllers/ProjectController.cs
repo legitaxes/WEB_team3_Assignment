@@ -20,31 +20,30 @@ namespace web_team3_assignment.Controllers
 
         // GET: Project
         public ActionResult Index()
-        {
-            // Stop accessing the action if not logged in 
-            // or account not in the "Staff" role
+        {          
             if ((HttpContext.Session.GetString("Role") == null) ||
                 (HttpContext.Session.GetString("Role") != "Student") )
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            //ProjectList = GetAllProject by studentID in Integer 
+            //ProjectList = projectContext method will GetAllProject by studentID in Integer 
             List<Project> ProjectList = projectContext.GetAllProject(HttpContext.Session.GetInt32("StudentID"));
             System.Diagnostics.Debug.WriteLine(HttpContext.Session.GetString("ProjectRole"));
 
-            //projectContext method will getprojectmemeberdetails by studentID in integer
+
+            //projectMemberList = projectContext method will getprojectmemberdetails by studentID in integer
             List<ProjectMember> projectMemberList = projectContext.GetProjectMemberDetails(HttpContext.Session.GetInt32("StudentID"));
 
-            //To be able to view projectmemberList on _ViewProject.cshtml
+            //Use ViewData to get ProjectList to view projectmemberList on _ViewProject.cshtml
             ViewData["ProjectList"] = projectMemberList;
+
             return View(ProjectList);
         }
 
         //GET: Project/Create
         public ActionResult CreateProject()
         {
-            // Stop accessing the action if not logged in // or account not in the "Student" role
             if ((HttpContext.Session.GetString("Role") == null) ||
                 (HttpContext.Session.GetString("Role") != "Student"))
             {
@@ -90,14 +89,9 @@ namespace web_team3_assignment.Controllers
             }
         }
 
-
-
-
         // GET: Lecturer/Edit/5
         public ActionResult EditProject(int? id)
         {
-            // Stop accessing the action if not logged in
-            // or account not in the "Student" role
             if ((HttpContext.Session.GetString("Role") == null) ||
             (HttpContext.Session.GetString("Role") != "Student"))
             {
@@ -110,13 +104,14 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index");
             }
 
-            //ViewData["ProjectMemberList"] = GetAllProjectMembers();
             Project project = projectContext.GetProjectDetails(id.Value);
+            //project.ProjectMemberList = projectContext.GetAllProjectMM(id.Value);
             if (project == null)
             {
                 //Return to listing page, not allowed to edit
                 return RedirectToAction("Index");
             }
+
             return View(project);
         }
 
@@ -142,83 +137,25 @@ namespace web_team3_assignment.Controllers
         // GET: Project/Details/5
         public ActionResult DetailProject(int id)
         {
-
-            // Stop accessing the action if not logged in 
-            // or account not in the "Student" role
             if ((HttpContext.Session.GetString("Role") == null) ||
                 (HttpContext.Session.GetString("Role") != "Student"))
             {
                 return RedirectToAction("Index", "Home");
             }
 
-
-            //string Role = "";
-
-            //Get ProjectMember's StudentId in Integer
-
-            //int projectStudentID;
-
-            //Project will be equal to the details, get from GetProjectDetails's ID in projectContext  
-            //e.g. ID = 1, it will get from projectContext and list ProjectDetails ID 1
-
+            //use projectContext method to getprojectdetails by parameter id
             Project project = projectContext.GetProjectDetails(id);
 
             ProjectViewModel projectVM = MapToProjectVM(project);
 
-            //List<ProjectMember> projectMemberList = projectMemberContext.GetAllProjectMember();
 
-
-            ////foreach projectmember in projectmemberlist
-            //foreach (ProjectMember projectMember in projectMemberList)
-            //{
-
-            //    //foreach student studentlist in studentContext, get all the students.
-            //    foreach (Student StudentList in studentContext.GetAllStudent())
-            //    {
-
-            //        //if projectmember's projectID is equal to project's projectID
-            //        if (projectMember.ProjectId == project.ProjectId)
-            //        {
-
-            //            //if studentlist's studentID is equal to projectmember's studentID
-            //            if (StudentList.StudentID == projectMember.StudentId)
-            //            {
-            //                //if projectmember's role is equal to Leader
-            //                if (projectMember.Role == "Leader")
-            //                {
-
-            //                    //Role will be equal to projectMember's Role 
-            //                    Role = projectMember.Role;
-
-            //                    //projectStudentID will be equal to projectmember's studentID
-            //                    projectStudentID = projectMember.StudentId;
-
-            //                    //View projectmember that is "Leader" and list the student's name in studentList
-            //                    ViewData["ProjectMember"] = "Leader" + StudentList.Name;
-            //                    break;
-
-            //                }
-            //            }
-            //        }
-            //    }           
-            //}
             return View(projectVM);
         }
-
-           
-
-            
-
+                     
         public ProjectViewModel MapToProjectVM(Project project)
         {
             string Role = "";
-            if (project != null)
-
-            ////Get Project's ProjectId in Interger
-            //int ProjectId;
-
-            ////if project's projectID is more than 0, GetAllProjectMembers from projectMemberContext and list projectmember in projectMemberList
-            //if (project.ProjectId > 0)
+            if (project != null)      
             {
                 List<ProjectMember> projectMemberList = projectMemberContext.GetAllProjectMembers();
 
@@ -230,9 +167,6 @@ namespace web_team3_assignment.Controllers
                     {
                         //Role will be equal to projectMember's role
                         Role = projectMember.Role;
-
-                        //ProjectID will be equal to projectMember's projectID
-                        //ProjectId = projectMember.ProjectId;
 
                         //Exit the foreach loop once the role is found
                         break;
@@ -247,7 +181,6 @@ namespace web_team3_assignment.Controllers
                 ProjectURL = project.ProjectURL,
                 Description = project.Description,
                 projectphoto = project.ProjectPoster + ".jpg"
-                
             };
             return projectVM;
         }
@@ -287,9 +220,7 @@ namespace web_team3_assignment.Controllers
 
 
         public ActionResult UploadPhoto(int id)
-        {
-            // Stop accessing the action if not logged in
-            // or account not in the "Student" role
+        {       
             if ((HttpContext.Session.GetString("Role") == null) ||
             (HttpContext.Session.GetString("Role") != "Student"))
             {
@@ -313,7 +244,7 @@ namespace web_team3_assignment.Controllers
                     string fileExt = Path.GetExtension(
                      projectVM.posterToUpload.FileName);
 
-                    // Rename the uploaded file with the projectposter’s name.
+                    // Rename the uploaded file with the projectposter’s filename.
                     string uploadedFile = projectVM.ProjectId + fileExt;
 
                     // Get the complete path to the images folder in server
@@ -330,6 +261,8 @@ namespace web_team3_assignment.Controllers
                     projectVM.projectphoto = uploadedFile;
                     ViewData["Message"] = "File uploaded successfully.";
                 }
+
+                //catch exception that is thrown in when an I/O error occurs
                 catch (IOException)
                 {
                     //File IO error, could be due to access rights denied
@@ -343,5 +276,6 @@ namespace web_team3_assignment.Controllers
             return View(projectVM);
         }
 
+       
     }
 }

@@ -34,43 +34,32 @@ namespace web_team3_assignment.DAL
         }
 
 
-        //studentId can either have interger value or null value
-        public List<Project> GetAllProject(int? studentId)
+        // Get All Projects
+        public List<Project> GetAllProject(int? studentId) // int "?" studentId can either have interger value or null value
         {
-            //Instantiate a SqlCommand object, supply it with a
-            //SELECT SQL statement that operates against the database,
-            //and the connection object for connecting to the database.
-            //Join project table and projectmember table where studentID is the selected studentID
+            // Join project table and projectmember table where studentID is the selected studentID
             SqlCommand cmd = new SqlCommand(
             "SELECT * FROM Project p" +
             " INNER JOIN ProjectMember pm ON p.ProjectID = pm.ProjectID" +
             " WHERE StudentID = @selectedstudentID" , conn);
 
-            //Assign values to parameters
+            // Assign values to parameters
             cmd.Parameters.AddWithValue("@selectedstudentID", studentId);
-
-            //Instantiate a DataAdapter object and pass the
-            //SqlCommand object created as parameter.
+            
+            // Create database connection and run query
             SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-            //Create a DataSet object to contain records get from database
             DataSet result = new DataSet();
-
-            //Open a database connection
             conn.Open();
-
-            //Use DataAdapter, which execute the SELECT SQL through its
-            //SqlCommand object to fetch data to a table "ProjectDetails"
-            //in DataSet "result".
             da.Fill(result, "ProjectDetails");
-
-            //Close the database connection
             conn.Close();
 
-            //Transferring rows of data in DataSet’s table to “Project” objects
+            // Create Project List
             List<Project> projectList = new List<Project>();
+
+            // Iterate through queried projectList
             foreach (DataRow row in result.Tables["ProjectDetails"].Rows)
             {
+                // Add project to Project List
                 projectList.Add(
                 new Project
                 {
@@ -78,15 +67,50 @@ namespace web_team3_assignment.DAL
                     Title = row["Title"].ToString(),
                     Description = row["Description"].ToString(),
                     ProjectPoster = row["ProjectPoster"].ToString(),
-                    ProjectURL = row["ProjectURL"].ToString()
+                    ProjectURL = row["ProjectURL"].ToString()            
                 }
                 );
             }
+
+            // Return ProjectList
             return projectList;
         }
 
+        // Get All Project Members of a Project
+        //public List<ProjectMember> GetAllProjectMM(int? projectId)
+        //{
+        //    // Create query
+        //    SqlCommand cmd = new SqlCommand
+        //    ("SELECT * FROM Project p INNER JOIN ProjectMember pm ON p.ProjectID = pm.ProjectID WHERE p.ProjectID = @projectId", conn);
+        //    cmd.Parameters.AddWithValue("@projectId", projectId);
+
+        //    // Create database connection and run query
+        //    SqlDataAdapter da = new SqlDataAdapter(cmd);
+        //    DataSet projectMemberResult = new DataSet();
+        //    conn.Open();
+        //    da.Fill(projectMemberResult, "ProjectMemberDetails");
+        //    conn.Close();
+
+        //    // Create ProjectMemberList
+        //    List<ProjectMember> projectMemberList = new List<ProjectMember>();
+
+        //    // Iterate through ProjectMemberList
+        //    foreach (DataRow row in projectMemberResult.Tables["ProjectMemberDetails"].Rows)
+        //    {
+        //        projectMemberList.Add(new ProjectMember
+        //        {
+        //            ProjectId = Convert.ToInt32(row["ProjectID"]),
+        //            StudentId = Convert.ToInt32(row["StudentID"]),
+        //            Role = row["Role"].ToString()
+        //        });
+        //    }
+
+        //    // Return ProjectMemberList
+        //    return projectMemberList;
+        //}
 
         //Add Project
+
         public int Add(Project project)
         {
             SqlCommand cmd = new SqlCommand
@@ -114,7 +138,7 @@ namespace web_team3_assignment.DAL
             return project.ProjectId;
         }
 
-        //add project as leader in projectMember
+        //Add project as leader in projectMember
         public int AddProjectAsLeader(ProjectMember projectMember)
         {
             SqlCommand cmd = new SqlCommand
@@ -144,12 +168,18 @@ namespace web_team3_assignment.DAL
         {
             SqlCommand cmd = new SqlCommand("Select * from projectmember where StudentID = @selectedStudentID", conn);
             cmd.Parameters.AddWithValue("@selectedStudentID", studentId);
+
+            // Create database connection and run query
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet result = new DataSet();
             conn.Open();
             da.Fill(result, "ProjectMemberDetails");
             conn.Close();
+
+            // Create ProjectMember List
             List<ProjectMember> projectMemberList = new List<ProjectMember>();
+
+            // Iterate through queried projectList
             foreach (DataRow row in result.Tables["ProjectMemberDetails"].Rows)
             {
                 //  Add new created projectmember into projectMemberList
@@ -164,36 +194,19 @@ namespace web_team3_assignment.DAL
             return projectMemberList;
         }
 
-        //Get project details
+        //Get project details that projectID is integer
         public Project GetProjectDetails(int projectId)
         {
-
-            //Instantiate a SqlCommand object, supply it with a SELECT SQL
-            //statement which retrieves all attributes of a project record.
             SqlCommand cmd = new SqlCommand
             ("SELECT * FROM Project WHERE ProjectID = @selectedProjectID", conn);
 
-
-            //Define the parameter used in SQL statement, value for the
-            //parameter is retrieved from the method parameter “projectId”.
             cmd.Parameters.AddWithValue("@selectedProjectID", projectId);
 
-
-            //Instantiate a DataAdapter object, pass the SqlCommand
-            //object “cmd” as parameter.
+            // Create database connection and run query
             SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-
-            //Create a DataSet object “projectresult"
             DataSet projectresult = new DataSet();
-
-            //Open a database connection.
             conn.Open();
-
-            //Use DataAdapter to fetch data to a table "ProjectDetails" in DataSet. 
             da.Fill(projectresult, "ProjectDetails");
-
-            //Close the database connection 
             conn.Close();
 
             //Create a new variable called project to store datas
@@ -234,8 +247,6 @@ namespace web_team3_assignment.DAL
         // Return number of row updated
         public int Update(Project project)
         {
-            //Instantiate a SqlCommand object, supply it with SQL statement UPDATE
-            //and the connection object for connecting to the database.
             SqlCommand cmd = new SqlCommand
             ("UPDATE Project SET Title=@Title, Description=@Description, ProjectURL=@ProjectURL, ProjectPoster=@ProjectPoster WHERE ProjectID = @selectedProjectID ", conn);
 
@@ -245,14 +256,12 @@ namespace web_team3_assignment.DAL
             cmd.Parameters.AddWithValue("@Description", project.Description);
             cmd.Parameters.AddWithValue("@ProjectURL", project.ProjectURL);
             cmd.Parameters.AddWithValue("@ProjectPoster", project.ProjectPoster);
-
-            //Open a database connection.
+     
             conn.Open();
 
             //ExecuteNonQuery is used for UPDATE and DELETE
             int count = cmd.ExecuteNonQuery();
-
-            //Close the database connection.
+  
             conn.Close();
 
             return count;
@@ -282,6 +291,11 @@ namespace web_team3_assignment.DAL
         //}
 
         //Check if project Title exists
+
+
+
+       
+            //Validate if project title exists
         public bool IsProjectTitleExists(string Title)
         {
             SqlCommand cmd = new SqlCommand
