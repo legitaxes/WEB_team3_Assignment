@@ -24,7 +24,7 @@
                     //variable projectmemberlist = "ProjectList" that get from ProjectController as List ... Projectmember.
                     var projectmemberList = ViewData["ProjectList"] as List<web_team3_assignment.Models.ProjectMember>;
 
-                    //if projectrole is a Leader, colour of the row will be in green colour
+                    //if projectrole is a Leader, colour of the row will be in yellow colour
                     if (projectmemberList[i].Role == "Leader")
                     {
                         selectedRow = "class='table-warning'";
