@@ -36,23 +36,17 @@ namespace web_team3_assignment.DAL
             // all branch records, and a connection object to open
             //the database
             SqlCommand cmd = new SqlCommand("SELECT * FROM SkillSet", conn);
-
             //instantiate a dataAdapter object "da" and pass the Sqlcommand object cmd as parameter
             SqlDataAdapter da = new SqlDataAdapter(cmd);
-
             //create a DataSet object "result" to contain the records 
             //retrieved from database 
             DataSet result = new DataSet();
-
             //open database connection
             conn.Open();
-
             //Use DataAdapter "da" to fill up a DataTable "Skillset" in DataSet "result"
             da.Fill(result, "SkillSetDetails");
-
             //Close database connection
             conn.Close();
-
             //Transferring rows of data in DataTable to "Skillset" objects 
             List<StudentSkillSetViewModel> Skillsetlist = new List<StudentSkillSetViewModel>();
             foreach (DataRow row in result.Tables["SkillSetDetails"].Rows)
@@ -67,7 +61,35 @@ namespace web_team3_assignment.DAL
             return Skillsetlist;
         }
 
-        public bool CheckStudentSkillSets(int skillsetID, int StudentID)
+        public List<StudentSkillSetViewModel> GetStudentsSkillSet(int StudentID)
+        {
+            SqlCommand cmd = new SqlCommand
+          ("Select SkillSetName From SkillSet s INNER JOIN StudentSkillSet sk ON s.SkillSetID = sk.SkillSetID WHERE sk.StudentID = @selectedStudentID", conn);
+            cmd.Parameters.AddWithValue("@selectedStudentID", StudentID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            //create a DataSet object "result" to contain the records 
+            //retrieved from database 
+            DataSet result = new DataSet();
+            //open database connection
+            conn.Open();
+            //Use DataAdapter "da" to fill up a DataTable "Skillset" in DataSet "result"
+            da.Fill(result, "SkillSetDetails");
+            //Close database connection
+            conn.Close();
+            //Transferring rows of data in DataTable to "Skillset" objects 
+            List<StudentSkillSetViewModel> Skillsetlist = new List<StudentSkillSetViewModel>();
+            foreach (DataRow row in result.Tables["SkillSetDetails"].Rows)
+            {
+                Skillsetlist.Add(new StudentSkillSetViewModel
+                {
+                    SkillSetName = row["SkillSetName"].ToString()
+                }
+              );
+            }
+            return Skillsetlist;
+        }
+
+            public bool CheckStudentSkillSets(int skillsetID, int StudentID)
         {
             SqlCommand cmd = new SqlCommand
             ("SELECT SkillsetID FROM StudentSkillset WHERE StudentID = @selectedStudentID AND SkillsetID=@selectedSkillSetID", conn);
@@ -112,6 +134,6 @@ namespace web_team3_assignment.DAL
             //Close database connection.
             conn.Close();
             return rowCount;        
-        }
+        }        
     }
 }

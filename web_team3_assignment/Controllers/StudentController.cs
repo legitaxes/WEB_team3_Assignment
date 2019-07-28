@@ -16,6 +16,7 @@ namespace web_team3_assignment.Controllers
         private StudentDAL studentContext = new StudentDAL();
         private LecturerDAL lecturerContext = new LecturerDAL();
         private SkillSetDAL skillsetContext = new SkillSetDAL();
+        private SuggestionDAL suggestionContext = new SuggestionDAL();
         private StudentSkillSetDAL studentskillsetContext = new StudentSkillSetDAL();
 
         public IActionResult Index(int? id)
@@ -35,14 +36,27 @@ namespace web_team3_assignment.Controllers
                 if (id == null)
                 {
                     int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
-                    Student student = studentContext.GetStudentDetails(studentid);
+                    //Student student = studentContext.GetStudentDetails(studentid);
+                    StudentViewModel studentList = new StudentViewModel();
+                    List<Student> allstudentList = studentContext.GetAllStudent() ;
+                    foreach (Student student in allstudentList)
+                    {
+                        if (student.StudentID == studentid)
+                        {
+                            StudentViewModel StudentVM = MapToLecturer(student);
+                            studentList = StudentVM;
+                        }
+                    }
+                    List<StudentSkillSetViewModel> allskillsetList = studentskillsetContext.GetAllSkillSets();
+                    allskillsetList = studentskillsetContext.GetStudentsSkillSet(studentid);
+                    ViewBag.list = allskillsetList;
                     System.Diagnostics.Debug.WriteLine(HttpContext.Session.GetString("ID"));
-                    if (student == null)
+                    if (studentList == null)
                     {
                         TempData["ErrorMessage"] = "Mentee does not exist!";
                         return RedirectToAction("Mentee", "Lecturer");
                     }
-                    return View(student);
+                    return View(studentList);
                 }
                 //display under lecturer's context
                 else
@@ -113,7 +127,6 @@ namespace web_team3_assignment.Controllers
         public StudentViewModel MapToLecturer(Student student)
         {
             string lecturername = "";
-            List<SkillSet> skillsetList = skillsetContext.GetAllSkillSet();
             List<Lecturer> lecturerList = lecturerContext.GetAllLecturer();
             foreach (Lecturer lecturer in lecturerList)
             {
@@ -122,7 +135,6 @@ namespace web_team3_assignment.Controllers
                     lecturername = lecturer.Name;
                 }
             }
-
             StudentViewModel studentVM = new StudentViewModel
             {
                 StudentID = student.StudentID,

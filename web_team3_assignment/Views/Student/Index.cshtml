@@ -1,4 +1,4 @@
-﻿@model web_team3_assignment.Models.Student
+﻿@model web_team3_assignment.Models.StudentViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -8,6 +8,9 @@
 @if (ViewData["ErrorMessage"] != null)
 {
     <h3 class="text-danger" style="text-align:center;">@ViewData["ErrorMessage"]</h3>
+}
+@{
+    var getlist = ViewBag.list as IEnumerable<web_team3_assignment.Models.StudentSkillSetViewModel>;
 }
 <hr />
 <fieldset class="FormContent">
@@ -67,6 +70,23 @@
             @Html.Display("ExternalLink")
         </div>
     </div>
+    <div class="table-responsive">
+        <table id="viewStaff" class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Skill Set Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var skillset in getlist)
+                {
+                    <tr>
+                        <td>@skillset.SkillSetName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
     <div class="form-group row">
         <label asp-for="EmailAddr"
@@ -76,7 +96,7 @@
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row" readonly hidden>
         <label asp-for="Password"
                class="col-sm-3 col-form-label"></label>
         <div class="col-sm-9 form-control-plaintext">
@@ -84,7 +104,7 @@
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row" readonly hidden>
         <label asp-for="MentorID"
                class="col-sm-3 col-form-label"></label>
         <div class="col-sm-9 form-control-plaintext">
@@ -92,6 +112,13 @@
         </div>
     </div>
 
+    <div class="form-group row">
+        <label asp-for="LecturerName"
+               class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-9 form-control-plaintext">
+            @Html.Display("LecturerName")
+        </div>
+    </div>
 
     <div class="form-group row">
         <div class="col-sm-9 offset-sm-3">
