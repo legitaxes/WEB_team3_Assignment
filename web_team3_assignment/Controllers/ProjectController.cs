@@ -17,28 +17,37 @@ namespace web_team3_assignment.Controllers
         private ProjectDAL projectContext = new ProjectDAL();
         private ProjectMemberDAL projectMemberContext = new ProjectMemberDAL();
         private StudentDAL studentContext = new StudentDAL();
+        private HomeDAL homeContext = new HomeDAL();
 
         // GET: Project
         public ActionResult Index()
-        {          
+        {
             if ((HttpContext.Session.GetString("Role") == null) ||
-                (HttpContext.Session.GetString("Role") != "Student") )
+                (HttpContext.Session.GetString("Role") != "Student"))
             {
                 return RedirectToAction("Index", "Home");
             }
+            ProjectMember projectmember = homeContext.getProjectID(HttpContext.Session.GetInt32("StudentID").Value);
+            if (projectmember.Role != null || projectmember.ProjectId != 0)
+            {
+                HttpContext.Session.SetInt32("ProjectID", projectmember.ProjectId);
+                HttpContext.Session.SetString("ProjectRole", projectmember.Role);
+                List<Project> ProjectList = projectContext.GetAllProject(HttpContext.Session.GetInt32("StudentID"));
+                System.Diagnostics.Debug.WriteLine(HttpContext.Session.GetString("ProjectRole"));
 
-            //ProjectList = projectContext method will GetAllProject by studentID in Integer 
-            List<Project> ProjectList = projectContext.GetAllProject(HttpContext.Session.GetInt32("StudentID"));
-            System.Diagnostics.Debug.WriteLine(HttpContext.Session.GetString("ProjectRole"));
 
+                //projectMemberList = projectContext method will getprojectmemberdetails by studentID in integer
+                List<ProjectMember> projectMemberList = projectContext.GetProjectMemberDetails(HttpContext.Session.GetInt32("StudentID"));
 
-            //projectMemberList = projectContext method will getprojectmemberdetails by studentID in integer
-            List<ProjectMember> projectMemberList = projectContext.GetProjectMemberDetails(HttpContext.Session.GetInt32("StudentID"));
+                //Use ViewData to get ProjectList to view projectmemberList on _ViewProject.cshtml
+                ViewData["ProjectList"] = projectMemberList;
 
-            //Use ViewData to get ProjectList to view projectmemberList on _ViewProject.cshtml
-            ViewData["ProjectList"] = projectMemberList;
-
-            return View(ProjectList);
+                return View(ProjectList);
+            }
+            else
+            {
+                return View();
+            }
         }
 
         //GET: Project/Create

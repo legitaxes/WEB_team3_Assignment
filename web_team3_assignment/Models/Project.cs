@@ -37,6 +37,5 @@ namespace web_team3_assignment.Models
 
         //[Display(Name = "ProjectMember")]
         //public List<ProjectMember> ProjectMemberList { get; set; }
-
     }
 }
