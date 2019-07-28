@@ -204,7 +204,7 @@ namespace web_team3_assignment.DAL
             }
         }
 
-        public int UpdateProfile(Student student)
+        public int UpdateProfile(StudentViewModel student)
         {
             SqlCommand cmd = new SqlCommand("UPDATE Student SET Name=@name, Course=@course, Photo=@photo, Description=@description, Achievement=@achievement, ExternalLink=@externallink, EmailAddr=@emailaddr, Password=@password, MentorID=mentorID" +
                 " WHERE StudentID=@selectedStudentID", conn);

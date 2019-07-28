@@ -1,4 +1,4 @@
-﻿@model web_team3_assignment.Models.Student
+﻿@model web_team3_assignment.Models.StudentViewModel
 
 @{
     ViewData["Title"] = "Update";
@@ -7,7 +7,7 @@
 <img class="img-fluid" src="~/images/updatestudent.png" style="display:block; margin:auto;" />
 <form asp-action="Update">
     <fieldset class="FormContent">
-        <legend>Input Profile Details Below</legend>
+        <legend>Update your portfolio</legend>
         <input asp-for="StudentID" type="hidden" readonly class="form-control" />
 
         <div class="form-group row">
@@ -30,11 +30,12 @@
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row" hidden>
             <label asp-for="Photo"
-                   class="col-sm-3 col-form-label"></label>
+                   class="col-sm-3 col-form-label">
+            </label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="Photo" class="form-control" readonly/>
+                <input asp-for="Photo" class="form-control" readonly />
                 <span asp-validation-for="Photo"
                       class="text-danger"></span>
             </div>
@@ -102,10 +103,21 @@
         </div>
 
         <div class="form-group row">
+            <label asp-for="LecturerName"
+                   class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 col-md-5">
+                <input asp-for="LecturerName" class="form-control" />
+                <span asp-validation-for="LecturerName"
+                      class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
             <div class="col-sm-9 offset-sm-3">
                 <input type="submit" value="Save" class="btn btn-primary mb1 bg-teal" />
             </div>
         </div>
+
         <div>
             <a class="btn btn-secondary" role="button" asp-action="Index" id="CreateStudentReturn">Back</a>
             @if (ViewData["Message"] != null)
@@ -115,3 +127,11 @@
         </div>
     </fieldset>
 </form>
+
+@*<div>
+    <label><b>Photo</b></label>
+    <div class="col-sm-9 col-md-5">
+        @{ string imageFileName = Model.Photo; }
+        <img src="~/images/@imageFileName" style="width:50px" />
+    </div>
+</div>*@

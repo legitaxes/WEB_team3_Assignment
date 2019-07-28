@@ -28,6 +28,7 @@ namespace web_team3_assignment.Models
         public DateTime DateCreated { get; set; }
 
         [Display(Name = "Lecturer Name")]
+        [StringLength(50, ErrorMessage = "Password Length Cannot Exceed 50 Characters!")]
         public string LecturerName { get; set; }
     }
 }

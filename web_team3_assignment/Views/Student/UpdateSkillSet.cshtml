@@ -1,0 +1,38 @@
+﻿@model web_team3_assignment.Models.CheckBoxList
+
+@{
+    ViewData["Title"] = "Update your SkillSet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Update your Skill sets</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateSkillSet">
+            <div>
+                <label class="control-label">Skill Sets available</label>
+                <br />
+                @{
+                    for (int i = 0; i < Model.CheckBoxOptions.Count; i++)
+                    {
+                        @Html.CheckBoxFor(m => Model.CheckBoxOptions[i].IsChecked)
+                        @Model.CheckBoxOptions[i].SkillSetName
+                        @Html.HiddenFor(m => Model.CheckBoxOptions[i].SkillSetID)
+                        @Html.HiddenFor(m => Model.CheckBoxOptions[i].SkillSetName)
+                        <br />
+                    }
+                }
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-default mb1 bg-teal" />
+            </div>
+            <span style="color:red;">@ViewData["Message"]</span>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="StudentMain">Back to main page</a>
+</div>
+

@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +14,10 @@ namespace web_team3_assignment.Controllers
     public class StudentController : Controller
     {
         private StudentDAL studentContext = new StudentDAL();
-        
+        private LecturerDAL lecturerContext = new LecturerDAL();
+        private SkillSetDAL skillsetContext = new SkillSetDAL();
+        private StudentSkillSetDAL studentskillsetContext = new StudentSkillSetDAL();
+
         public IActionResult Index(int? id)
         {
             // Stop accessing the action if not logged in 
@@ -56,14 +59,17 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
+            //System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
             Student student = studentContext.GetStudentDetails(studentid);
-            return View(student);
+            List<StudentViewModel> studentVMList = new List<StudentViewModel>();
+            StudentViewModel studentVM = MapToLecturer(student);
+            studentVMList.Add(studentVM);
+            return View(studentVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(Student student)
+        public ActionResult Update(StudentViewModel student)
         {
             if (ModelState.IsValid)
             {
@@ -72,6 +78,36 @@ namespace web_team3_assignment.Controllers
                 return View("Update");
             }
             return View("Update");
+        }
+
+        public StudentViewModel MapToLecturer(Student student)
+        {
+            string lecturername = "";
+            List<SkillSet> skillsetList = skillsetContext.GetAllSkillSet();
+            List<Lecturer> lecturerList = lecturerContext.GetAllLecturer();
+            foreach (Lecturer lecturer in lecturerList)
+            {
+                if (lecturer.LecturerId == student.MentorID)
+                {
+                    lecturername = lecturer.Name;
+                }
+            }
+
+            StudentViewModel studentVM = new StudentViewModel
+            {
+                StudentID = student.StudentID,
+                Name = student.Name,
+                Course = student.Course,
+                Photo = student.Photo,
+                Description = student.Description,
+                Achievement = student.Achievement,
+                ExternalLink = student.ExternalLink,
+                EmailAddr = student.EmailAddr,
+                Password = student.Password,
+                MentorID = student.MentorID,
+                LecturerName = lecturername,
+            };
+            return studentVM;
         }
 
         public ActionResult UpdatePhoto()
@@ -122,6 +158,74 @@ namespace web_team3_assignment.Controllers
                 }
             }
             return View(student);
+        }
+
+        public ActionResult UpdateSkillSet()
+        {
+            // Stop accessing the action if not logged in 
+            // or account not in the "Staff" role in
+            if ((HttpContext.Session.GetString("Role") == null) || (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
+            CheckBoxList options = new CheckBoxList();
+            List<StudentSkillSetViewModel> allskillsetList = studentskillsetContext.GetAllSkillSets();
+            List<StudentSkillSetViewModel> studentskillsetList = new List<StudentSkillSetViewModel>();
+            foreach (StudentSkillSetViewModel skillset in allskillsetList)
+            {
+                bool check = studentskillsetContext.CheckStudentSkillSets(skillset.SkillSetID, studentid);
+                studentskillsetList.Add(
+                new StudentSkillSetViewModel
+                {
+                    StudentID = studentid,
+                    SkillSetID = Convert.ToInt32(skillset.SkillSetID),
+                    SkillSetName = skillset.SkillSetName,
+                    IsChecked = check
+                });
+            }
+            options.CheckBoxOptions = studentskillsetList;
+            return View(options);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateSkillset(CheckBoxList checkboxes)
+        {
+            // Stop accessing the action if not logged in
+            // or account not in the "Staff" role
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            CheckBoxList options = new CheckBoxList();
+            List<StudentSkillSetViewModel> skillsetList = studentskillsetContext.GetAllSkillSets();
+            int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
+            studentskillsetContext.DeleteSkillSets(studentid);
+            foreach (var skillset in checkboxes.CheckBoxOptions)
+            {
+                if (skillset.IsChecked == true)
+                {
+                    studentskillsetContext.UpdateSkillSets(studentid, skillset.SkillSetID);
+                }
+            }
+            List<StudentSkillSetViewModel> SkillSets = new List<StudentSkillSetViewModel>();
+            foreach (StudentSkillSetViewModel skillset in skillsetList)
+            {
+                bool student = studentskillsetContext.CheckStudentSkillSets(skillset.SkillSetID, studentid);
+                SkillSets.Add(
+                new StudentSkillSetViewModel
+                {
+                    StudentID = studentid,
+                    SkillSetID = Convert.ToInt32(skillset.SkillSetID),
+                    SkillSetName = skillset.SkillSetName,
+                    IsChecked = student
+                });
+            }
+            options.CheckBoxOptions = SkillSets;
+            ViewData["Message"] = "Skillsets successfully updated";
+            return View(options);
         }
     }
 }
