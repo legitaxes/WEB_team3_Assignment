@@ -67,10 +67,6 @@ namespace web_team3_assignment.Controllers
             string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
             Student student = homeContext.studentLogin(studentLoginID, hashedPassword);
 
-            // HomeController's homeContext will getProjectID through HomeDAL by student's studentID
-            ProjectMember projectmember = homeContext.getProjectID(student.StudentID);
-
-
             if (student.EmailAddr == studentLoginID && student.Password == hashedPassword)
             {
                 HttpContext.Session.SetString("LoginName", student.Name);
@@ -78,8 +74,7 @@ namespace web_team3_assignment.Controllers
                 HttpContext.Session.SetInt32("StudentsMentorID", student.MentorID);
                 HttpContext.Session.SetString("Role", "Student");
                 HttpContext.Session.SetString("currentTime", DateTime.Now.ToString());
-                HttpContext.Session.SetInt32("ProjectID", projectmember.ProjectId);
-                HttpContext.Session.SetString("ProjectRole", projectmember.Role);
+
                 // Redirect user to the "StudentMain" view through an action
                 return RedirectToAction("StudentMain");
             }
@@ -119,7 +114,15 @@ namespace web_team3_assignment.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View();
+            // HomeController's homeContext will getProjectID through HomeDAL by student's studentID
+            ProjectMember projectmember = homeContext.getProjectID(HttpContext.Session.GetInt32("StudentID").Value);
+            if (projectmember.Role != null || projectmember.ProjectId != 0)
+            {
+                HttpContext.Session.SetInt32("ProjectID", projectmember.ProjectId);
+                HttpContext.Session.SetString("ProjectRole", projectmember.Role);
+                return View(projectmember);
+            }
+            return View(projectmember);
         }
 
         public ActionResult SkillSetMain()

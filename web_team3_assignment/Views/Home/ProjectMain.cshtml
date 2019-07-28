@@ -1,4 +1,4 @@
-﻿
+﻿@model web_team3_assignment.Models.ProjectMember
 @{
     ViewData["Title"] = "Project MainPage";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,10 +8,16 @@
 <img class="img-fluid" src="~/images/projectportfolio.png" style="display:block; margin:auto;" />
 
 <br />
-
-<a href="~/Project/Index">
-    <img class="img-fluid" src="~/images/viewprojects.gif" style="display:block; margin:auto;" />
-</a>
+@if (Model.Role == null || Model.ProjectId == 0)
+{
+    <h3 style="color:red; font-weight: bold; text-align:center;">Try Adding A New Project!</h3>
+}
+else
+{
+    <a href="~/Project/Index">
+        <img class="img-fluid" src="~/images/viewprojects.gif" style="display:block; margin:auto;" />
+    </a>
+}
 <br />
 <a href="~/Project/CreateProject">
     <img class="img-fluid" src="~/images/createproject.gif" style="display:block; margin:auto;" />
