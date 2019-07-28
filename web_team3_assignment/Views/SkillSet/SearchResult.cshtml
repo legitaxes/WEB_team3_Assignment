@@ -1,0 +1,47 @@
+﻿@model IEnumerable<web_team3_assignment.Models.SkillSet>
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.ToList().Count > 0)
+{
+    <div class="table-responsive">
+        <table id="viewStaff" class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>StudentID</th>
+                    <th>StudentName</th>
+                    <th>External Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>@item.StudentID.ToString()</td>
+                        <td>@item.Name</td>
+                        <td>@item.ExternalLink</td>
+
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+else
+{
+    <span style="color:red">No record found!</span>
+}
+
+<div>
+    <a asp-action="Index" class="btn btn-primary mb1 black bg-gray">Back to SkillSet List</a>
+</div>
+
+
+

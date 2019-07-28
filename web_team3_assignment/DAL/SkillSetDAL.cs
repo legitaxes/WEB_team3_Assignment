@@ -60,13 +60,12 @@ namespace web_team3_assignment.DAL
             //Open a database connection
             conn.Open();
             //Use DataAdapter, which execute the SELECT SQL through its
-            //SqlCommand object to fetch data to a table "StaffDetails"
-            //in DataSet "result".
+            //SqlCommand object to fetch data to a table
             da.Fill(result, "SkillsetDetails");
             //Close the database connection
             conn.Close();
 
-            //Transferring rows of data in DataSet’s table to “Staff” objects
+            //Transferring rows of data in DataSet’s table to “SkillSet” objects
             List<SkillSet> SkillSetList = new List<SkillSet>();
             foreach (DataRow row in result.Tables["SkillsetDetails"].Rows)
             {
@@ -119,8 +118,7 @@ namespace web_team3_assignment.DAL
             //statement which retrieves all attributes of a staff record.
             SqlCommand cmd = new SqlCommand
             ("SELECT * FROM SKillset WHERE SKillsetID = @selectedSkillsetID", conn);
-            //Define the parameter used in SQL statement, value for the
-            //parameter is retrieved from the method parameter “staffId”.
+
             cmd.Parameters.AddWithValue("@selectedSkillsetID", SkillSetId);
             //Instantiate a DataAdapter object, pass the SqlCommand
             //object “cmd” as parameter.
@@ -129,7 +127,7 @@ namespace web_team3_assignment.DAL
             DataSet result = new DataSet();
             //Open a database connection.
             conn.Open();
-            //Use DataAdapter to fetch data to a table "StaffDetails" in DataSet.
+            //Use DataAdapter to fetch data to a table.
             da.Fill(result, "SkillsetDetails");
             //Close the database connection
             conn.Close();
@@ -137,7 +135,7 @@ namespace web_team3_assignment.DAL
             if (result.Tables["SkillsetDetails"].Rows.Count > 0)
             {
                 skillset.SkillSetId = SkillSetId;
-                // Fill staff object with values from the DataSet
+                // Fill SkillSet object with values from the DataSet
                 DataTable table = result.Tables["SkillsetDetails"];
                 if (!DBNull.Value.Equals(table.Rows[0]["SkillSetName"]))
                     skillset.SkillSetName = table.Rows[0]["SkillSetName"].ToString();
@@ -162,9 +160,46 @@ namespace web_team3_assignment.DAL
             daSkillSet.Fill(result, "SkillSetDetails");
             conn.Close();
             if (result.Tables["SkillSetDetails"].Rows.Count > 0)
-                return true; //The email exists for another staff
+                return true; //The SkillSet exists 
             else
-                return false; // The email address given does not exist
+                return false; // The SkillSet given does not exist
+        }
+
+        public List<SkillSet> SearchSkill(int skillz)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT Student.StudentID, Student.Name, Student.ExternalLink " +
+                "FROM Student " +
+                "INNER JOIN StudentSkillSet ON Student.StudentID = StudentSkillSet.StudentID " +
+                "INNER JOIN SkillSet ON SkillSet.SkillSetID = StudentSkillSet.SkillSetID " +
+                "WHERE SkillSet.SkillSetID = @selectedSID", conn);
+            //cmd.Parameters.AddWithValue("@selectedSName", skillz.SkillSetName) ;
+            cmd.Parameters.AddWithValue("@selectedSID", skillz);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+
+            conn.Open();
+            da.Fill(result, "SkillSearch");
+            //int count = cmd.ExecuteNonQuery();
+            conn.Close();
+
+            //return count;
+
+            List<SkillSet> skillresult = new List<SkillSet>();
+            foreach (DataRow row in result.Tables["SkillSearch"].Rows)
+            {
+                skillresult.Add(
+                    new SkillSet
+                    {
+                        StudentID = Convert.ToInt32(row["StudentID"]),
+                        Name = row["Name"].ToString(),
+                        ExternalLink = row["ExternalLink"].ToString(),
+
+                    });
+
+            }
+            return skillresult;
+
         }
     }
 }

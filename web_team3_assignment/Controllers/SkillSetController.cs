@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using web_team3_assignment.DAL;
 using web_team3_assignment.Models;
+using System.Data.Common;
 
 
 namespace web_team3_assignment.Controllers
@@ -24,6 +25,18 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index", "Home");
             }
             List<SkillSet> SkillSetList = SkillSetContext.GetAllSkillSet();
+
+            List<SelectListItem> items = new List<SelectListItem>();
+            foreach (var item in SkillSetList)
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = item.SkillSetName,
+                    Value = item.SkillSetId.ToString(),
+
+                });
+            }
+            ViewData["ListItems"] = items;
             return View(SkillSetList);
         }
 
@@ -98,9 +111,9 @@ namespace web_team3_assignment.Controllers
                 SkillSetContext.Delete(skillSet.SkillSetId);
                 return RedirectToAction("Index", "SkillSet");
             }
-            catch
+            catch (DbException e)
             {
-                ViewData["Message"] = "There are already students using this SkillSet!";
+                ViewData["Message"] = "There are currently students using this SkillSet!";
                 return View();
             }
         }
@@ -143,6 +156,27 @@ namespace web_team3_assignment.Controllers
             }
 
             return View(skillSet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SearchSkill(int seaskill)
+        {
+
+            List<SkillSet> skillresult = SkillSetContext.SearchSkill(seaskill);
+            List<SkillSet> resultDisplay = new List<SkillSet>();
+            foreach (var item in skillresult)
+            {
+                resultDisplay.Add(new SkillSet
+                {
+                    StudentID = item.StudentID,
+                    Name = item.Name,
+                    ExternalLink = item.ExternalLink,
+                });
+            }
+            ViewData["ListItems"] = resultDisplay; //states that view result are the results displayed
+
+            return View("SearchResult", skillresult); 
         }
 
         //// POST: Lecturer/Delete/5

@@ -3,6 +3,20 @@
 
 @if (Model.ToList().Count > 0)
 {
+    <fieldset class="FormContent">
+        <div class="form-group row">
+            <div class="col-sm-9 col-md-5">
+                @using (Html.BeginForm("SearchSkill", "SkillSet", FormMethod.Post)) //searchskill(ControllerActionResult), skillset is the controller
+                {              
+                    @Html.DropDownList("seaskill", ViewData["ListItems"] as List<SelectListItem>, new { @id = "skillitem" }) //listitems is linked to controller to populate
+
+
+                    <input class="newskill" type="submit" value="Search for student(s) with selected SkillSet" />
+                }
+            </div>
+        </div>
+    </fieldset>
+
     <div class="table-responsive">
         <table id="viewStaff" class="table table-striped table-bordered">
             <thead class="thead-dark">
@@ -20,11 +34,11 @@
                         <td>@item.SkillSetId.ToString()</td>
                         <td>@item.SkillSetName</td>
                         @*<td>
-                            @{ string imageFileName = item.SkillSetName; }
-                            <img src="~/images/@imageFileName"
-                                 style="width:50px" />
-                        </td>*@
-                        
+                                @{ string imageFileName = item.SkillSetName; }
+                                <img src="~/images/@imageFileName"
+                                     style="width:50px" />
+                            </td>*@
+
                         <td>
                             <a asp-action="SkillSetDelete" asp-controller="SkillSet"
                                asp-route-id="@item.SkillSetId">Delete</a>|

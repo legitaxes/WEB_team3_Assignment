@@ -19,5 +19,15 @@ namespace web_team3_assignment.Models
         [ValidateSkillSetExists(ErrorMessage = "SkillSet already exists!")]
         [Display(Name = "SkillSet Name")]
         public string SkillSetName { get; set; }
+
+        [Display(Name = "Student ID")]
+        public int StudentID { get; set; }
+       
+        [StringLength(50, ErrorMessage = "Name Cannot Exceed 50 Characters!")]
+        public string Name { get; set; }
+
+        [Display(Name = "External Link")]
+        [StringLength(255, ErrorMessage = "Name Cannot Exceed 255 Characters!")]
+        public string ExternalLink { get; set; }
     }
 }
