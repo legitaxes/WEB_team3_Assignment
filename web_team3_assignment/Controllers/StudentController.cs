@@ -33,25 +33,43 @@ namespace web_team3_assignment.Controllers
                 {
                     int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
                     Student student = studentContext.GetStudentDetails(studentid);
+                    System.Diagnostics.Debug.WriteLine(HttpContext.Session.GetString("ID"));
+                    if (student == null)
+                    {
+                        TempData["ErrorMessage"] = "Mentee does not exist!";
+                        return RedirectToAction("Mentee", "Lecturer");
+                    }
                     return View(student);
                 }
                 //display under lecturer's context
                 else
                 {
-                    Student lecturerStudent = studentContext.GetStudentDetails(id.Value);
-                    //checks whether the student ID exists
-                    if (lecturerStudent == null)
+                    System.Diagnostics.Debug.WriteLine(HttpContext.Session.GetString("ID") == null);
+                    //checks FOR STUDENTS WHO ARE MESSING AROUND WITH THE QUERY STRING, this checks whether the logged in lecturerID is NULL
+                    if (HttpContext.Session.GetString("ID") != null)
                     {
-                        TempData["ErrorMessage"] = "Mentee does not exist!";
-                        return RedirectToAction("Mentee", "Lecturer");
+                        Student lecturerStudent = studentContext.GetStudentDetails(id.Value);
+                        //checks whether the student ID exists
+                        if (lecturerStudent == null)
+                        {
+                            TempData["ErrorMessage"] = "You are not allowed to view students that are not your Mentees!";
+                            return RedirectToAction("Mentee", "Lecturer");
+                        }
+                        //checks whether the student's mentor ID matches with the logged in lecturer's ID
+                        if (lecturerStudent.MentorID != Convert.ToInt32(HttpContext.Session.GetString("ID")))
+                        {
+                            TempData["ErrorMessage"] = "You are not allowed to view students that are not your Mentees!";
+                            return RedirectToAction("Mentee", "Lecturer");
+                        }
+                        return View(lecturerStudent);
                     }
-                    //checks whether the student's mentor ID matches with the logged in lecturer's ID
-                    if (lecturerStudent.MentorID != Convert.ToInt32(HttpContext.Session.GetString("ID")))
+                    else
                     {
-                        TempData["ErrorMessage"] = "You are not allowed to view students that are not your Mentees!";
-                        return RedirectToAction("Mentee", "Lecturer");
+                        int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
+                        Student student = studentContext.GetStudentDetails(studentid);
+                        ViewData["ErrorMessage"] = "You Are Not Allowed To View Other Student's Details!";
+                        return View(student);
                     }
-                    return View(lecturerStudent);
                 }
             }
             return RedirectToAction("Index", "Home");
