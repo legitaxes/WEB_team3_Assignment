@@ -92,8 +92,7 @@
         </div>
 
         <div class="form-group row">
-            <label asp-for="MentorID"
-                   class="col-sm-3 col-form-label"></label>
+            <label class="col-sm-3 col-form-label">Mentor Name</label>
             <div class="col-sm-9 col-md-5">
                 <select asp-for="MentorID" asp-items="@ViewData["LecturerSelect"] as List<SelectListItem>" class="form-control"> </select>
                 <span asp-validation-for="MentorID"

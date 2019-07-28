@@ -86,7 +86,7 @@ namespace web_team3_assignment.Controllers
                     int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
                     //Student student = studentContext.GetStudentDetails(studentid);
                     StudentViewModel studentList = new StudentViewModel();
-                    List<Student> allstudentList = studentContext.GetAllStudent() ;
+                    List<Student> allstudentList = studentContext.GetAllStudent();
                     foreach (Student student in allstudentList)
                     {
                         if (student.StudentID == studentid)
@@ -111,30 +111,35 @@ namespace web_team3_assignment.Controllers
                 {
                     System.Diagnostics.Debug.WriteLine(HttpContext.Session.GetString("ID") == null);
                     //checks FOR STUDENTS WHO ARE MESSING AROUND WITH THE QUERY STRING, this checks whether the logged in lecturerID is NULL
-                    if (HttpContext.Session.GetString("ID") != null)
+                    Student lecturerStudent = studentContext.GetStudentDetails(id.Value);
+                    //checks whether the student ID exists
+                    if (lecturerStudent == null)
                     {
-                        Student lecturerStudent = studentContext.GetStudentDetails(id.Value);
-                        //checks whether the student ID exists
-                        if (lecturerStudent == null)
-                        {
-                            TempData["ErrorMessage"] = "You are not allowed to view students that are not your Mentees!";
-                            return RedirectToAction("Mentee", "Lecturer");
-                        }
-                        //checks whether the student's mentor ID matches with the logged in lecturer's ID
-                        if (lecturerStudent.MentorID != Convert.ToInt32(HttpContext.Session.GetString("ID")))
-                        {
-                            TempData["ErrorMessage"] = "You are not allowed to view students that are not your Mentees!";
-                            return RedirectToAction("Mentee", "Lecturer");
-                        }
-                        return View(lecturerStudent);
+                        TempData["ErrorMessage"] = "Student Does Not Exist!";
+                        return RedirectToAction("Mentee", "Lecturer");
                     }
-                    else
-                    {
-                        int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
-                        Student student = studentContext.GetStudentDetails(studentid);
-                        ViewData["ErrorMessage"] = "You Are Not Allowed To View Other Student's Details!";
-                        return View(student);
-                    }
+                    StudentViewModel StudentVM = MapToLecturer(lecturerStudent);
+                    List<StudentSkillSetViewModel> allskillsetList = studentskillsetContext.GetAllSkillSets();
+                    allskillsetList = studentskillsetContext.GetStudentsSkillSet(StudentVM.StudentID);
+                    ViewBag.list = allskillsetList;
+                    //checks whether the student's mentor ID matches with the logged in lecturer's ID
+                    //if (lecturerStudent.MentorID != Convert.ToInt32(HttpContext.Session.GetString("ID")))
+                    //{
+                    //    TempData["ErrorMessage"] = "You are not allowed to view students that are not your Mentees!";
+                    //    return RedirectToAction("Mentee", "Lecturer");
+                    //}
+                    return View(StudentVM);
+                    //else
+                    //{
+                    //    int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
+                    //    Student student = studentContext.GetStudentDetails(studentid);
+                    //    StudentViewModel StudentVM = MapToLecturer(student);
+                    //    List<StudentSkillSetViewModel> allskillsetList = studentskillsetContext.GetAllSkillSets();
+                    //    allskillsetList = studentskillsetContext.GetStudentsSkillSet(studentid);
+                    //    ViewBag.list = allskillsetList;
+                    //    ViewData["ErrorMessage"] = "You Are Not Allowed To View Other Student's Details!";
+                    //    return View(StudentVM);
+                    //}
                 }
             }
             return RedirectToAction("Index", "Home");
@@ -173,6 +178,8 @@ namespace web_team3_assignment.Controllers
                 ViewData["Message"] = "Student profile updated Successfully!";
                 return View("Update");
             }
+            ViewData["CourseSelect"] = GetCourse();
+            ViewData["LecturerSelect"] = GetLecturer();
             return View("Update");
         }
 
