@@ -210,6 +210,7 @@ namespace web_team3_assignment.DAL
             //use for loop to loop thru each character in the string, checks through the whole string for numbers
             for (int i = 0; i < counter; i++)
             {
+                //if the current iteration contains a number, execute the query which updates the password
                 if (Char.IsDigit(lecturer.NewPassword, i))
                 {
                     //hashed the new password

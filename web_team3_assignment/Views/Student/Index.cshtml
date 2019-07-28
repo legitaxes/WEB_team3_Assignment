@@ -4,8 +4,11 @@
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <img class="img-fluid" src="~/images/yourportfolio.png" style="display:block; margin:auto;" />
+@if (ViewData["ErrorMessage"] != null)
+{
+    <h3 class="text-danger" style="text-align:center;">@ViewData["ErrorMessage"]</h3>
+}
 <hr />
 <fieldset class="FormContent">
     <div class="form-group row">

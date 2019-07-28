@@ -36,9 +36,22 @@
         <div class="form-group row">
             <label asp-for="Status" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 form-control-plaintext">
-                <select asp-for="Status"
-                        asp-items="@ViewData["Status"] as List<SelectListItem>"
-                        class="form-control"></select>
+                <select asp-for="Status" id="status" class="col-sm-9 form-control">
+                    <option value='Y' id="acknowledged">Acknowledged</option>
+                    <option value='N' id="nacknowledged">Not Acknowledged</option>
+                </select>                
+                @if (Model.Status == "Acknowledged")
+                {
+                    <script>
+                        document.getElementById("acknowledged").selected = "true";
+                    </script>
+                }
+                else
+                {
+                    <script>
+                        document.getElementById("nacknowledged").selected = "false";
+                    </script>
+                }
             </div>
         </div>
         <div class="form-group row">
