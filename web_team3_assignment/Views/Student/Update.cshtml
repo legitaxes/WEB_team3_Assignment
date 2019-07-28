@@ -29,12 +29,12 @@
             </div>
         </div>
 
-        <div class="form-group row" hidden>
+        <div class="form-group row" hidden readonly>
             <label asp-for="Photo"
                    class="col-sm-3 col-form-label">
             </label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="Photo" class="form-control" readonly />
+                <input asp-for="Photo" class="form-control"  />
                 <span asp-validation-for="Photo"
                       class="text-danger"></span>
             </div>
@@ -71,17 +71,17 @@
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row" hidden readonly>
             <label asp-for="EmailAddr"
-                   class="col-sm-3 col-form-label"></label>
+                   class="col-sm-3 col-form-label" ></label>
             <div class="col-sm-9 col-md-5">
-                <input asp-for="EmailAddr" class="form-control" />
+                <input asp-for="EmailAddr" class="form-control"/>
                 <span asp-validation-for="EmailAddr"
                       class="text-danger"></span>
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row" hidden readonly>
             <label asp-for="Password"
                    class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9 col-md-5">
@@ -107,7 +107,7 @@
         </div>
 
         <div>
-            <a class="btn btn-secondary" role="button" asp-action="Index" id="CreateStudentReturn">Back</a>
+            <a class="btn btn-primary mb1 black bg-gray" href="~/Home/StudentMain">Back</a>
             @if (ViewData["Message"] != null)
             {
                 <span class="text-danger">@ViewData["Message"]</span>

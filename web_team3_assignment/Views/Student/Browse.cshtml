@@ -1,0 +1,17 @@
+﻿@model IEnumerable<web_team3_assignment.Models.Student>
+
+@{
+    ViewData["Title"] = "Browse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Browse your peer's portfolios</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <p class="text-danger" style="text-align:center; font-size:25px;"><b>@TempData["ErrorMessage"]</b></p>
+    //TempData["ErrorMessage"] = "";
+}
+
+<!-- Add a partial view to display a list of staff records in a tabular format. -->
+<partial name="~/Views/Student/_ViewStudents.cshtml" model="@Model" />

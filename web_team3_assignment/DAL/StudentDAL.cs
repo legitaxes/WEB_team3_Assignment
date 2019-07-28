@@ -8,6 +8,8 @@ using System.Data;
 using System.Data.SqlClient;
 using web_team3_assignment.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace web_team3_assignment.DAL
 {
@@ -30,7 +32,7 @@ namespace web_team3_assignment.DAL
             //Connection String read.
             conn = new SqlConnection(strConn);
         }
-
+        //Gets list of all students
         public List<Student> GetAllStudent()
         {
             //Instantiate a SqlCommand object, supply it with a
@@ -74,10 +76,9 @@ namespace web_team3_assignment.DAL
             }
             return studentList;
         }
-
+        //Adds a student into database
         public int Add(Student student)
         {
-            //sql command to add (i hope it works :pray:)
             SqlCommand cmd = new SqlCommand
                 ("INSERT INTO Student (Name, Course, Photo, Description, Achievement, ExternalLink, EmailAddr, Password, MentorID)" +
                 " OUTPUT INSERTED.StudentID" +
@@ -111,7 +112,7 @@ namespace web_team3_assignment.DAL
             conn.Close();
             return student.StudentID;
         }
-
+        //Check if the email exists in the database
         public bool IsEmailExist(string email, int id)
         {
             SqlCommand cmd = new SqlCommand
@@ -277,5 +278,57 @@ namespace web_team3_assignment.DAL
             return count;
         }
 
+        public StudentUpdatePassword GetPassword(int studentID)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Student WHERE StudentID = @selectedstudentID", conn);
+            cmd.Parameters.AddWithValue("@selectedstudentID", studentID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet result = new DataSet();
+            conn.Open();
+            da.Fill(result, "StudentPassword");
+            conn.Close();
+            StudentUpdatePassword student = new StudentUpdatePassword();
+            if (result.Tables["StudentPassword"].Rows.Count > 0)
+            {
+                student.StudentID = studentID;
+                DataTable table = result.Tables["StudentPassword"];
+                if (!DBNull.Value.Equals(table.Rows[0]["Password"]))
+                    student.Password = table.Rows[0]["Password"].ToString();
+                return student;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        //Returns true if password is changed successfully without errors
+        public bool ChangePassword(StudentUpdatePassword student)
+        {
+            //Numeric validation
+            //Nount the number of character in the password
+            int counter = student.NewPassword.Length;
+            //Use for loop to loop thru each character in the string, checks through the whole string for numbers
+            for (int i = 0; i < counter; i++)
+            {
+                //If the current iteration contains a number, execute the query which updates the password
+                if (Char.IsDigit(student.NewPassword, i))
+                {
+                    //hashed the new password
+                    var sha1 = new SHA1CryptoServiceProvider();
+                    var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(student.NewPassword));
+                    string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
+                    SqlCommand cmd = new SqlCommand("UPDATE Student SET Password=@newPassword" +
+                    " WHERE StudentID = @selectedstudentID", conn);
+                    cmd.Parameters.AddWithValue("@newPassword", hashedPassword);
+                    cmd.Parameters.AddWithValue("@selectedstudentID", student.StudentID);
+                    conn.Open();
+                    int count = cmd.ExecuteNonQuery();
+                    conn.Close();
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

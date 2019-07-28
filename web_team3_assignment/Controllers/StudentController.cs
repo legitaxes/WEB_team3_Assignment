@@ -1,6 +1,8 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +20,7 @@ namespace web_team3_assignment.Controllers
         private SkillSetDAL skillsetContext = new SkillSetDAL();
         private SuggestionDAL suggestionContext = new SuggestionDAL();
         private StudentSkillSetDAL studentskillsetContext = new StudentSkillSetDAL();
-        //UPDATE COURSE
+        //Retrieves list of courses
         private List<SelectListItem> GetCourse()
         {
             List<SelectListItem> Course = new List<SelectListItem>
@@ -39,11 +41,10 @@ namespace web_team3_assignment.Controllers
                     Text = "Financial Infomatics"
                 }
             };
-
             return Course;
         }
 
-        //UPDATE COURSE
+        //Retrieves list of lecturers
         private List<SelectListItem> GetLecturer()
         {
             List<SelectListItem> Lecturer = new List<SelectListItem>
@@ -67,6 +68,57 @@ namespace web_team3_assignment.Controllers
             return Lecturer;
         }
 
+        //Gets all Student details and display it in a table
+        // GET: Student
+        public async Task<IActionResult> Browse(string searchString)
+        {
+            // Stop accessing the action if not logged in 
+            // or account not in the "Student" role
+            if ((HttpContext.Session.GetString("Role") == null) ||
+                (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewData["CurrentFilter"] = searchString;
+            List<Student> studentList = studentContext.GetAllStudent();
+            var students = from s in studentList
+                           select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s => s.Name.Contains(searchString));
+                return View(students.ToList());
+            }
+            else
+            {
+                return View(studentList);
+            }
+        }
+
+        public ActionResult ViewPeer(int id)
+        {
+            //View peer Profile Page
+            //GET: Student/ViewPeer/id
+            if ((HttpContext.Session.GetString("Role") == null) ||
+                (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            StudentViewModel studentList = new StudentViewModel();
+            List<Student> allstudentList = studentContext.GetAllStudent();
+            foreach (Student student in allstudentList)
+            {
+                if (student.StudentID == id)
+                {
+                    StudentViewModel StudentVM = MapToLecturer(student);
+                    studentList = StudentVM;
+                }
+            }
+            List<StudentSkillSetViewModel> allskillsetList = studentskillsetContext.GetAllSkillSets();
+            allskillsetList = studentskillsetContext.GetStudentsSkillSet(id);
+            ViewBag.List = allskillsetList;
+            //if everything is ok, return the lecturer object to the view
+            return View(studentList);
+        }
         public IActionResult Index(int? id)
         {
             // Stop accessing the action if not logged in 
@@ -144,13 +196,12 @@ namespace web_team3_assignment.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-
+        //Updating student portfolio page
         public ActionResult Update(int id)
         {
             int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
             // Stop accessing the action if not logged in
-            // or account not in the "Staff" role
-
+            // or account not in the "Student" role
             if ((HttpContext.Session.GetString("Role") == null) ||
             (HttpContext.Session.GetString("Role") != "Student"))
             {
@@ -165,7 +216,7 @@ namespace web_team3_assignment.Controllers
             //studentVMList.Add(studentVM);
             return View(student);
         }
-
+        //Button on updating student portfolio page
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Update(Student student)
@@ -210,11 +261,11 @@ namespace web_team3_assignment.Controllers
             };
             return studentVM;
         }
-
+        //Uploading student profile photo
         public ActionResult UpdatePhoto()
         {
             // Stop accessing the action if not logged in 
-            // or account not in the "Staff" role in
+            // or account not in the "Student" role in
             if ((HttpContext.Session.GetString("Role") == null) || (HttpContext.Session.GetString("Role") != "Student"))
             {
                 return RedirectToAction("Index", "Home");
@@ -223,7 +274,7 @@ namespace web_team3_assignment.Controllers
             Student student = studentContext.GetStudentDetails(studentid);
             return View(student);
         }
-
+        //Button on updating student profile photo
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdatePhoto(Student student)
@@ -260,11 +311,11 @@ namespace web_team3_assignment.Controllers
             }
             return View(student);
         }
-
+        //Updating skill set page
         public ActionResult UpdateSkillSet()
         {
             // Stop accessing the action if not logged in 
-            // or account not in the "Staff" role in
+            // or account not in the "Student" role in
             if ((HttpContext.Session.GetString("Role") == null) || (HttpContext.Session.GetString("Role") != "Student"))
             {
                 return RedirectToAction("Index", "Home");
@@ -288,13 +339,13 @@ namespace web_team3_assignment.Controllers
             options.CheckBoxOptions = studentskillsetList;
             return View(options);
         }
-
+        //Updating student skill set page button
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UpdateSkillset(CheckBoxList checkboxes)
         {
             // Stop accessing the action if not logged in
-            // or account not in the "Staff" role
+            // or account not in the "Student" role
             if ((HttpContext.Session.GetString("Role") == null) ||
             (HttpContext.Session.GetString("Role") != "Student"))
             {
@@ -327,6 +378,69 @@ namespace web_team3_assignment.Controllers
             options.CheckBoxOptions = SkillSets;
             ViewData["Message"] = "Skillsets successfully updated";
             return View(options);
+        }
+        //Change Password Page
+        //GET: Student/UpdatePassword Function
+        public ActionResult UpdatePassword()
+        {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+               (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            //set a variable from the session string logged in Student's ID
+            int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
+            //get all the student's details based on the ID
+            StudentUpdatePassword student = new StudentUpdatePassword
+            {
+                StudentID = studentid
+            };
+            return View(student);
+        }
+        //Update Password button
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdatePassword(StudentUpdatePassword student)
+        {
+            if (student.Password == null)
+            {
+                return View(student);
+            }
+            //Get password details for currently logged in Student
+            StudentUpdatePassword currentStudent = studentContext.GetPassword(Convert.ToInt32(HttpContext.Session.GetInt32("StudentID")));
+            var sha1 = new SHA1CryptoServiceProvider();
+            var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(student.Password));
+            string hashedPassword = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
+
+            //if password DOES NOT match the database password...
+            if (hashedPassword != currentStudent.Password)
+            {
+                ViewData["Message"] = "Current Password Is Incorrect!";
+                return View(student);
+            }
+            //else continue what is needed to be done
+            if (ModelState.IsValid)
+            {
+                //checks whether the password is the same
+                if (student.NewPassword == student.ConfirmPassword)
+                {
+                    //Checks the password whether it contains a digit, hashes the password using SHA-1 and updates the password into the database
+                    if (studentContext.ChangePassword(student))
+                    {
+                        ViewData["Message"] = "Password Changed Successfully!";
+                        return View(student);
+                    }
+                }
+                //if password does not match
+                else
+                {
+                    ViewData["Message"] = "Password Does Not Match!";
+                    return View(student);
+                }
+            }
+            //if password field is empty OR does not match the required model from Lecturer.cs, return to view with error message
+            ViewData["Message"] = "Password Field Did Not Meet Requirements!";
+            return View(student);
         }
     }
 }

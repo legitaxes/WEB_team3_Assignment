@@ -1,0 +1,63 @@
+﻿@model IEnumerable<web_team3_assignment.Models.Student>
+<form asp-action="Browse" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Browse">Back to Full List</a>
+        </p>
+    </div>
+</form>
+@if (Model.ToList().Count > 0)
+{
+    <div class="table-responsive">
+        <table id="viewStaff" class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Course</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    string selectedRow = "";
+                    string View = "color: #990000; cursor: default; font-weight: bold;";
+                    if (Convert.ToInt32(Context.Session.GetInt32("StudentID")) == item.StudentID)
+                    {
+                        selectedRow = "class='table-primary'";
+                        View = "color: green; font-weight: bold;";
+                    }
+                <tr @Html.Raw(selectedRow)>
+                    @if (item.StudentID != Convert.ToInt32(Context.Session.GetInt32("StudentID")))
+                    {
+                        <td>@item.StudentID.ToString()</td>
+                        <td>@item.Name</td>
+                        <td>@item.Course</td>
+                        <td>
+                            <a asp-action="Viewpeer" asp-controller="Student"
+                               asp-route-id="@item.StudentID" style="@Html.Raw(View)">Browse Student</a>
+                        </td>
+                    }
+
+                    else
+                    {
+                        <td>@item.StudentID.ToString()</td>
+                        <td>@item.Name</td>
+                        <td>@item.Course</td>
+                        <td>
+                            <a href="Index">View your portfolio</a>
+                        </td>
+                    }
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <span style="color:red">No students found!</span>
+}

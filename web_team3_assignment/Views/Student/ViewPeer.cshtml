@@ -1,18 +1,14 @@
 ﻿@model web_team3_assignment.Models.StudentViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "ViewPeer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<img class="img-fluid" src="~/images/yourportfolio.png" style="display:block; margin:auto;" />
-@if (ViewData["ErrorMessage"] != null)
-{
-    <h3 class="text-danger" style="text-align:center;">@ViewData["ErrorMessage"]</h3>
-}
 @{
-    var getlist = ViewBag.list as IEnumerable<web_team3_assignment.Models.StudentSkillSetViewModel>;
+    var getlist = ViewBag.List as IEnumerable<web_team3_assignment.Models.StudentSkillSetViewModel>;
 }
-<hr />
+<h2>Your peer's portfolio</h2>
+
 <fieldset class="FormContent">
     <div class="form-group row">
         <label asp-for="StudentID"
