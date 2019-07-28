@@ -25,8 +25,6 @@ namespace web_team3_assignment.Models
         [StringLength(255, ErrorMessage = "File name Cannot Exceed 255 Characters!")]
         public string Photo { get; set; }
 
-        public IFormFile FileToUpload { get; set; }
-
         [Display(Name = "Description")]
         [StringLength(3000, ErrorMessage = "Name Cannot Exceed 3000 Characters!")]
         public string Description { get; set; }

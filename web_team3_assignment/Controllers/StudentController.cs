@@ -271,13 +271,13 @@ namespace web_team3_assignment.Controllers
                 return RedirectToAction("Index", "Home");
             }
             int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
-            Student student = studentContext.GetStudentDetails(studentid);
-            return View(student);
+            StudentPhoto studentPhoto = studentContext.GetPhotoDetails(studentid);
+            return View(studentPhoto);
         }
         //Button on updating student profile photo
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdatePhoto(Student student)
+        public async Task<IActionResult> UpdatePhoto(StudentPhoto student)
         {
             if (student.FileToUpload != null && student.FileToUpload.Length > 0)
             {

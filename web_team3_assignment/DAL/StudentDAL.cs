@@ -130,8 +130,42 @@ namespace web_team3_assignment.DAL
             else
                 return false; // The email address given does not exist
         }
+        public StudentPhoto GetPhotoDetails(int studentID)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT Name, Photo FROM Student WHERE StudentID = @selectedStudentID", conn);
+            cmd.Parameters.AddWithValue("@selectedStudentID", studentID);
+            //object “cmd” as parameter.
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
 
-        //Get student details
+
+            //Create a DataSet object “result"
+            DataSet studentresult = new DataSet();
+
+            //Open a database connection.
+            conn.Open();
+
+            //Use DataAdapter to fetch data to a table "StaffDetails" in DataSet. 
+            da.Fill(studentresult, "StudentDetails");
+
+            //Close the database connection 
+            conn.Close();
+            StudentPhoto studentPhoto = new StudentPhoto();
+            if (studentresult.Tables["StudentDetails"].Rows.Count > 0)
+            {
+                studentPhoto.StudentID = studentID;
+                DataTable table = studentresult.Tables["StudentDetails"];
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Name"]))
+                    studentPhoto.Name = table.Rows[0]["Name"].ToString();
+
+                if (!DBNull.Value.Equals(table.Rows[0]["Photo"]))
+                    studentPhoto.Photo = table.Rows[0]["Photo"].ToString();
+                return studentPhoto;
+            }
+            else 
+                return null;
+        }
+            //Get student details
         public Student GetStudentDetails(int studentID)
         {
             //Instantiate a SqlCommand object, supply it with a SELECT SQL
@@ -242,32 +276,16 @@ namespace web_team3_assignment.DAL
             return count;
         }
 
-        public int UpdatePhoto(Student student)
+        public int UpdatePhoto(StudentPhoto student)
         {
-            SqlCommand cmd = new SqlCommand("UPDATE Student SET Name=@name, Course=@course, Photo=@photo, Description=@description, Achievement=@achievement, ExternalLink=@externallink, EmailAddr=@emailaddr, Password=@password, MentorID=mentorID" +
+            SqlCommand cmd = new SqlCommand("UPDATE Student SET Name=@name, Photo=@photo" +
                 " WHERE StudentID=@selectedStudentID", conn);
 
             cmd.Parameters.AddWithValue("@name", student.Name);
-            cmd.Parameters.AddWithValue("@course", student.Course);
             if (student.Photo != null)
                 cmd.Parameters.AddWithValue("@photo", student.Photo);
             else
                 cmd.Parameters.AddWithValue("@photo", DBNull.Value);
-            if (student.Description != null)
-                cmd.Parameters.AddWithValue("@description", student.Description);
-            else
-                cmd.Parameters.AddWithValue("@description", DBNull.Value);
-            if (student.Achievement != null)
-                cmd.Parameters.AddWithValue("@achievement", student.Achievement);
-            else
-                cmd.Parameters.AddWithValue("@achievement", DBNull.Value);
-            if (student.ExternalLink != null)
-                cmd.Parameters.AddWithValue("@externallink", student.ExternalLink);
-            else
-                cmd.Parameters.AddWithValue("@achievement", DBNull.Value);
-            cmd.Parameters.AddWithValue("@emailaddr", student.EmailAddr);
-            cmd.Parameters.AddWithValue("@password", student.Password);
-            cmd.Parameters.AddWithValue("@mentorID", student.MentorID);
             cmd.Parameters.AddWithValue("@selectedStudentID", student.StudentID);
             conn.Open();
 
