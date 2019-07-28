@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using web_team3_assignment.DAL;
 using web_team3_assignment.Models;
+using System.Diagnostics;
 
 namespace web_team3_assignment.Controllers
 {
@@ -72,24 +74,6 @@ namespace web_team3_assignment.Controllers
                 return null;
         }
 
-        // GET: Suggestion
-        public ActionResult StudentSuggestion()
-        {
-            if ((HttpContext.Session.GetString("Role") == null) ||
-            (HttpContext.Session.GetString("Role") != "Student"))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            List<StudentSuggestionViewModel> studentsuggestionVMList = new List<StudentSuggestionViewModel>();
-            List<Suggestion> suggestionList = suggestionContext.GetSuggestionPostedByStudentsMentor(Convert.ToInt32(HttpContext.Session.GetInt32("StudentID")));
-            foreach (Suggestion suggestion in suggestionList)
-            {
-                StudentSuggestionViewModel suggestionVM = MapToLecturerVM(suggestion);
-                studentsuggestionVMList.Add(suggestionVM);
-            }
-            return View(studentsuggestionVMList);
-        }
-
         public StudentSuggestionViewModel MapToLecturerVM(Suggestion suggestion)
         {
             if (suggestion != null)
@@ -124,10 +108,29 @@ namespace web_team3_assignment.Controllers
                     DateCreated = suggestion.DateCreated,
                     LecturerName = lecturerName
                 };
-               return studentVM;
+                return studentVM;
             }
             else
                 return null;
+        }
+
+        // GET: Suggestion
+        public ActionResult StudentSuggestion()
+        {
+            if ((HttpContext.Session.GetString("Role") == null) ||
+            (HttpContext.Session.GetString("Role") != "Student"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
+            List<StudentSuggestionViewModel> studentsuggestionVMList = new List<StudentSuggestionViewModel>();
+            List<Suggestion> suggestionList = suggestionContext.GetSuggestionPostedByStudentsMentor(Convert.ToInt32(HttpContext.Session.GetInt32("StudentID")));
+            foreach (Suggestion suggestion in suggestionList)
+            {
+                StudentSuggestionViewModel suggestionVM = MapToLecturerVM(suggestion);
+                studentsuggestionVMList.Add(suggestionVM);
+            }
+            return View(studentsuggestionVMList);
         }
 
         // GET: Suggestion/Acknowledge/5
@@ -142,12 +145,15 @@ namespace web_team3_assignment.Controllers
             if (id == null)
             {
                 return RedirectToAction("Index");
+                TempData["ErrorMessage"] = "You are not allowed to acknowledge other student's suggestions!";
             }
+            int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
             Suggestion suggestion = suggestionContext.GetSuggestionDetails(id.Value);
             StudentSuggestionViewModel suggestionVM = MapToLecturerVM(suggestion);
-            if (suggestion == null)
+            if (suggestion == null || suggestion.StudentId != studentid)
             {
                 return RedirectToAction("StudentSuggestion");
+                TempData["ErrorMessage"] = "You are not allowed to acknowledge other student's suggestions!";
             }
             return View(suggestionVM);
         }

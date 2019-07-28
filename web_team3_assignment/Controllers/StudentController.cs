@@ -18,6 +18,54 @@ namespace web_team3_assignment.Controllers
         private SkillSetDAL skillsetContext = new SkillSetDAL();
         private SuggestionDAL suggestionContext = new SuggestionDAL();
         private StudentSkillSetDAL studentskillsetContext = new StudentSkillSetDAL();
+        //UPDATE COURSE
+        private List<SelectListItem> GetCourse()
+        {
+            List<SelectListItem> Course = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Value = "",
+                    Text = "Select Course"
+                },
+                new SelectListItem
+                {
+                    Value = "IT",
+                    Text = "Information Technology"
+                },
+                new SelectListItem
+                {
+                    Value = "FI",
+                    Text = "Financial Infomatics"
+                }
+            };
+
+            return Course;
+        }
+
+        //UPDATE COURSE
+        private List<SelectListItem> GetLecturer()
+        {
+            List<SelectListItem> Lecturer = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Value = "",
+                    Text = "Select Mentor"
+                }
+            };
+            List<Lecturer> lecturerList = lecturerContext.GetAllLecturer();
+            foreach (Lecturer lecturer in lecturerList)
+            {
+                Lecturer.Add(
+                new SelectListItem
+                {
+                    Value = lecturer.LecturerId.ToString(),
+                    Text = lecturer.Name
+                });
+            }
+            return Lecturer;
+        }
 
         public IActionResult Index(int? id)
         {
@@ -105,18 +153,22 @@ namespace web_team3_assignment.Controllers
             }
             //System.Diagnostics.Debug.WriteLine(ModelState.IsValid);
             Student student = studentContext.GetStudentDetails(studentid);
-            List<StudentViewModel> studentVMList = new List<StudentViewModel>();
-            StudentViewModel studentVM = MapToLecturer(student);
-            studentVMList.Add(studentVM);
-            return View(studentVM);
+            ViewData["CourseSelect"] = GetCourse();
+            ViewData["LecturerSelect"] = GetLecturer();
+            //List<StudentViewModel> studentVMList = new List<StudentViewModel>();
+            //StudentViewModel studentVM = MapToLecturer(student);
+            //studentVMList.Add(studentVM);
+            return View(student);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(StudentViewModel student)
+        public ActionResult Update(Student student)
         {
             if (ModelState.IsValid)
             {
+                ViewData["CourseSelect"] = GetCourse();
+                ViewData["LecturerSelect"] = GetLecturer();
                 studentContext.UpdateProfile(student);
                 ViewData["Message"] = "Student profile updated Successfully!";
                 return View("Update");

@@ -205,9 +205,9 @@ namespace web_team3_assignment.DAL
             }
         }
 
-        public int UpdateProfile(StudentViewModel student)
+        public int UpdateProfile(Student student)
         {
-            SqlCommand cmd = new SqlCommand("UPDATE Student SET Name=@name, Course=@course, Photo=@photo, Description=@description, Achievement=@achievement, ExternalLink=@externallink, EmailAddr=@emailaddr, Password=@password, MentorID=mentorID" +
+            SqlCommand cmd = new SqlCommand("UPDATE Student SET Name=@name, Course=@course, Photo=@photo, Description=@description, Achievement=@achievement, ExternalLink=@externallink, EmailAddr=@emailaddr, Password=@password, MentorID=@mentorID" +
                 " WHERE StudentID=@selectedStudentID", conn);
             
             cmd.Parameters.AddWithValue("@name", student.Name);
