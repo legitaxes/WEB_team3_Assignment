@@ -77,7 +77,7 @@ namespace web_team3_assignment.DAL
             return studentList;
         }
         //Adds a student into database
-        public int Add(Student student)
+        public int Add(StudentCreate student)
         {
             SqlCommand cmd = new SqlCommand
                 ("INSERT INTO Student (Name, Course, Photo, Description, Achievement, ExternalLink, EmailAddr, Password, MentorID)" +

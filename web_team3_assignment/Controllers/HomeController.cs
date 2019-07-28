@@ -195,7 +195,7 @@ namespace web_team3_assignment.Controllers
         // POST: Create student profile
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateStudent(Student student)
+        public ActionResult CreateStudent(StudentCreate student)
         {
             var sha1 = new SHA1CryptoServiceProvider();
             var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes("p@55Student"));

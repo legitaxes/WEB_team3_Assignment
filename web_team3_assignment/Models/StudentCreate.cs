@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace web_team3_assignment.Models
 {
-    public class Student
+    public class StudentCreate
     {
         [Display(Name = "Student ID")]
         public int StudentID { get; set; }
@@ -16,7 +16,7 @@ namespace web_team3_assignment.Models
         [StringLength(50, ErrorMessage = "Name Cannot Exceed 50 Characters!")]
         public string Name { get; set; }
 
-        [Display(Name="Course")]
+        [Display(Name = "Course")]
         [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [StringLength(50, ErrorMessage = "Name Cannot Exceed 50 Characters!")]
         public string Course { get; set; }
@@ -40,14 +40,14 @@ namespace web_team3_assignment.Models
         [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [Display(Name = "Email Address")]
         [EmailAddress]
-        //[ValidateEmailExists(ErrorMessage = "Email Address already exists!")]
+        [ValidateEmailExists(ErrorMessage = "Email Address already exists!")]
         [StringLength(50, ErrorMessage = "Email Cannot Exceed 50 Characters!")]
         public string EmailAddr { get; set; }
 
         [StringLength(255, ErrorMessage = "Password Length Cannot Exceed 255 Characters!")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]  
+        [Required(ErrorMessage = "Please Do not Leave This Field Blank!")]
         [Display(Name = "Mentor ID")]
         public int MentorID { get; set; }
     }
