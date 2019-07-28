@@ -144,16 +144,16 @@ namespace web_team3_assignment.Controllers
 
             if (id == null)
             {
-                return RedirectToAction("Index");
                 TempData["ErrorMessage"] = "You are not allowed to acknowledge other student's suggestions!";
+                return RedirectToAction("Index");
             }
             int studentid = Convert.ToInt32(HttpContext.Session.GetInt32("StudentID"));
             Suggestion suggestion = suggestionContext.GetSuggestionDetails(id.Value);
             StudentSuggestionViewModel suggestionVM = MapToLecturerVM(suggestion);
             if (suggestion == null || suggestion.StudentId != studentid)
             {
-                return RedirectToAction("StudentSuggestion");
                 TempData["ErrorMessage"] = "You are not allowed to acknowledge other student's suggestions!";
+                return RedirectToAction("StudentSuggestion");
             }
             return View(suggestionVM);
         }
