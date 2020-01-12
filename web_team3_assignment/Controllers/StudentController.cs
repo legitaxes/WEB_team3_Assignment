@@ -142,7 +142,7 @@ namespace web_team3_assignment.Controllers
                     foreach (Student student in allstudentList)
                     {
                         if (student.StudentID == studentid)
-                        {
+                        {   
                             StudentViewModel StudentVM = MapToLecturer(student);
                             studentList = StudentVM;
                         }
